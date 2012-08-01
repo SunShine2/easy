@@ -1,0 +1,198 @@
+/**
+ * common.css
+ * version : 0-0-1
+ * author : butian.wth@aliyun-inc.com
+ */
+
+/***reset part ***/
+
+/*** 统一HTML5标签样式***/
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+
+audio,
+canvas,
+video {
+  display:inline-block;
+}
+
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+figure {
+  margin: 1em 40px 1em 40px;
+}
+
+/*** 取消下划线，并统一聚焦后的样式 ***/
+
+a{
+  text-decoration:none
+}
+
+a:focus{
+  outline: thin dotted;
+}
+
+a:active, a:hover{
+  outline:0
+}
+
+/*** h1,h2设置 ***/
+
+h1{
+  font-size: 2em;
+  margin: 0.67em 0
+}
+
+h2{
+  font-size: 1.5em;
+  margin: 0.83em 0
+}
+
+/*** 常用的合并边框模型 ***/
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/*** ul/li/dd ***/
+
+dl,
+menu,
+ol,
+ul {
+  margin: 1em 0;
+}
+
+dd {
+  margin: 0 0 0 40px;
+}
+
+menu,
+ol,
+ul {
+  padding: 0 0 0 40px;
+}
+
+/*** for form ***/
+
+/*** chrome内置样式 ***/
+
+fieldset {
+  border: 2px groove #f0f0f0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/*** 统一margin ***/
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  vertical-align: baseline;
+}
+
+/*** 统一取消滚动条 ***/
+
+textarea {
+  overflow: auto;
+  vertical-align: top; /*Improves readability and alignment in all browsers. */
+}
+
+/*** 统一button的左右内边距 ***/
+
+button {
+  padding: 0 6px;
+}
+
+/*** chrome内置样式 ***/
+
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/*** 和type为text的input保持一致 ***/
+
+input[type="search"] {
+  -webkit-appearance: textfield;
+  box-sizing: content-box;
+}
+
+/*
+* Removes inner padding and search cancel button in S5, Chrome.
+*/
+
+input[type="search"] {
+  -webkit-appearance: none;
+}
+
+/*** for page ***/
+
+.body, input, button, select, textarea{
+  font: 20px/1.5 arial,Microsoft YaHei,"文泉驿微米黑";
+}
+
+.wui-Page{
+  width:100%;
+  position:static !important
+}
+
+em,h1,h2,h3,h4{
+  font-style:normal
+}
+
+.wui-DeckPage>div{
+  width:480px;
+  height:800px
+}
+
+/*** tools ***/
+
+.fix-float:after{
+  content: "\0020";
+  display:block;
+  height:0;
+  clear:both
+}
+
+.display-none{
+  position:absolute;
+  visibility:hidden
+}
+
+.beark-word{
+  word-wrap:break-word;
+  overflow:hidden
+}
+
+/*** 320宽屏幕适配 ***/
+@media screen and (max-width:320px) {
+
+  .wui-DeckPage>div{
+    width:320px;
+    height:416px
+  }
+
+  .body, input, button, select, textarea{
+    font-size:14px
+  }
+}

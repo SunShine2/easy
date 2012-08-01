@@ -1,0 +1,17 @@
+.DS_Store
+dist/
+dist/zepto.min.js
+dist/zepto.js
+pkg
+*.swp
+docs/*
+.jhw-cache
+.rbenv-version
+public/
+*.svn
+.svn
+/.svn
+/*.svn
+/*/.svn
+/*/*/.svn
+/*/*/*/.svn

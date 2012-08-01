@@ -1,0 +1,77 @@
+/*日期选择页面*/
+.calendar-wrap{
+  background:#f4f3f3;
+  width:100%
+}
+.calendar-hd{
+  border-bottom:1px solid #fff;
+}
+.calendar-action{
+  height:60px;
+  line-height:60px;
+  font-size:25px;
+  color:#333;
+  margin:0 auto;
+  width:300px;
+  text-align:center;
+}
+#calendarInfo{
+  display:none;
+}
+.calendar-box table{
+  width:100%;
+  border:none;
+}
+.calendar-box thead{
+  background:#eeecec;
+  border-top:1px solid #d5d5d5;
+  height:32px;
+  line-height:32px;
+}
+.calendar-box thead th{
+  font-weight:normal;
+}
+.calendar-box tbody td{
+  text-align:center;
+  border:1px solid;
+  border-color:#dfdfdf #fdfdfd #d2d1d1 #dfdfdf;
+  padding:22px 0;
+}
+.calendar-box tbody td.hov{
+  background:#007cb0;
+  color:#fff
+}
+.calendar-box tbody td.now{
+  background:#007cb0;
+  color:#fff;
+}
+.calendar-box tbody td.before{
+  color:#ccc;
+}
+.calendar-prev,.calendar-next{
+  width:60px;
+}
+.calendar-prev{
+  float:left;
+}
+.calendar-next{
+  float:right;
+}
+.calendar-next s,
+.calendar-prev s,
+.prev-day-icon,
+.next-day-icon{
+  width:0;
+  height:0;
+  display:inline-block;
+}
+.calendar-next s,.next-day-icon{
+  border-width: 10px;
+  border-style: dashed dashed dashed solid;
+  border-color: transparent transparent transparent #09c;
+}
+.calendar-prev s,.prev-day-icon{
+  border-width: 10px;
+  border-style: dashed solid dashed dashed;
+  border-color: transparent #09c transparent transparent;
+}
