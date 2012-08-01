@@ -37,7 +37,7 @@
     return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)')
   }
   /**
-   * 遍历时间对象的方法
+   * 遍历事件对象的方法
    */
   function eachEvent(events, fn, iterator){
     if ($.isObject(events)) $.each(events, iterator)
@@ -57,7 +57,8 @@
     capture = !!capture
     var id = zid(element), set = (handlers[id] || (handlers[id] = []))
     eachEvent(events, fn, function(event, fn){
-      //如果是事件代理，则进行绑定
+      //如果是事件代理，则对其事件对象再进行包装
+      //增加currentTarget和livefired
       var delegate = getDelegate && getDelegate(fn, event),
         callback = delegate || fn
       //对回调函数进行proxy，参数是合并event.data后的event对象
@@ -95,7 +96,8 @@
   $.event = { add: add, remove: remove }
 
   /**
-   * 设置函数的执行环境，并对事件进行标识，从而可以实现通过函数解绑事件，如果第一个参数不是函数，则
+   * 设置函数的执行环境，并对事件进行标识，从而可以实现通过函数解绑事件
+   * 可以传函数+上下文环境，也可以传上下文环境和函数名（函数名一定要在context中存在）
    * @param fn
    * @param context
    */
@@ -143,14 +145,16 @@
       }
 
   /**
-   * 创建事件代理，所有内部事件都要可以冒泡，并且不return false，从而可以让最外部的元素能代理到
+   * 对原生的event事件进行包装，通过eventMethods下的三个属性值来判断是否已经被阻止冒泡或者默认事件
+   * 把eventMethod下的3个Key分别放入包装后的proxy对象下
+   * 把eventMethod下的3个属性也加入，默认是一个返回false的函数
    * @param event
    */
   function createProxy(event) {
     var proxy = $.extend({originalEvent: event}, event)
     $.each(eventMethods, function(name, predicate) {
       proxy[name] = function(){
-        this[predicate] = returnTrue
+        this[predicate] = returnTrue //如果执行了evt.stopImmediatePropagation，调用e.isImmediatePropagationStopped()返回true
         return event[name].apply(event, arguments)
       }
       proxy[predicate] = returnFalse
@@ -243,7 +247,8 @@
       e.target = element
       $.each(findHandlers(element, event.type || event), function(i, handler){
         result = handler.proxy(e)
-        if (e.isImmediatePropagationStopped()) return false
+        //如果没有在回调中执行了stopImmediatePropagation，则主动触发
+        if (e.isImmediatePropagationStopped()) return false 
       })
     })
     return result
