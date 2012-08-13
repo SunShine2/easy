@@ -2,15 +2,20 @@
 //     (c) 2010-2012 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
 
+/**
+ * @easyModify
+ * @butian.wth
+ * version : 0-0-1
+ */
+
 ;(function($){
   var $$ = $.zepto.qsa, handlers = {}, _zid = 1, specialEvents={}
-  //保存鼠标事件
+  $.handlers = handlers
   specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
-  //给元素增加唯一的id
+
   function zid(element) {
     return element._zid || (element._zid = _zid++)
   }
-  //找到与参数相匹配的事件对象
   function findHandlers(element, event, fn, selector) {
     event = parse(event)
     if (event.ns) var matcher = matcherFor(event.ns)
@@ -22,85 +27,47 @@
         && (!selector || handler.sel == selector)
     })
   }
-
-  /**
-   * 解析事件为对象字面量
-   */
   function parse(event) {
     var parts = ('' + event).split('.')
     return {e: parts[0], ns: parts.slice(1).sort().join(' ')}
   }
-  /**
-   * 创建匹配事件名的正则表达式
-   */
   function matcherFor(ns) {
     return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)')
   }
-  /**
-   * 遍历事件对象的方法
-   */
+  function isCustomEventsHandler(o){return o.selector === 'customEvents'}
   function eachEvent(events, fn, iterator){
     if ($.isObject(events)) $.each(events, iterator)
     else events.split(/\s/).forEach(function(type){ iterator(type, fn) })
   }
 
-  /**
-   * 绑定事件
-   * @param element 元素
-   * @param events 事件名
-   * @param fn 绑定的函数
-   * @param selector 选择器
-   * @param getDelegate 是否代理
-   * @param capture 捕捉
-   */
   function add(element, events, fn, selector, getDelegate, capture){
     capture = !!capture
-    var id = zid(element), set = (handlers[id] || (handlers[id] = []))
+    var id = zid(element), set = (handlers[id] || (handlers[id] = [])), isCeh = isCustomEventsHandler(element)
     eachEvent(events, fn, function(event, fn){
-      //如果是事件代理，则对其事件对象再进行包装
-      //增加currentTarget和livefired
       var delegate = getDelegate && getDelegate(fn, event),
         callback = delegate || fn
-      //对回调函数进行proxy，参数是合并event.data后的event对象
       var proxyfn = function (event) {
         var result = callback.apply(element, [event].concat(event.data))
-        //如果在绑定的回调函数中执行了return false，则阻止默认事件
-        if (result === false) event.preventDefault()
+        if (result === false && event.preventDefault) event.preventDefault() //custom event object dosen't have 'preventDefault' method
         return result
       }
-      //扩展事件对象，并保存在set数组中，这样可以防止重复绑定
       var handler = $.extend(parse(event), {fn: fn, proxy: proxyfn, sel: selector, del: delegate, i: set.length})
       set.push(handler)
-      element.addEventListener(handler.e, proxyfn, capture)
+      !isCeh && element.addEventListener(handler.e, proxyfn, capture) //if not custom event, don't addEventListener
     })
   }
-
-  /**
-   * 移除事件
-   * @param element
-   * @param events
-   * @param fn
-   * @param selector
-   */
   function remove(element, events, fn, selector){
-    //获取事件id
-    var id = zid(element)
+    var id = zid(element), isCeh = isCustomEventsHandler(element)
     eachEvent(events || '', fn, function(event, fn){
       findHandlers(element, event, fn, selector).forEach(function(handler){
         delete handlers[id][handler.i]
-        element.removeEventListener(handler.e, handler.proxy, false)
+        !isCeh && element.removeEventListener(handler.e, handler.proxy, false) //if not custom event, don't removeEventListener
       })
     })
   }
 
   $.event = { add: add, remove: remove }
 
-  /**
-   * 设置函数的执行环境，并对事件进行标识，从而可以实现通过函数解绑事件
-   * 可以传函数+上下文环境，也可以传上下文环境和函数名（函数名一定要在context中存在）
-   * @param fn
-   * @param context
-   */
   $.proxy = function(fn, context) {
     if ($.isFunction(fn)) {
       var proxyFn = function(){ return fn.apply(context, arguments) }
@@ -114,16 +81,23 @@
   }
 
   $.fn.bind = function(event, callback){
+    if(isCustomEventsHandler(this)){
+      add(this, event, callback);
+      return this
+    }
     return this.each(function(){
       add(this, event, callback)
     })
   }
   $.fn.unbind = function(event, callback){
+    if(isCustomEventsHandler(this)){
+      remove(this, event, callback);
+      return this
+    }
     return this.each(function(){
       remove(this, event, callback)
     })
   }
-
   $.fn.one = function(event, callback){
     return this.each(function(i, element){
       add(this, event, callback, null, function(fn, type){
@@ -140,21 +114,14 @@
       returnFalse = function(){return false},
       eventMethods = {
         preventDefault: 'isDefaultPrevented',
-        stopImmediatePropagation: 'isImmediatePropagationStopped', //所有其他监听函数不会执行
+        stopImmediatePropagation: 'isImmediatePropagationStopped',
         stopPropagation: 'isPropagationStopped'
       }
-
-  /**
-   * 对原生的event事件进行包装，通过eventMethods下的三个属性值来判断是否已经被阻止冒泡或者默认事件
-   * 把eventMethod下的3个Key分别放入包装后的proxy对象下
-   * 把eventMethod下的3个属性也加入，默认是一个返回false的函数
-   * @param event
-   */
   function createProxy(event) {
     var proxy = $.extend({originalEvent: event}, event)
     $.each(eventMethods, function(name, predicate) {
       proxy[name] = function(){
-        this[predicate] = returnTrue //如果执行了evt.stopImmediatePropagation，调用e.isImmediatePropagationStopped()返回true
+        this[predicate] = returnTrue
         return event[name].apply(event, arguments)
       }
       proxy[predicate] = returnFalse
@@ -163,7 +130,6 @@
   }
 
   // emulates the 'defaultPrevented' property for browsers that have none
-  //如果没有'defaultPrevented属性，就提供一个'
   function fix(event) {
     if (!('defaultPrevented' in event)) {
       event.defaultPrevented = false
@@ -219,13 +185,25 @@
     return selector == undefined || $.isFunction(selector) ?
       this.unbind(event, selector || callback) : this.undelegate(selector, event, callback)
   }
-
   /**
-   * 创建自定义事件，并触发
-   * @param event
+   * fire the custom event bind on agent
+   * @param agent
+   * @param evt
    * @param data
    */
+  function publish(agent, evt, data) {
+    var id = zid(agent), event = {type: evt, target: agent, data:data}
+    findHandlers(agent, evt).forEach(function(item){
+      item.proxy(event)
+    })
+    return this
+  }
+
   $.fn.trigger = function(event, data){
+    if(isCustomEventsHandler(this)){
+      publish(this, event, data);
+      return this
+    }
     if (typeof event == 'string') event = $.Event(event)
     fix(event)
     event.data = data
@@ -238,7 +216,6 @@
 
   // triggers event handlers on current element just as if an event occurred,
   // doesn't trigger an actual event, doesn't bubble
-  // 不触发浏览器的默认事件
   $.fn.triggerHandler = function(event, data){
     var e, result
     this.each(function(i, element){
@@ -247,8 +224,7 @@
       e.target = element
       $.each(findHandlers(element, event.type || event), function(i, handler){
         result = handler.proxy(e)
-        //如果没有在回调中执行了stopImmediatePropagation，则主动触发
-        if (e.isImmediatePropagationStopped()) return false 
+        if (e.isImmediatePropagationStopped()) return false
       })
     })
     return result
@@ -261,7 +237,6 @@
     $.fn[event] = function(callback){ return this.bind(event, callback) }
   })
 
-  //存在callback则对其进行绑定，如果不存在则直接执行对应的默认方法
   ;['focus', 'blur'].forEach(function(name) {
     $.fn[name] = function(callback) {
       if (callback) this.bind(name, callback)
@@ -270,11 +245,6 @@
     }
   })
 
-  /**
-   * 创建自定义事件
-   * @param type
-   * @param props
-   */
   $.Event = function(type, props) {
     var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true
     if (props) for (var name in props) (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name])

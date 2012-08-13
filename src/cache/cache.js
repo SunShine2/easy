@@ -50,6 +50,10 @@
       /**
        * 解决历史问题，由于一开始一些数据没有被记入缓存
        */
+      if(id == ""){
+        callback.call(agent,false);
+        return;
+      }
       if(!(id in dataCont.idArr)){
         dataCont.idArr.push(id);
       }

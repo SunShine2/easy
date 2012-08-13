@@ -1,0 +1,258 @@
+/**
+ * reset.css for android
+ * version : 0-0-1
+ * author : youxiao@alibaba-inc.com
+ */
+
+/*
+margin: 8px
+*/
+body,
+/*
+-webkit-margin-before: 1__qem;
+-webkit-margin-after: 1__qem;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+p,
+/*
+-webkit-margin-before: 1__qem;
+-webkit-margin-after: 1em;
+-webkit-margin-start: 40px;
+-webkit-margin-end: 40px;
+*/
+blockquote,
+/*
+-webkit-margin-before: 1em;
+-webkit-margin-after: 1em;
+-webkit-margin-start: 40px;
+-webkit-margin-end: 40px;
+*/
+figure,
+/*
+-webkit-margin-before: 0.5em;
+-webkit-margin-after: 0.5em;
+-webkit-margin-start: auto;
+-webkit-margin-end: auto;
+*/
+hr,
+/*
+-webkit-margin-before: 0.67__qem;
+-webkit-margin-after: 0.67em;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+h1,
+/*
+-webkit-margin-before: 0.83__qem;
+-webkit-margin-after: 0.83em;
+*/
+:-webkit-any(article,aside,nav,section) h1,
+/*
+-webkit-margin-before: 1__qem;
+-webkit-margin-after: 1em;
+*/
+:-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+/*
+-webkit-margin-before: 1.33__qem;
+-webkit-margin-after: 1.33em;
+*/
+:-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+/*
+-webkit-margin-before: 1.67__qem;
+-webkit-margin-after: 1.67em;
+*/
+:-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+/*
+-webkit-margin-before: 2.33__qem;
+-webkit-margin-after: 2.33em;
+*/
+:-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+/*
+-webkit-margin-before: 0.83__qem;
+-webkit-margin-after: 0.83em;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+h2,
+/*
+-webkit-margin-before: 1__qem;
+-webkit-margin-after: 1em;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+h3,
+/*
+-webkit-margin-before: 1.33__qem;
+-webkit-margin-after: 1.33em;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+h4,
+/*
+-webkit-margin-before: 1.67__qem;
+-webkit-margin-after: 1.67em;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+h5,
+/*
+-webkit-margin-before: 2.33__qem;
+-webkit-margin-after: 2.33em;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+h6,
+/*
+-webkit-margin-before: 1__qem;
+-webkit-margin-after: 1em;
+-webkit-margin-start: 0;
+-webkit-margin-end: 0;
+*/
+ul, menu, dir, ol, dl,
+/*
+-webkit-margin-start: 40px
+*/
+dd,
+/*
+-webkit-margin-start: 2px;
+-webkit-margin-end: 2px;
+*/
+fieldset,
+/*
+margin-left: 2px;
+*/
+input::-webkit-outer-spin-button,
+/*
+margin: 3px 0.5ex;
+*/
+input[type="radio"], input[type="checkbox"],
+/*
+margin: 2px;
+*/
+input[type="range"],
+/*
+margin: 1__qem 0
+*/
+pre, xmp, plaintext, listing,
+/*
+margin-right: 0.4em;
+*/
+summary::-webkit-details-marker
+{
+    margin: 0;
+}
+
+
+/*
+-webkit-padding-start: 40px
+*/
+ul, menu, dir, ol,
+/*
+-webkit-padding-start: 2px;
+-webkit-padding-end: 2px;
+*/
+legend,
+/*
+-webkit-padding-before: 0.35em;
+-webkit-padding-start: 0.75em;
+-webkit-padding-end: 0.75em;
+-webkit-padding-after: 0.625em;
+*/
+fieldset,
+/*
+padding: 1px;
+*/
+input, input[type="password"], input[type="search"], isindex,
+/*
+padding: 2px;
+*/
+textarea,
+/*
+padding: initial;
+*/
+input[type="hidden"], input[type="image"], input[type="file"], input[type="radio"], input[type="checkbox"], input[type="range"],
+/*
+padding: 2px 6px 3px 6px;
+*/
+input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button,
+/*
+padding: 8px;
+*/
+::-webkit-validation-bubble-message
+{
+    padding: 0;
+}
+
+/*TODO*/
+input[type="text"], input[type="password"], input[type="search"], input[type="file"]{
+    padding: initial;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size:100%;
+    font-weight:normal;
+}
+
+/*
+font-style: italic
+*/
+/*i,*/
+cite, var, address, em {
+    font-style: normal;
+}
+
+/*
+font-weight: bolder
+*/
+/*b,*/
+strong{
+    font-weight: normal;
+}
+
+a:-webkit-any-link{
+    text-decoration: none;
+}
+/*
+border-collapse: separate;
+border-spacing: 2px;
+*/
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+/*
+border: 2px groove ThreeDFace
+*/
+fieldset,
+/*
+border: 2px inset
+*/
+iframe{
+    border: none;
+}
+
+/*
+list-style-type: decimal;
+*/
+ol,
+/*
+list-style-type: disc;
+*/
+ul {
+    list-style:none;
+}
+
+/*
+font: -webkit-small-control;
+*/
+input, textarea, select, button{
+    font-family:inherit;
+    font-size:inherit;
+    font-weight:inherit;
+}

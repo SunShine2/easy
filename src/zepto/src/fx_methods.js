@@ -7,7 +7,6 @@
     origShow = $.fn.show, origHide = $.fn.hide, origToggle = $.fn.toggle,
     speeds = { _default: 400, fast: 200, slow: 600 }
 
-  //速度转换
   function translateSpeed(speed) {
     return typeof speed == 'number' ? speed : (speeds[speed] || speeds._default)
   }
@@ -29,22 +28,13 @@
     })
   }
 
-  /**
-   * 同hide
-   * @param speed
-   * @param callback
-   */
   $.fn.show = function(speed, callback) {
     origShow.call(this)
     if (speed === undefined) speed = 0
     else this.css('opacity', 0)
     return anim(this, speed, 1, '1,1', callback)
   }
-  /**
-   * hide本身是不需要参数的，增加参数是为了让hide可以在fadeOut调用
-   * @param speed
-   * @param callback
-   */
+
   $.fn.hide = function(speed, callback) {
     if (speed === undefined) return origHide.call(this)
     else return hide(this, speed, '0,0', callback)

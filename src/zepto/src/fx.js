@@ -12,9 +12,6 @@
   function downcase(str) { return str.toLowerCase() }
   function normalizeEvent(name) { return eventPrefix ? eventPrefix + name : downcase(name) }
 
-  /**
-   * 包装前缀
-   */
   $.each(vendors, function(vendor, event){
     if (testEl.style[vendor + 'TransitionProperty'] !== undefined) {
       prefix = '-' + downcase(vendor) + '-'
@@ -29,24 +26,13 @@
   clearProperties[prefix + 'animation-name'] =
   clearProperties[prefix + 'animation-duration'] = ''
 
-  /**
-   * 兼容处理
-   */
   $.fx = {
-    //判断是否支持css3动画
     off: (eventPrefix === undefined && testEl.style.transitionProperty === undefined),
     cssPrefix: prefix,
     transitionEnd: normalizeEvent('TransitionEnd'),
     animationEnd: normalizeEvent('AnimationEnd')
   }
 
-  /**
-   * 动画函数
-   * @param properties
-   * @param duration
-   * @param ease
-   * @param callback
-   */
   $.fn.animate = function(properties, duration, ease, callback){
     if ($.isObject(duration))
       ease = duration.easing, callback = duration.complete, duration = duration.duration
@@ -54,16 +40,9 @@
     return this.anim(properties, duration, ease, callback)
   }
 
-  /**
-   * 动画的具体实现
-   * @param properties
-   * @param duration
-   * @param ease
-   * @param callback
-   */
   $.fn.anim = function(properties, duration, ease, callback){
     var transforms, cssProperties = {}, key, that = this, wrappedCallback, endEvent = $.fx.transitionEnd
-    if (duration === undefined) duration = 0.4 //默认持续时间400ms
+    if (duration === undefined) duration = 0.4
     if ($.fx.off) duration = 0
 
     if (typeof properties == 'string') {
@@ -82,27 +61,25 @@
 
       if (transforms) cssProperties[prefix + 'transform'] = transforms.join(' ')
       if (!$.fx.off && typeof properties === 'object') {
-        cssProperties[prefix + 'transition-property'] = Object.keys(properties).join(', ')  //transition里放css属性
+        cssProperties[prefix + 'transition-property'] = Object.keys(properties).join(', ')
         cssProperties[prefix + 'transition-duration'] = duration + 's'
-        cssProperties[prefix + 'transition-timing-function'] = (ease || 'linear') //动画样式，默认线性
+        cssProperties[prefix + 'transition-timing-function'] = (ease || 'linear')
       }
     }
 
-    //对回调函数进行包装，包括判断是否为元素本身触发的动画结束事件，并清除css3动画属性
     wrappedCallback = function(event){
       if (typeof event !== 'undefined') {
-        if (event.target !== event.currentTarget) return
-        // 如果事件是冒泡上来的，则不执行http://dev.w3.org/csswg/css3-transitions/
-        $(event.target).unbind(endEvent, arguments.callee) //解绑动画结束事件
+        if (event.target !== event.currentTarget) return // makes sure the event didn't bubble from "below"
+        $(event.target).unbind(endEvent, arguments.callee)
       }
-      $(this).css(clearProperties) //执行回调函数之前清空css3动画属性
+      $(this).css(clearProperties)
       callback && callback.call(this)
     }
     if (duration > 0) this.bind(endEvent, wrappedCallback)
 
     setTimeout(function() {
-      that.css(cssProperties) //设置css3动画样式
-      if (duration <= 0) setTimeout(function() { //如果动画持续事件为0，则直接将回调放入执行线程中
+      that.css(cssProperties)
+      if (duration <= 0) setTimeout(function() {
         that.each(function(){ wrappedCallback.call(this) })
       }, 0)
     }, 0)
