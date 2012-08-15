@@ -10,7 +10,6 @@
 
 ;(function($){
   var $$ = $.zepto.qsa, handlers = {}, _zid = 1, specialEvents={}
-  $.handlers = handlers
   specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
 
   function zid(element) {
@@ -191,17 +190,20 @@
    * @param evt
    * @param data
    */
-  function publish(agent, evt, data) {
-    var id = zid(agent), event = {type: evt, target: agent, data:data}
-    findHandlers(agent, evt).forEach(function(item){
+  function publish(agent, evt, data, stop) {
+    var event = {type: evt, target: agent, data:data}
+    findHandlers(agent, evt).every(function(item){
+      var ret = true
       item.proxy(event)
+      if(stop) ret = false
+      return ret
     })
     return this
   }
 
   $.fn.trigger = function(event, data){
     if(isCustomEventsHandler(this)){
-      publish(this, event, data);
+      publish(this, event, data)
       return this
     }
     if (typeof event == 'string') event = $.Event(event)
@@ -217,6 +219,10 @@
   // triggers event handlers on current element just as if an event occurred,
   // doesn't trigger an actual event, doesn't bubble
   $.fn.triggerHandler = function(event, data){
+    if(isCustomEventsHandler(this)){
+      publish(this, event, data, true);
+      return this
+    }
     var e, result
     this.each(function(i, element){
       e = createProxy(typeof event == 'string' ? $.Event(event) : event)
