@@ -66,8 +66,8 @@ describe('测试自定义事件模块', function () {
                 name:'testObj01'
             },
             index = 1,
-            testFn = function (e, data) {
-                index = data.index
+            testFn = function (e) {
+                index = e.index
             },
             dataObj = {
                 index:3

@@ -23,7 +23,7 @@
      *  }
      */
     var handlers = {}, _zid = 1;
-
+    $.ceHandlers = handlers;
     function findHandlers(event, fn, agent) {
         return (handlers[event] || []).filter(function (handler) {
             return handler
@@ -40,22 +40,23 @@
         'subscribe':function (evt, callback, agent) {
             var o = {'type':evt},
                 item = handlers[evt] || (handlers[evt] = []),
-                proxyfn = function (event, data) {
-                    return callback.apply(agent, [event].concat(data));
+                proxyfn = function () {
+                    return callback.apply(agent, arguments);
                 };
             o = $.extend(o, {'fn':callback, 'proxy':proxyfn, 'i':item.length, 'agent':agent});
             item.push(o);
+            return o;
         },
         'unSubscribe':function (evt, callback, agent) {
-            $.each(findHandlers(evt, callback, agent), function (handler) {
+            findHandlers(evt, callback, agent).forEach(function (handler) {
                 delete handlers[evt][handler.i]
             });
         },
         'publish':function (evt, data, agent) {
-            $.each(findHandlers(evt, undefined, agent), function (key, ret) {
-                evt = ret;
-                ret['proxy'](evt, data);
-            })
+            findHandlers(evt, undefined, agent).forEach(function (ret) {
+                data && $.extend(ret, data);
+                ret['proxy'](ret);
+            });
         }
     });
 
