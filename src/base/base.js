@@ -2,6 +2,32 @@
  *  easy框架基类，用于创建easy组件，参考YUI3
  *  author : butian.wth
  *  version : 0-0-1
+ *  <h2>使用方法</h2>
+ *  <p>本模块依赖于custom-event和core模块，使用方法很简单
+ *  $.Base.build(
+ *      'moduleName',
+ *      {
+ *          method : function(){} //挂载在prototype上的方法
+ *      },
+ *      {
+ *          property:{ //该属性可以在初始化的时候进行配置，也可以用set进行设置，get进行获取
+ *              value : defaultValue,
+ *              setter : function(){}, //用于判断是否符合匹配条件
+ *              validator : Reg  //正则匹配
+ *          }
+ *      },
+ *      {
+ *          NAME : 'asdasd'  //挂载在模块上的静态方法，不会继承到实例中
+ *      }
+ *  );
+ *  </p>
+ *  在组件内部可以通过
+ *  this.publish(eventName, data);
+ *  来开放一个事件
+ *  这样在组件外部可以通过
+ *  var module = new Module();
+ *  module.subscribe(eventName, callback)
+ *  来绑定事件，可以监听到内部的触发
  */
 
 (function ($) {
@@ -57,18 +83,6 @@
         DESTROYED = "destroyed";
 
     /**
-     * 基础base对象，用于扩展
-     * @constructor
-     */
-    function Base() {
-
-        addCustomEvent.call(this);
-        addAttr.call(this);
-
-        this.init.apply(this);
-    }
-
-    /**
      * 增加filter系统，用于对初始化时传入的option进行处理，只接受
      */
     function optionFilter(option, attrObj) {
@@ -118,6 +132,18 @@
         }
     }
 
+    /**
+     * 基础base对象，用于扩展
+     * @constructor
+     */
+    function Base() {
+
+        addCustomEvent.call(this);
+        addAttr.call(this);
+
+        this.init.apply(this, arguments);
+    }
+
     $.extend(Base.prototype, {
         /**
          * 静态属性，用于记录数据
@@ -131,10 +157,12 @@
         init:function () {
             this.subscribe(INIT, this._defInitFn);
             this.publish(INIT);
+            this.initializer && this.initializer(arguments);
         },
         destroy:function () {
             this.subscribe(DESTROY, this._defDestroyFn);
             this.publish(DESTROY);
+            this.destructor && this.destructor(arguments);
         },
         /**
          * 静态的默认属性，可以在子类中进行覆写
@@ -171,7 +199,12 @@
 
             $.extend(this, option);  //将属性放入this中
             //this.constructor = Base;
-            Base.call(this);
+            Base.call(this, arguments);
+        };
+        //模块名字
+        Module.name = moduleName;
+        Module.toString = function(){
+            return moduleName;
         };
         //将静态属性挂在在模块构造器本身
         $.extend(Module, staticMember);

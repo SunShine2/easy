@@ -5,11 +5,17 @@
  */
 
 $.Abc = $.Base.build('a', {
+        initializer :function(){
+            this.fucked = true;
+        },
         getName : function(){
             return this.name
         },
         getStaticName : function(){
             return $.Abc.NAME;
+        },
+        destructor : function(){
+
         }
     },{
         width : {
@@ -36,7 +42,7 @@ $.Abc = $.Base.build('a', {
 var testA = new $.Abc({name:'testA'}),
     testB = new $.Abc({name:'testB'});
 
-console.log(testA.getName());
+console.log(testA.get('fucked'));
 testA.subscribe('attrChange', function(e){
     console.log('属性改变了：' + e.attrKey + ':' + e.attrValue);
 });
