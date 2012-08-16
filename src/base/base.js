@@ -28,6 +28,12 @@
  *  var module = new Module();
  *  module.subscribe(eventName, callback)
  *  来绑定事件，可以监听到内部的触发
+ *
+ *  base功能：
+ *  1. 提供set和get方法，附带属性检查
+ *  2. 提供自定义事件的支持
+ *  3. 提供组件的生成函数
+ *  4. 提供基础的初始化组件方法
  */
 
 (function ($) {
