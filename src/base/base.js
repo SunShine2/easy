@@ -22,11 +22,11 @@
  *  );
  *  </p>
  *  在组件内部可以通过
- *  this.publish(eventName, data);
+ *  this.trigger(eventName, data);
  *  来开放一个事件
  *  这样在组件外部可以通过
  *  var module = new Module();
- *  module.subscribe(eventName, callback)
+ *  module.bind(eventName, callback)
  *  来绑定事件，可以监听到内部的触发
  *
  *  base功能：
@@ -42,14 +42,14 @@
      * 用于对对象增加自定义事件的支持
      */
     function addCustomEvent() {
-        this.subscribe = function (evt, callback) {
-            return $.subscribe(evt, callback, this)
+        this.bind = function (evt, callback) {
+            return $.bind(evt, callback, this)
         };
-        this.unSubscribe = function (evt, callback) {
-            return $.unSubscribe(evt, callback, this)
+        this.unbind = function (evt, callback) {
+            return $.unbind(evt, callback, this)
         };
-        this.publish = function (evt, data) {
-            return $.publish(evt, data, this)
+        this.trigger = function (evt, data) {
+            return $.trigger(evt, data, this)
         }
     }
 
@@ -65,7 +65,7 @@
                     console.log('属性不符合规则，拒绝修改');
                     return false;
                 }else{
-                    that.publish(ATTR_CHANGE, {
+                    that.trigger(ATTR_CHANGE, {
                         'attrKey':key,
                         'attrValue':value
                     });
@@ -161,13 +161,13 @@
          * 生命周期内的方法
          */
         init:function () {
-            this.subscribe(INIT, this._defInitFn);
-            this.publish(INIT);
+            this.bind(INIT, this._defInitFn);
+            this.trigger(INIT);
             this.initializer && this.initializer(arguments);
         },
         destroy:function () {
-            this.subscribe(DESTROY, this._defDestroyFn);
-            this.publish(DESTROY);
+            this.bind(DESTROY, this._defDestroyFn);
+            this.trigger(DESTROY);
             this.destructor && this.destructor(arguments);
         },
         /**
@@ -175,7 +175,7 @@
          */
         _defInitFn:function (e) {
             this.set(INITIALIZED, true);
-            this.subscribe(ATTR_CHANGE, this._defAttrChange);
+            this.bind(ATTR_CHANGE, this._defAttrChange);
         },
         _defDestroyFn:function (e) {
             this.set(DESTROYED, true);

@@ -37,7 +37,7 @@
     }
 
     $.extend($, {
-        'subscribe':function (evt, callback, agent) {
+        bind:function (evt, callback, agent) {
             var o = {'type':evt},
                 item = handlers[evt] || (handlers[evt] = []),
                 proxyfn = function () {
@@ -47,15 +47,21 @@
             item.push(o);
             return o;
         },
-        'unSubscribe':function (evt, callback, agent) {
+        unbind:function (evt, callback, agent) {
             findHandlers(evt, callback, agent).forEach(function (handler) {
                 delete handlers[evt][handler.i]
             });
         },
-        'publish':function (evt, data, agent) {
-            findHandlers(evt, undefined, agent).forEach(function (ret) {
-                data && $.extend(ret, data);
-                ret['proxy'](ret);
+        trigger:function (evt, data, agent) {
+            var ret = [],
+                args = [].slice.call(arguments);
+            findHandlers(evt, undefined, agent).forEach(function (item) {
+                args.forEach(function(item,index){
+                    if(index < (args.length-1)){
+                        ret.push(item);
+                    }
+                });
+                item['proxy'](item);
             });
         }
     });

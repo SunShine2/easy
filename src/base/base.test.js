@@ -43,7 +43,7 @@ var testA = new $.Abc({name:'testA'}),
     testB = new $.Abc({name:'testB'});
 
 console.log(testA.get('fucked'));
-testA.subscribe('attrChange', function(e){
+testA.bind('attrChange', function(e){
     console.log('属性改变了：' + e.attrKey + ':' + e.attrValue);
 });
 testA.set('name','c');
