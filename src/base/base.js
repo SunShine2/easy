@@ -245,18 +245,25 @@
         };
         //挂载ATTRS属性
         Module.ATTRS = attrMember;
+        //挂在静态属性
         $.extend(Module, staticMember);
+        //如果没有传入要继承的对象，则默认为Base
         superModule = superModule || Base;
+        //拷贝一份prototype，防止构造函数直接执行
         tempFn.prototype = superModule.prototype;
         Module.prototype = new tempFn();
+        //方便访问静态函数
         Module.prototype._constructor = Module;
+        //把方法添加到Module的原型上
         $.extend(Module.prototype, protoMethod);
+        //修改构造器
         Module.prototype.constructor = superModule;
-
+        //保存对超类的引用
         Module.superclass = superModule.prototype;
         if(superModule.prototype.constructor == Object.prototype.constructor){
             superModule.prototype.constructor = superModule;
         }
+        //保存生成的对象
         Base.classList.push(o);
         console.log(Module);
         return Module;
