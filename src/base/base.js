@@ -34,6 +34,9 @@
  *  2. 提供自定义事件的支持
  *  3. 提供组件的生成函数
  *  4. 提供基础的初始化组件方法
+ *
+ *  20120820 新增extend方法，支持对Base产生的对象进行二次继承
+ *  Base.extend(moduleName, superModule, protoMethod, attrMember, staticMember)
  */
 
 (function ($) {
@@ -59,7 +62,7 @@
     function addAttr() {
         this.set = function (key, value) {
             var that = this;
-            filterHandler(value, this.ATTRS[key], function(v){
+            filterHandler(value, this._constructor.ATTRS[key], function(v){
                 console.log(v);
                 if(v === that.get(key)){
                     console.log('属性不符合规则，拒绝修改');
@@ -77,11 +80,6 @@
         }
     }
 
-    /**
-     * 默认函数
-     * @type {String}
-     */
-
     var INIT = 'init',
         DESTROY = 'destroy',
         ATTR_CHANGE = 'attrChange',
@@ -92,7 +90,8 @@
      * 增加filter系统，用于对初始化时传入的option进行处理，只接受
      */
     function optionFilter(option, attrObj) {
-        var ret = {};
+        var ret = {},
+            option = option || {};
         $.each(attrObj, function(key,item){
             var value = option[key];
             filterHandler(value, item, function(v){
@@ -142,13 +141,15 @@
      * 基础base对象，用于扩展
      * @constructor
      */
-    function Base() {
+    function Base(option) {
 
         addCustomEvent.call(this);
         addAttr.call(this);
 
-        this.init.apply(this, arguments);
+        this._init.apply(this, arguments);
     }
+
+    Base.classList = [];
 
     $.extend(Base.prototype, {
         /**
@@ -160,12 +161,15 @@
         /**
          * 生命周期内的方法
          */
-        init:function () {
+        _init:function (option) {
+            console.log(this._constructor.ATTRS, option);
+            option = optionFilter(option,this._constructor.ATTRS);
+            $.extend(this, option);
             this.bind(INIT, this._defInitFn);
             this.trigger(INIT);
             this.initializer && this.initializer(arguments);
         },
-        destroy:function () {
+        _destroy:function () {
             this.bind(DESTROY, this._defDestroyFn);
             this.trigger(DESTROY);
             this.destructor && this.destructor(arguments);
@@ -174,6 +178,7 @@
          * 静态的默认属性，可以在子类中进行覆写
          */
         _defInitFn:function (e) {
+            console.log(this);
             this.set(INITIALIZED, true);
             this.bind(ATTR_CHANGE, this._defAttrChange);
         },
@@ -196,35 +201,73 @@
      * @private
      */
 
-    Base._build = function(moduleName, protoMethod, attrMember, staticMember){
-        var Module = function(option){
+    Base._build = function(moduleName, superModule, protoMethod, attrMember, staticMember){
+        /*var Module = function(option){
             //$.extend(attrMember, option);  //合并默认的属性和实例化时传入的属性
             this.ATTRS = attrMember;
-
             option = optionFilter(option,attrMember);
-
+            Module.inheritModule = baseModule || Base;
             $.extend(this, option);  //将属性放入this中
             //this.constructor = Base;
-            Base.call(this, arguments);
+            this.inheritModule.call(this, arguments);
         };
+        //模块名字
+        Module.name = moduleName;
+        Base.classList.push(moduleName);
+        Module.toString = function(){
+            return moduleName;
+        };
+
+        //将静态属性挂在在模块构造器本身
+        $.extend(Module, staticMember);
+        *//**
+         * TODO:静态对象可能会含有对应的filter
+         *//*
+        $.extend(Module.prototype, protoMethod);
+        $.extend(Module.prototype, Base.prototype);
+        //返回构造后的模块
+        return Module;*/
+
+        //使用prototype方式继承
+        var Module = function(option){
+                this._constructor.superclass.constructor.call(this,option);
+            },
+            tempFn = function(){},
+            o = {
+                name : moduleName,
+                value : Module
+            };
+
         //模块名字
         Module.name = moduleName;
         Module.toString = function(){
             return moduleName;
         };
-        //将静态属性挂在在模块构造器本身
+        //挂载ATTRS属性
+        Module.ATTRS = attrMember;
         $.extend(Module, staticMember);
-        /**
-         * TODO:静态对象可能会含有对应的filter
-         */
+        superModule = superModule || Base;
+        tempFn.prototype = superModule.prototype;
+        Module.prototype = new tempFn();
+        Module.prototype._constructor = Module;
         $.extend(Module.prototype, protoMethod);
-        $.extend(Module.prototype, Base.prototype);
-        //返回构造后的模块
+        Module.prototype.constructor = superModule;
+
+        Module.superclass = superModule.prototype;
+        if(superModule.prototype.constructor == Object.prototype.constructor){
+            superModule.prototype.constructor = superModule;
+        }
+        Base.classList.push(o);
+        console.log(Module);
         return Module;
     };
 
     Base.build = function(moduleName, protoMethod, attrMember, staticMember){
-        return Base._build(moduleName, protoMethod, attrMember, staticMember)
+        return Base._build(moduleName, null, protoMethod, attrMember, staticMember)
+    };
+
+    Base.extend = function(moduleName, superModule, protoMethod, attrMember, staticMember){
+        return Base._build(moduleName, superModule, protoMethod, attrMember, staticMember)
     };
 
     $.Base = Base;

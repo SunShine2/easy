@@ -1,186 +1,235 @@
 /**
  * 针对云应用部分工具模块
  * author : butian.wth@aliyun-inc.com
- * version : 0-0-1
+ * version : 0-0-2
  */
-(function($) {
+(function ($) {
 
-  var caf,
-    deviceFn = {
-      "imei" : function(){return CloudAPI.Device.getDeviceId('getSimSuccess', 'getSimError')},
-      "model" : function(){return navigator.system.platform.Model ? (navigator.system.platform.Model) : (getDevice("frameVer").split("."))[2]},
-      "osInfo" : function(){return navigator.system.platform.NativeFrameworkVersion},
-      "sysVer" : function(){return navigator.system.platform.FirmwareVersion},
-      "frameVer" : function(){return navigator.system.platform.SystemFrameworkVersion},
-      "uuid" : function(){
-        var uuid = CloudAPI.PIM.getCloudUUID() != "false" ? CloudAPI.PIM.getCloudUUID() : "";
-        //fuck uuid有可能偶尔取不到，多取几次
-        while(!uuid) {
-          uuid = CloudAPI.PIM.getCloudUUID() != "false" ? CloudAPI.PIM.getCloudUUID() : "";
-        }
-        return uuid;
-      }
+    var caf,
+        deviceFn = {
+            "imei":function () {
+                return CloudAPI.Device.getDeviceId('getSimSuccess', 'getSimError')
+            },
+            "model":function () {
+                return navigator.system.platform.Model ? (navigator.system.platform.Model) : (getDevice("frameVer").split("."))[2]
+            },
+            "osInfo":function () {
+                return navigator.system.platform.NativeFrameworkVersion
+            },
+            "sysVer":function () {
+                return navigator.system.platform.FirmwareVersion
+            },
+            "frameVer":function () {
+                return navigator.system.platform.SystemFrameworkVersion
+            },
+            "uuid":function () {
+                var uuid = CloudAPI.PIM.getCloudUUID() != "false" ? CloudAPI.PIM.getCloudUUID() : "";
+                //fuck uuid有可能偶尔取不到，多取几次
+                while (!uuid) {
+                    uuid = CloudAPI.PIM.getCloudUUID() != "false" ? CloudAPI.PIM.getCloudUUID() : "";
+                }
+                return uuid;
+            }
+        };
+
+    $.caf = {
+        "imei":"",
+        "model":"",
+        "osInfo":"",
+        "sysVer":"",
+        "frameVer":"",
+        "uuid":""
     };
 
-  $.caf = {
-    "imei" : "",
-    "model" : "",
-    "osInfo" : "",
-    "sysVer" : "",
-    "frameVer" : "",
-    "uuid" : "",
-    "screen" : ""
-  };
+    caf = $.caf;
 
-  caf = $.caf;
-
-  function getDevice(name){
-    return caf.name ? caf.name : (function(){
-        var ret = "";
-        try{
-          ret = deviceFn[name]();
-        } catch(e){}
-        caf.name = ret;
-        return ret
-      })();
-  }
-
-  $.getDevice = getDevice;
-
-  $.extend({
-    "getScreen" : function(callback) {
-      var ret;
-      navigator.system.get("OutputDevices", function(o) {
-        window.screenInfo = o.displayDevices[0].physicalWidth + "*" + o.displayDevices[0].physicalHeight;
-        ret = [o.displayDevices[0].physicalWidth, o.displayDevices[0].physicalHeight];
-        callback(ret);
-      });
-    },
-    "checkNet" : function(callback, agent) {
-      if (CloudAPI.Device.DeviceStateInfo.isNetworkAvailable() !== "true") {
-        var params = {
-          "title": "联网提示",
-          "msg"  : "网络连接失败，点击确定检查网络"
-        };
-        agent.dlgInvoke("confirm", this, params, this, function(dlg, act, sender){
-          switch(act){
-            case "dlg_ok":
-              CloudAPI.Device.DeviceStateInfo.wirelessSetting();
-              break;
-            case "dlg_cancel":
-            break;
-          }
-        });
-      } else {
-        callback.call(agent);
-      }
-    },
-    "getApp" : function(){
-      return __runtime__.getActiveApp()
-    },
-    "getPage" : function(){
-      return $.getApp().getActivePage()
-    },
-    "getPageId" : function(){
-      return $.getPage().getPid()
-    },
-    "pageBack" : function(){
-      $.getApp()._deckPage.pageBack()
-    },
-    "launchApp" : function(type, name, data, sucCB, failCB){
-      var l = navigator.service.applicationLauncher.launchApplication;
-      if(name.indexOf("cloudappstore") != -1){
-        l({
-          "type": type,
-          "id" : name,
-          "data" : data
-        }, sucCB, failCB)
-      }else{
-        l({
-          "type":type,
-          "package":name,
-          "data":data
-        }, sucCB, failCB)
-      }
-    },
-    "getSign" : function(callback, agent, update){
-      /**
-       * 手机环境取真实的sign
-       */
-      agent = agent || $.getApp();
-      var osToken = window.localStorage.getItem("os_token");
-      if(osToken || !update){
-        callback.call(agent);
-        return osToken;
-      }else{
-        if(__runtime__.isMobile()){
-          agent.sign = CloudAPI.PIM.peekSign();
-          window.localStorage.setItem("os_token", agent.sign);
-          if(agent.sign == "false"){
-            agent.apiInvoke("sign", [true], agent, function(mysign) {
-              if (mysign) {
-                agent.sign = mysign;
-                window.localStorage.setItem("os_token", agent.sign);
-                callback && callback.call(agent, agent.sign);
-                return mysign;
-              } else {
-                agent.showMsgBox("提示",'获取云帐号失败',"err");
-                return false;
-              }
-            });
-          }else{
-            callback && callback.call(agent, agent.sign);
-          }
-        }else{
-          /**
-           * 开发环境取测试环境的sign
-           */
-          CloudAPI.PIM.getSign = function (flag, onSuccess, onFailure) {
-            var url = "http://10.249.195.165/newopenapi/createsign.php?appid=60119&tyuid=zhouqicf";
-            var win = window;
-            __runtime__.getActiveApp().netInvoke("GET", url, "", "json", this, function (json) {
-              if (json.code == 200) {
-                _sign = json.data;
-                  win[onSuccess](_sign);
-              } else {
-                win[onFailure]("PIM.getSign failure");
-              }
-            });
-          };
-          agent.apiInvoke("sign", [true], agent, function(mysign) {
-            if (mysign) {
-              agent.sign = mysign;
-              window.localStorage.setItem("os_token", agent.sign);
-              callback && callback.call(agent, mysign);
-              return mysign;
-            } else {
-              agent.showMsgBox("提示",'获取云帐号失败',"err");
-              return false;
+    function getDevice(name) {
+        return caf.name ? caf.name : (function () {
+            var ret = "";
+            try {
+                ret = deviceFn[name]();
+            } catch (e) {
             }
-          });
-        }
-      }
-    },
-    "netInvokeSign" : function(method, url, params, type, agent, callback){
-      if(!window.localStorage.getItem("os_token")){
-        $.getSign(function(){
-          this.netInvoke(method, url, params, type, agent, function(data){
-            callback.call(agent,data);
-          });
-        }, this, true)
-      }else{
-        $.getApp().netInvoke(method, url, params, type, agent, function(data){
-          if(data.code && data.code == "900"){
-            $.getSign(function(){
-              this.netInvoke(method, url, params, type, agent, function(data){
-                callback.call(agent,data);
-              });
-            }, this, true)
-          }else{
-            callback.call(agent,data);
-          }
-        })
-      }
+            caf.name = ret;
+            return ret
+        })();
     }
-  });
+
+    $.getDevice = getDevice;
+
+    $.extend($, {
+        "getScreen":function (callback) {
+            var ret;
+            navigator.system.get("OutputDevices", function (o) {
+                window.screenInfo = o.displayDevices[0].physicalWidth + "*" + o.displayDevices[0].physicalHeight;
+                ret = [o.displayDevices[0].physicalWidth, o.displayDevices[0].physicalHeight];
+                callback(ret);
+            });
+        },
+        "checkNet":function (callback, agent) {
+            agent = typeof agent !== "undefined" ? agent : this;
+            agent.checkNeting = false;
+            if ('true' !== CloudAPI.Device.DeviceStateInfo.isNetworkAvailable()) {
+                var msg,
+                    params = {
+                        "title":"提示",
+                        "msg":msg
+                    };
+                if (agent.checkNeting) {
+                    msg = "您刚刚设置过网络，可能还没连接成功,您可以尝试重新连接。"
+                } else {
+                    msg = "系统检测到您没有使用网络，是否要设置网络？"
+                }
+                $.loading && $.loading.hide();
+                agent.dlgInvoke("neterror", agent, params, agent, function (a, b) {
+                    if ('dlg_cancel' !== b) {
+                        agent.checkNeting = true;
+                        CloudAPI.Device.DeviceStateInfo.wirelessSetting();
+                    }
+                });
+            } else {
+                agent.checkNeting = false;
+                callback && callback.call(agent);
+                $.loading && $.loading.hide()
+            }
+        },
+        "getApp":function () {
+            return __runtime__.getActiveApp()
+        },
+        "getPage":function () {
+            return $.getApp().getActivePage()
+        },
+        "getPageId":function () {
+            return $.getPage().getPid()
+        },
+        "setPageBack":function (callback) {
+            $.getApp()._deckPage.pageBack = callback
+        },
+        "launchApp":function (type, name, data, sucCB, failCB) {
+            var l = navigator.service.applicationLauncher.launchApplication;
+            if (name.indexOf("cloudappstore") != -1) {
+                l({
+                    "type":type,
+                    "id":name,
+                    "data":data
+                }, sucCB, failCB)
+            } else {
+                l({
+                    "type":type,
+                    "package":name,
+                    "data":data
+                }, sucCB, failCB)
+            }
+        },
+        "getSign":function (callback, agent, update) {
+            /**
+             * 手机环境取真实的sign
+             */
+
+            /**
+             * 开发环境取测试环境的sign
+             */
+            if (!__runtime__.isMobile()) {
+                CloudAPI.PIM.getSign = function (flag, onSuccess, onFailure) {
+                    var url = "http://10.249.195.165/newopenapi/createsign.php?appid=60119&tyuid=zhouqicf";
+                    var win = window;
+                    __runtime__.getActiveApp().netInvoke("GET", url, "", "json", this, function (json) {
+                        if (json.code == 200) {
+                            _sign = json.data;
+                            $.os_token = json.data
+                            win[onSuccess](_sign);
+                        } else {
+                            win[onFailure]("PIM.getSign failure");
+                        }
+                    });
+                };
+            }
+
+            agent = agent || $.getApp();
+            var osToken = $.os_token;
+            if (osToken || !update) {
+                callback.call(agent);
+                return osToken;
+            } else {
+                agent.sign = CloudAPI.PIM.peekSign();
+                $.os_token = agent.sign;
+                if (agent.sign == "false") {
+                    agent.apiInvoke("sign", [true], agent, function (mysign) {
+                        if (mysign) {
+                            agent.sign = mysign;
+                            $.os_token = mysign;
+                            callback && callback.call(agent, agent.sign);
+                            return mysign;
+                        } else {
+                            agent.showMsgBox("提示", '获取云帐号失败', "err");
+                            return false;
+                        }
+                    });
+                } else {
+                    callback && callback.call(agent, agent.sign);
+                }
+            }
+
+            /**
+             * 划开的时候清除sign
+             */
+            agent.onSuspend = function () {
+                $.os_token = "";
+            };
+        },
+        "netInvokeSign":function (method, url, params, type, agent, callback) {
+            if (!window.localStorage.getItem("os_token")) {
+                $.getSign(function () {
+                    $.getApp().netInvoke(method, url, params, type, agent, function (data) {
+                        callback.call(agent, data);
+                    });
+                }, this, true)
+            } else {
+                $.getApp().netInvoke(method, url, params, type, agent, function (data) {
+                    if (data.code && data.code == "900") {
+                        $.getSign(function () {
+                            $.getApp().netInvoke(method, url, params, type, agent, function (data) {
+                                callback.call(agent, data);
+                            });
+                        }, this, true)
+                    } else {
+                        callback.call(agent, data);
+                    }
+                })
+            }
+        },
+        "checkData":function (data, flag, callback, list, agent) {
+            agent = typeof agent !== "undefined" ? agent : this;
+            if (data[flag]) {
+                if (list == null || list.length === 0) {
+                    agent.toast ? agent.toast("没有对应的数据") : agent._app.toast("没有对应的数据")
+                } else {
+                    callback.call(agent, data)
+                }
+            } else {
+                agent.showMsgBox("提示", "网络繁忙，请重试或检查网络", "warn")
+            }
+            $.loading.hide();
+        },
+        "comparePlain":function (actual, expect) {
+            var e = JSON.stringify(expect),
+                a = JSON.stringify(actual);
+
+            return e === a;
+        },
+        'formatedDate':function (connect, dateObj) {
+            var now = [],
+                date = dateObj || new Date();
+            now.push(date.getFullYear());
+            now.push(date.getMonth() + 1);
+            now.push(date.getDate());
+            if (now[1] < 10) {
+                now[1] = "0" + now[1];
+            }
+            if (now[2] + 1 < 10) {
+                now[2] = "0" + now[2];
+            }
+            return now.join(connect);
+        }
+    });
 })(Zepto);

@@ -40,8 +40,8 @@
         bind:function (evt, callback, agent) {
             var o = {'type':evt},
                 item = handlers[evt] || (handlers[evt] = []),
-                proxyfn = function () {
-                    return callback.apply(agent, arguments);
+                proxyfn = function (e, data) {
+                    return callback.apply(agent, [e].concat(data));
                 };
             o = $.extend(o, {'fn':callback, 'proxy':proxyfn, 'i':item.length, 'agent':agent});
             item.push(o);
@@ -52,16 +52,9 @@
                 delete handlers[evt][handler.i]
             });
         },
-        trigger:function (evt, data, agent) {
-            var ret = [],
-                args = [].slice.call(arguments);
+        trigger:function (evt,data,agent) {
             findHandlers(evt, undefined, agent).forEach(function (item) {
-                args.forEach(function(item,index){
-                    if(index < (args.length-1)){
-                        ret.push(item);
-                    }
-                });
-                item['proxy'](item);
+                item['proxy'](item, data);
             });
         }
     });

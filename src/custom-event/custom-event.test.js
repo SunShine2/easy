@@ -18,18 +18,18 @@ describe('测试自定义事件模块', function () {
             name = "";
         });
         it('测试绑定自定义事件以及触发自定义事件的功能是否通过', function () {
-            $.subscribe('testEvent01', testFn, testObj);
-            $.publish('testEvent01');
+            $.bind('testEvent01', testFn, testObj);
+            $.trigger('testEvent01');
             expect(name).toEqual('foolish');
         });
         it("测试解绑自定义事件的功能", function () {
-            $.unSubscribe('testEvent01', testFn);
-            $.publish('testEvent01');
+            $.unbind('testEvent01', testFn);
+            $.trigger('testEvent01');
             expect(name).not.toEqual('testEvent01');
         });
         it('测试解绑功能，只传一个参数', function () {
-            $.subscribe('testEvent01', testFn, testObj);
-            $.unSubscribe('testEvent01');
+            $.bind('testEvent01', testFn, testObj);
+            $.unbind('testEvent01');
             expect(name).toEqual('')
         });
     });
@@ -43,20 +43,20 @@ describe('测试自定义事件模块', function () {
                 return index;
             };
         beforeEach(function () {
-            $.unSubscribe('testEvent01');
+            $.unbind('testEvent01');
             index = 1;
         });
         it('测试重复绑定', function () {
-            $.subscribe('testEvent01', testFn, testObj);
-            $.subscribe('testEvent01', testFn, testObj);
-            $.publish('testEvent01');
+            $.bind('testEvent01', testFn, testObj);
+            $.bind('testEvent01', testFn, testObj);
+            $.trigger('testEvent01');
             expect(index).toEqual(3)
         });
         it('测试解绑所有监听器的功能，只传一个参数', function () {
-            $.subscribe('testEvent01', testFn, testObj);
-            $.subscribe('testEvent01', testFn, testObj);
-            $.subscribe('testEvent01', testFn, testObj);
-            $.unSubscribe('testEvent01');
+            $.bind('testEvent01', testFn, testObj);
+            $.bind('testEvent01', testFn, testObj);
+            $.bind('testEvent01', testFn, testObj);
+            $.unbind('testEvent01');
             expect(index).toEqual(1)
         });
     });
@@ -66,16 +66,17 @@ describe('测试自定义事件模块', function () {
                 name:'testObj01'
             },
             index = 1,
-            testFn = function (e) {
-                index = e.index
+            testFn = function (e, data) {
+                console.log(arguments);
+                index = data.index
             },
             dataObj = {
                 index:3
             };
 
         it('测试简单数据的传递', function () {
-            $.subscribe(event, testFn, testObj);
-            $.publish(event, dataObj);
+            $.bind(event, testFn, testObj);
+            $.trigger(event, dataObj);
             expect(index).toEqual(3);
         })
     });
@@ -96,9 +97,9 @@ describe('测试自定义事件模块', function () {
             };
 
         it('测试简单数据的传递', function () {
-            $.subscribe(event, testFn, testObj01);
-            $.subscribe(event, testFn, testObj02);
-            $.publish(event, dataObj, testObj01);
+            $.bind(event, testFn, testObj01);
+            $.bind(event, testFn, testObj02);
+            $.trigger(event, dataObj, testObj01);
             expect(name).toEqual('testObj01');
         })
     })

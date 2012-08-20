@@ -5,53 +5,88 @@
  */
 
 $.Abc = $.Base.build('a', {
-        initializer :function(){
-            this.fucked = true;
-        },
-        getName : function(){
-            return this.name
-        },
-        getStaticName : function(){
-            return $.Abc.NAME;
-        },
-        destructor : function(){
+    initializer:function () {
+        this.fucked = true;
+    },
+    getName:function () {
+        return this.name
+    },
+    getStaticName:function () {
+        return $.Abc.NAME;
+    },
+    destructor:function () {
 
+    }
+}, {
+    width:{
+        value:5,
+        validator:/\d/
+    },
+    height:{
+        value:5,
+        setter:function (value) {
+            return /\d/.test(value)
         }
-    },{
-        width : {
-            value : 5,
-            validator : /\d/
+    },
+    name:{
+        value:'wocalei',
+        setter:function (value) {
+            return /.+/.test(value)
         },
-        height : {
-            value : 5,
-            setter : function(value){
+        validator:/\d/
+    }
+}, {
+    NAME:'这是静态属性'
+});
+
+var testA = new $.Abc({name:'testA'}),
+    testB = new $.Abc();
+console.log(testA);
+console.log(testA.get('fucked'));
+testA.bind('attrChange', function (e) {
+    console.log('属性改变了：' + e.attrKey + ':' + e.attrValue);
+});
+testA.set('name', 'c');
+console.log('testA的name属性', testA.get('name'));
+testA.set('width', 'a');
+console.log('testA的width属性', testA.get('width'));
+console.log('testA的静态属性', testA.getStaticName());
+
+console.log('testB的name属性', testB.getName());
+console.log('testB的width属性', testB.get('width'));
+console.log('testB的静态属性', testB.getStaticName());
+
+    $.Efg = $.Base.extend('c', $.Abc, {
+        getName:function () {
+            return this.name + 'C'
+        },
+        getStaticName:function () {
+            return $.Abc.NAME + 'C';
+        }
+    }, {
+        width:{
+            value:9,
+            validator:/\d/
+        },
+        height:{
+            value:9,
+            setter:function (value) {
                 return /\d/.test(value)
             }
         },
-        name : {
-            value : 'wocalei',
-            setter : function(value){
+        name:{
+            value:'wocaleiC',
+            setter:function (value) {
                 return /.+/.test(value)
             },
-            validator: /\d/
+            validator:/\d/
         }
-    },{
-        NAME : '这是静态属性'
+    }, {
+        NAME:'这是静态属性C'
     });
 
-var testA = new $.Abc({name:'testA'}),
-    testB = new $.Abc({name:'testB'});
+var testC = new $.Efg();
 
-console.log(testA.get('fucked'));
-testA.bind('attrChange', function(e){
-    console.log('属性改变了：' + e.attrKey + ':' + e.attrValue);
-});
-testA.set('name','c');
-console.log('testA的name属性',testA.get('name'));
-testA.set('width','a');
-console.log('testA的width属性',testA.get('width'));
-console.log('testA的静态属性',testA.getStaticName());
-
-console.log('testB的name属性',testB.getName());
-console.log('testB的width属性',testB.get('width'));
-console.log('testB的静态属性',testB.getStaticName());
+console.log(testC);
+console.log(testC.getName());
+console.log(testC.getStaticName());
