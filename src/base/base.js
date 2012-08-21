@@ -62,7 +62,7 @@
     function addAttr() {
         this.set = function (key, value) {
             var that = this;
-            filterHandler(value, this._constructor.ATTRS[key], function(v){
+            filterHandler(value, this.constructor.ATTRS[key], function(v){
                 console.log(v);
                 if(v === that.get(key)){
                     console.log('属性不符合规则，拒绝修改');
@@ -162,8 +162,8 @@
          * 生命周期内的方法
          */
         _init:function (option) {
-            console.log(this._constructor.ATTRS, option);
-            option = optionFilter(option,this._constructor.ATTRS);
+            console.log(this.constructor.ATTRS, option);
+            option = optionFilter(option,this.constructor.ATTRS);
             $.extend(this, option);
             this.bind(INIT, this._defInitFn);
             this.trigger(INIT);
@@ -230,7 +230,7 @@
 
         //使用prototype方式继承
         var Module = function(option){
-                this._constructor.superclass.constructor.call(this,option);
+                Module.superclass.constructor.call(this,option);
             },
             tempFn = function(){},
             o = {
@@ -240,9 +240,9 @@
 
         //模块名字
         Module.name = moduleName;
-        Module.toString = function(){
+        /*Module.toString = function(){
             return moduleName;
-        };
+        };*/
         //挂载ATTRS属性
         Module.ATTRS = attrMember;
         //挂在静态属性
@@ -252,12 +252,10 @@
         //拷贝一份prototype，防止构造函数直接执行
         tempFn.prototype = superModule.prototype;
         Module.prototype = new tempFn();
-        //方便访问静态函数
-        Module.prototype._constructor = Module;
         //把方法添加到Module的原型上
         $.extend(Module.prototype, protoMethod);
         //修改构造器
-        Module.prototype.constructor = superModule;
+        Module.prototype.constructor = Module;
         //保存对超类的引用
         Module.superclass = superModule.prototype;
         if(superModule.prototype.constructor == Object.prototype.constructor){
