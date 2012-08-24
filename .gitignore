@@ -16,3 +16,7 @@ public/
 /*/*/.svn
 /*/*/*/.svn
 _assets
+lib/
+lib/*
+tools
+tools/*

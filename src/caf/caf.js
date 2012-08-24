@@ -44,13 +44,13 @@
     caf = $.caf;
 
     function getDevice(name) {
-        return caf.name ? caf.name : (function () {
+        return caf[name] ? caf[name] : (function () {
             var ret = "";
             try {
                 ret = deviceFn[name]();
             } catch (e) {
             }
-            caf.name = ret;
+            caf[name] = ret;
             return ret
         })();
     }
@@ -66,32 +66,40 @@
                 callback(ret);
             });
         },
-        "checkNet":function (callback, agent) {
+        "checkNet":function (callback, agent, failHandler) {
+            console.log(agent);
             agent = typeof agent !== "undefined" ? agent : this;
             agent.checkNeting = false;
             if ('true' !== CloudAPI.Device.DeviceStateInfo.isNetworkAvailable()) {
-                var msg,
-                    params = {
-                        "title":"提示",
-                        "msg":msg
-                    };
-                if (agent.checkNeting) {
-                    msg = "您刚刚设置过网络，可能还没连接成功,您可以尝试重新连接。"
-                } else {
-                    msg = "系统检测到您没有使用网络，是否要设置网络？"
+                if(failHandler){
+                    failHandler.call(agent);
+                }else{
+                    $.defaultNetError(agent);
                 }
-                $.loading && $.loading.hide();
-                agent.dlgInvoke("neterror", agent, params, agent, function (a, b) {
-                    if ('dlg_cancel' !== b) {
-                        agent.checkNeting = true;
-                        CloudAPI.Device.DeviceStateInfo.wirelessSetting();
-                    }
-                });
             } else {
                 agent.checkNeting = false;
                 callback && callback.call(agent);
-                $.loading && $.loading.hide()
             }
+        },
+        'defaultNetError' : function(agent){
+            var msg,
+                params;
+            if (agent.checkNeting) {
+                msg = "您刚刚设置过网络，可能还没连接成功,您可以尝试重新连接。"
+            } else {
+                msg = "系统检测到您没有使用网络，是否要设置网络？"
+            }
+            params = {
+                "title":"提示",
+                "msg":msg
+            };
+            agent.dlgInvoke("neterror", agent, params, agent, function (a, b) {
+                if ('dlg_cancel' !== b) {
+                    agent.checkNeting = true;
+                    CloudAPI.Device.DeviceStateInfo.wirelessSetting();
+                }
+            });
+            $.loading && $.loading.hide()
         },
         "getApp":function () {
             return __runtime__.getActiveApp()
@@ -200,16 +208,16 @@
         },
         "checkData":function (data, flag, callback, list, agent) {
             agent = typeof agent !== "undefined" ? agent : this;
-            if (data[flag]) {
-                if (list == null || list.length === 0) {
+            if (flag) {
+                if (list &&( list == null || list == [] )) {
                     agent.toast ? agent.toast("没有对应的数据") : agent._app.toast("没有对应的数据")
                 } else {
                     callback.call(agent, data)
                 }
             } else {
-                agent.showMsgBox("提示", "网络繁忙，请重试或检查网络", "warn")
+                //agent.showMsgBox("提示", "网络繁忙，请重试或检查网络", "warn");
+                $.loading.hide();
             }
-            $.loading.hide();
         },
         "comparePlain":function (actual, expect) {
             var e = JSON.stringify(expect),

@@ -42,23 +42,9 @@
 (function ($) {
 
     /**
-     * 用于对对象增加自定义事件的支持
-     */
-    function addCustomEvent() {
-        this.bind = function (evt, callback) {
-            return $.bind(evt, callback, this)
-        };
-        this.unbind = function (evt, callback) {
-            return $.unbind(evt, callback, this)
-        };
-        this.trigger = function (evt, data) {
-            return $.trigger(evt, data, this)
-        }
-    }
-
-    /**
      * 用于对事件增加ATTR的支持，并提供一个ATT_CHANGE事件
      */
+
     function addAttr() {
         this.set = function (key, value) {
             var that = this;
@@ -143,7 +129,7 @@
      */
     function Base(option) {
 
-        addCustomEvent.call(this);
+        $.addCustomEvent.call(this);
         addAttr.call(this);
 
         this._init.apply(this, arguments);
@@ -267,10 +253,27 @@
         return Module;
     };
 
+    /**
+     * build方法，用于创建一个继承与Base的模块
+     * @param moduleName 模块的名字
+     * @param protoMethod 挂载到模块原型上的方法
+     * @param attrMember 模块参数的过滤系统
+     * @param staticMember 挂载在模块本身上的静态数据
+     * @return {*} 返回新构建的模块
+     */
     Base.build = function(moduleName, protoMethod, attrMember, staticMember){
         return Base._build(moduleName, null, protoMethod, attrMember, staticMember)
     };
 
+    /**
+     * extend方法，可以创建一个模块，该模块可以继承与build出来的模块，也可以继承与Base，第二个在参数中可以指定
+     * @param moduleName 模块的名字
+     * @param superModule 用于继承的超类
+     * @param protoMethod 挂载到模块原型上的方法
+     * @param attrMember 模块参数的过滤系统
+     * @param staticMember 挂载在模块本身上的静态数据
+     * @return {*} 返回新构建的模块
+     */
     Base.extend = function(moduleName, superModule, protoMethod, attrMember, staticMember){
         return Base._build(moduleName, superModule, protoMethod, attrMember, staticMember)
     };

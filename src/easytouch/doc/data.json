@@ -1,0 +1,786 @@
+{
+    "project": {
+        "name": "EasyTouch",
+        "description": "The UI library for Easy.",
+        "version": "0.0.1"
+    },
+    "files": {
+        "js\\core.js": {
+            "name": "js\\core.js",
+            "modules": {},
+            "classes": {
+                "$.EasyTouch": 1,
+                "$.EasyTouch.Page": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "$.EasyTouch": {
+            "name": "$.EasyTouch",
+            "shortname": "$.EasyTouch",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js\\core.js",
+            "line": 104,
+            "description": "Touch UI Library for Easy, Examples:\n\n    var Page1 = $.EasyTouch.Page.extend({\n        el: '#xxx .xxx',\n        init: function(){},\n        reset: function(){}\n    });\n\n    //you can new a $.EasyTouch\n    new $.EasyTouch({\n        pages: {\n            //class inherit from $.EasyTouch.Page\n            \"Page1\": Page1,\n\n            //get html from el\n            //html file\n            \"Page2\": {\n                el: 'xxx.html'\n            },\n            //css selector\n            \"Page3\": {\n                el: '#xxx'\n            },\n            //HTML Element\n            \"Page4\": {\n                el: document.getElementById('xxx')\n            },\n            //Zepto\n            \"Page5\": {\n                el: $('#xxx')\n            },\n\n            //get template from tpl, parse the template in the function of <code>parse</code>\n            \"Page6\": {\n                tpl: 'xxx.html'\n            },\n            \"Page7\": {\n                tpl: '#xxx'\n            },\n            \"Page8\": {\n                tpl: document.getElementById('xxx')\n            },\n            \"Page9\": {\n                tpl: $('#xxx')\n            }\n        },\n        //this function will run will new\n        init: function(params){},\n        //for YunOS resume event\n        resume: function(){},\n        //for YunOS suspend event\n        pause: function(){}\n    });\n\nOr you can extend a EasyTouch, like this:\n\n    var App = $.EasyTouch.extend({\n        el: 'xxx',\n        init: xxx\n        ...\n    });\n    new App();",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "pages",
+                            "description": "页面配置：\n        如果是一个Object，EasyTouch会调用<code>$.EasyTouch.extend</code>，将这个Object作为prototype属性扩展出一个Page；\n        如果是一个Class，则将直接使用该类作为一个Page；",
+                            "type": "Object|Class",
+                            "props": [
+                                {
+                                    "name": "el",
+                                    "description": "<code>el</code>和<code>tpl</code>属性二选一，<code>el</code>将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）",
+                                    "type": "HTMLElement|Node|String"
+                                },
+                                {
+                                    "name": "tpl",
+                                    "description": "将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>parse</code>方法中使用任意模板引擎渲染改模板",
+                                    "type": "HTMLElement|Node|String"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "is_constructor": 1
+        },
+        "$.EasyTouch.Page": {
+            "name": "$.EasyTouch.Page",
+            "shortname": "$.EasyTouch.Page",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js\\core.js",
+            "line": 573,
+            "description": "页面类，该类不需要应用自己实例化，EasyTouch会在<code>navPage</code>时判断是否实例化了该页面，如果没有会自动实例化，\n应用可以通过<code>$.EasyTouch.Page.extend</code>方法创建一个新的Page类",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "page id",
+                    "type": "String"
+                },
+                {
+                    "name": "params",
+                    "description": "property add to <code>$.EasyTouch.Page</code>",
+                    "type": "Object"
+                },
+                {
+                    "name": "app",
+                    "description": "the instance of <code>$.EasyTouch</code>, the page is in which app",
+                    "type": "Object"
+                }
+            ],
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js\\core.js",
+            "line": 1,
+            "description": "Easy Touch",
+            "author": ": youxiao@alibaba-inc.com",
+            "version": ": 0.0.1",
+            "beta": 1,
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 9,
+            "description": "页面切换完成时促发，包括<code>navPage</code>和<code>pageBack</code>\n\n    var app = new EasyTouch({...});\n    app.bind('page::change', function(e, params){\n        var fromPage = this.getPage(params.from);\n    }, app);",
+            "itemtype": "event",
+            "name": "page::change",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "from",
+                            "description": "page id of prev page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "to",
+                            "description": "page id of next page",
+                            "type": "String|Undefined"
+                        },
+                        {
+                            "name": "params",
+                            "description": "the params when you call <code>navPage</code> or <code>pageBack</code>",
+                            "type": "Object|Undefined"
+                        },
+                        {
+                            "name": "anim",
+                            "description": "the animation name",
+                            "type": "String|Undefined"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 26,
+            "description": "<code>pageBack</code>完成时促发",
+            "itemtype": "event",
+            "name": "page::back",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "from",
+                            "description": "page id of prev page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "to",
+                            "description": "page id of next page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "params",
+                            "description": "the params when you call <code>navPage</code> or <code>pageBack</code>",
+                            "type": "Object|Undefined"
+                        },
+                        {
+                            "name": "anim",
+                            "description": "the animation name",
+                            "type": "String|Undefined"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 37,
+            "description": "<code>navPage</code>完成时促发",
+            "itemtype": "event",
+            "name": "page::nav",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "from",
+                            "description": "page id of prev page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "to",
+                            "description": "page id of next page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "params",
+                            "description": "the params when you call <code>navPage</code> or <code>pageBack</code>",
+                            "type": "Object|Undefined"
+                        },
+                        {
+                            "name": "anim",
+                            "description": "the animation name",
+                            "type": "String|Undefined"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 48,
+            "description": "<code>navPage</code>开始前促发",
+            "itemtype": "event",
+            "name": "page::before_nav",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "from",
+                            "description": "page id of prev page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "to",
+                            "description": "page id of next page",
+                            "type": "String|Undefined"
+                        },
+                        {
+                            "name": "params",
+                            "description": "the params when you call <code>navPage</code> or <code>pageBack</code>",
+                            "type": "Object|Undefined"
+                        },
+                        {
+                            "name": "anim",
+                            "description": "the animation name",
+                            "type": "String|Undefined"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 59,
+            "description": "<code>navPage</code>或者<code>pageBack</code>开始前促发",
+            "itemtype": "event",
+            "name": "page::before_change",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "from",
+                            "description": "page id of prev page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "to",
+                            "description": "page id of next page",
+                            "type": "String|Undefined"
+                        },
+                        {
+                            "name": "params",
+                            "description": "the params when you call <code>navPage</code> or <code>pageBack</code>",
+                            "type": "Object|Undefined"
+                        },
+                        {
+                            "name": "anim",
+                            "description": "the animation name",
+                            "type": "String|Undefined"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 70,
+            "description": "<code>pageBack</code>开始前促发",
+            "itemtype": "event",
+            "name": "page::before_back",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "from",
+                            "description": "page id of prev page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "to",
+                            "description": "page id of next page",
+                            "type": "String"
+                        },
+                        {
+                            "name": "params",
+                            "description": "the params when you call <code>navPage</code> or <code>pageBack</code>",
+                            "type": "Object|Undefined"
+                        },
+                        {
+                            "name": "anim",
+                            "description": "the animation name",
+                            "type": "String|Undefined"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 200,
+            "description": "容器",
+            "itemtype": "property",
+            "name": "el",
+            "type": "HTMLElement|Node|String",
+            "default": "'body'",
+            "optional": 1,
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 208,
+            "description": "Page原型",
+            "itemtype": "property",
+            "name": "pages",
+            "type": "Object",
+            "required": 1,
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 216,
+            "description": "Page实例",
+            "itemtype": "property",
+            "name": "_pages",
+            "type": "Object",
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 223,
+            "description": "页面跳转的历史记录",
+            "itemtype": "property",
+            "name": "_history",
+            "type": "Array",
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 230,
+            "description": "EasyTouch初始化",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 238,
+            "description": "YunOS的resume事件监听",
+            "itemtype": "method",
+            "name": "resume",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 245,
+            "description": "YunOS的pause事件监听",
+            "itemtype": "method",
+            "name": "pause",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 252,
+            "description": "重置应用",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 263,
+            "description": "页面跳转\n\n    app.navPage('DetailPage', {\n        title: 'MacBook Air',\n        desc: '...'\n    }, 'sliderRightIn', -1);",
+            "itemtype": "method",
+            "name": "navPage",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "page id",
+                    "type": "String"
+                },
+                {
+                    "name": "params",
+                    "description": "params for next page",
+                    "type": "Object"
+                },
+                {
+                    "name": "anim",
+                    "description": "animation name, contain:\n\n*   slideRightIn\n*   slideLeftIn\n*   slideUpIn\n*   slideDownIn\n*   fadeIn\n*   dissolveIn\n*   popIn\n*   flipLeftIn\n*   flipRightIn\n*   swapLeftIn\n*   swapRightIn\n*   cubeLeftIn\n*   cubeRightIn",
+                    "type": "String"
+                },
+                {
+                    "name": "ifPushToHistory",
+                    "description": "if push rhe page to history",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 334,
+            "description": "返回到上一个页面\n\n    app.pageBack({\n        id: xxx\n    }, 'popIn');",
+            "itemtype": "method",
+            "name": "pageBack",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "params for next page",
+                    "type": "Object"
+                },
+                {
+                    "name": "anim",
+                    "description": "animation name, as same as <code>navPage</code>",
+                    "type": "String"
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 388,
+            "description": "页面切换效果",
+            "itemtype": "method",
+            "name": "_navPage",
+            "params": [
+                {
+                    "name": "fromPage",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "toPage",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "anim",
+                    "description": "animation name",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 419,
+            "description": "初始化一个Page类",
+            "itemtype": "method",
+            "name": "_createPage",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "page id",
+                    "type": "String"
+                },
+                {
+                    "name": "params",
+                    "description": "params for next page",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 442,
+            "description": "向App添加一个页面\n\n    app.addPage('DetailPage', {\n        el: '#DetailPage'\n    });",
+            "itemtype": "method",
+            "name": "addPage",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "page id"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "String|Object"
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 456,
+            "description": "通过页面ID获取某一个页面的引用\n\n    app.getPage('DetailPage');",
+            "itemtype": "method",
+            "name": "getPage",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "page id",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "the instance of page",
+                "type": "Object"
+            },
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 468,
+            "description": "获取当前页面的引用",
+            "itemtype": "method",
+            "name": "getCurrentPage",
+            "return": {
+                "description": "the instance of page",
+                "type": "Object"
+            },
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 476,
+            "description": "获取当前页面的ID",
+            "itemtype": "method",
+            "name": "getCurrentPID",
+            "return": {
+                "description": "the page id",
+                "type": "String"
+            },
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 490,
+            "description": "启用单页面刷新功能, 并开始记录页面跳转, 如果存在历史记录, 则跳转至最后一条历史记录, 反之跳转至params中指定的页面\n\n    app.history.start({\n        id: 'IndexPage',\n        params: {\n            name: 'YouXiao'\n        }\n    })",
+            "itemtype": "method",
+            "name": "history.start",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "data to call navPage when the history is empty",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "page id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "params",
+                            "description": "params for the default page",
+                            "type": "Object"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 514,
+            "description": "从尾部删除一条历史记录,并写入<code>sessionStorage</code>",
+            "itemtype": "method",
+            "name": "history.pop",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 522,
+            "description": "增加一条历史记录,并写入<code>sessionStorage</code>",
+            "itemtype": "method",
+            "name": "history.add",
+            "params": [
+                {
+                    "name": "record",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "page id",
+                            "type": "String"
+                        },
+                        {
+                            "name": "params",
+                            "description": "params for navPage",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "anim",
+                            "description": "the animation name",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 541,
+            "description": "将内存中的历史记录写入<code>sessionStorage</code>",
+            "itemtype": "method",
+            "name": "history.save",
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 555,
+            "description": "通过该方法来继承并扩展一个<code>$.EasyTouch</code>",
+            "itemtype": "method",
+            "name": "$.EasyTouch.extend",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "property or function add to <code>$.EasyTouch</code>",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the new Class extended from <code>$.EasyTouch</code>",
+                "type": "Function"
+            },
+            "static": 1,
+            "class": "$.EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 626,
+            "description": "当页面作为一个模板被加入App前,可以通过该方法渲染模板,默认原样返回",
+            "itemtype": "method",
+            "name": "parse",
+            "params": [
+                {
+                    "name": "template",
+                    "description": "the html before parse",
+                    "type": "String"
+                },
+                {
+                    "name": "params",
+                    "description": "the params from <code>navPage</code>",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the html after parse",
+                "type": "String"
+            },
+            "class": "$.EasyTouch.Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 637,
+            "description": "在页面节点被加入App前,可以通过改方法修改Dom,默认原样返回",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "$el",
+                    "description": "the $dom before render",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "the params from <code>navPage</code>",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the $dom after render",
+                "type": "Object"
+            },
+            "class": "$.EasyTouch.Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 648,
+            "description": "页面第一次被访问时会执行该方法",
+            "itemtype": "method",
+            "name": "init",
+            "class": "$.EasyTouch.Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 655,
+            "description": "页面每一次被访问时都会执行该方法",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "$.EasyTouch.Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 664,
+            "description": "通过该方法来继承并扩展一个<code>$.EasyTouch.Page</code>\n\n    var Page1 = $.EasyTouch.Page.extend({\n        //set el or tpl property, examples in $.EasyTouch example\n        el: '#Page1',\n        //el: document.getElementById('#Page1'),\n        //el: $('#Page1'),\n        //el: 'pages/Page1.html',\n\n        //tpl: '#Page1',\n        //tpl: document.getElementById('#Page1'),\n        //tpl: $('#Page1'),\n        //tpl: 'pages/Page1.html',\n\n        parse: function(template, params){\n            return Mustache.to_html(template, params);\n        },\n        render: function($el, params){\n            $el.find('#title').text(params.title);\n            return $el;\n        },\n        init: function(){\n\n        },\n        reset: function(){\n\n        }\n    });",
+            "itemtype": "method",
+            "name": "$.EasyTouch.Page.extend",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "property or function add to <code>$.EasyTouch.Page</code>",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the new Class extended from <code>$.EasyTouch.Page</code>",
+                "type": "Function"
+            },
+            "static": 1,
+            "class": "$.EasyTouch.Page"
+        }
+    ]
+}

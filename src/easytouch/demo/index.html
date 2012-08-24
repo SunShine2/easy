@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>EasyTouch</title>
+    <link rel="stylesheet" href="../../../_assets/highlight.js/styles/default.css">
+    <link rel="stylesheet" href="../../css/reset.css">
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/anim.css">
+    <script src="../_assets/mustache.js"></script>
+    <script src="../_assets/zepto.js"></script>
+    <script src="../../../_assets/highlight.js/highlight.pack.js"></script>
+    <script src="../../custom-event/custom-event.js"></script>
+    <script src="../_assets/base.js"></script>
+    <script src="../js/core.js"></script>
+    <style type="text/css">
+        h1{
+            font-family: Arial;
+        }
+        body{
+            background-color: #F0F0F0;
+        }
+        .et-page{
+            background-image: url('data:image/png;base64,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'), -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7B7C7F), color-stop(30%, #696A6D), color-stop(65%, #555658), color-stop(100%, #464748));
+        }
+    </style>
+</head>
+<body class="easytouch">
+<div id="ListPage" class="et-page">
+    <header>ListPage</header>
+    <p>This is ListPage from index.</p>
+    <button class="page-back">PageBack</button>
+</div>
+<div id="DetailPage" class="et-page">
+    <header>DetailPage</header>
+    <p>This is DetailPage from index.</p>
+    <button class="page-back">PageBack</button>
+</div>
+<script type="text/tpl" id="tpl-person">
+    <div>
+        <h1>Hi, my name is {{name}}, I created by mustache.</h1>
+        <p>This is a page parse by Mustache.</p>
+        <button class="page-back">PageBack</button>
+    </div>
+</script>
+<script>
+    $(function(){
+        var IndexPage = $.EasyTouch.Page.extend({
+            el: 'tpl/IndexPage.html',
+            render: function(response){
+                console.log('IndexPage render', arguments);
+                return response;
+            },
+            init: function(params){
+                console.log('IndexPage init', params);
+                var _this = this, anim = 'slideRightIn';
+                $('#name').text(params.name);
+                $('#select-anim').change(function(e){
+                    anim = this.value;
+                });
+                $('#detail-page').tap(function(e){
+                    _this._app.navPage('DetailPage', {}, anim);
+                });
+                $('#about-page').tap(function(e){
+                    _this._app.navPage('AboutPage', {}, anim);
+                });
+                $('#list-page').tap(function(e){
+                    _this._app.navPage('ListPage', {}, anim);
+                });
+                $('#person-page').tap(function(e){
+                    _this._app.navPage('PersonPage', {
+                        name: 'YouXiao'
+                    }, anim);
+                });
+            }
+        });
+        var ListPage = $.EasyTouch.Page.extend({
+            el: '#ListPage',
+            render: function($dom){
+                console.log('ListPage render', arguments);
+                return $dom;
+            },
+            init: function(params){
+                console.log('ListPage init', params);
+            }
+        });
+        var PersonPage = $.EasyTouch.Page.extend({
+            tpl: '#tpl-person',
+            parse: function(response, params){
+                console.log('PersonPage render', arguments);
+                return Mustache.to_html(response, params);
+            },
+            render: function($dom){
+                console.log('PersonPage render', arguments);
+                return $dom;
+            },
+            init: function(params){
+                console.log('PersonPage init', params);
+            }
+        });
+
+
+        window.app = new $.EasyTouch({
+            pages: {
+                "IndexPage": IndexPage,
+                "ListPage": ListPage,
+                "PersonPage": PersonPage,
+                "DetailPage": {
+                    el: $('#DetailPage')
+                },
+                "AboutPage": {
+                    el: 'tpl/AboutPage.html'
+                }
+            },
+            init: function(params){
+                console.log('app init', params);
+                var _this = this;
+
+                $('.page-back').live('tap', function(e){
+                    _this.pageBack();
+                });
+
+                _this.bind('page::before_nav', function(){
+                    console.log('page::before_nav', arguments);
+                }, _this);
+                _this.bind('page::nav', function(){
+                    console.log('page::nav', arguments);
+                }, _this);
+                _this.bind('page::before_back', function(){
+                    console.log('page::before_back', arguments);
+                }, _this);
+                _this.bind('page::back', function(){
+                    console.log('page::back', arguments);
+                }, _this);
+                _this.bind('page::before_change', function(){
+                    console.log('page::before_change', arguments);
+                }, _this);
+                _this.bind('page::change', function(){
+                    console.log('page::change', arguments);
+                }, _this);
+
+                this.history.start({
+                    id: 'IndexPage',
+                    params: {
+                        name: "YouXiao"
+                    }
+                });
+
+                console.log(this.getCurrentPage());
+            }
+        });
+    });
+</script>
+</body>
+</html>

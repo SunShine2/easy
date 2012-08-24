@@ -11,12 +11,9 @@
     var DEF_LOADING = '&nbsp;&nbsp;加载中...',
         NETWORK_ERROR = '网络繁忙，请检查网络或重试。';
 
-    $.Loading = $.Base.build('Loading', {
+    var Loading = $.Base.build('Loading', {
             initializer:function () {
-                if (!this.INITIALIZED) {
-                    this.initCont();
-                    this.initCont();
-                }
+                this.initCont();
             },
             initCont : function(){
                 var div = $('<div></div>');
@@ -37,7 +34,7 @@
                             clearInterval(that.interval);
                             that.interval = null;
                             that.hide();
-                            callback();
+                            that.callback();
                         }
                     }, 1000);
                 }
@@ -85,7 +82,6 @@
         }
     );
 
-    //增加容错处理，先放到组件内部，后期进行剥离
-    $.loading = new $.Loading({timeout : 15000});
+    $.loading = new Loading();
 
 })(Zepto);
