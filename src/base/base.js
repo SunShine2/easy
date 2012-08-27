@@ -51,12 +51,11 @@
             filterHandler(value, this.constructor.ATTRS[key], function(v){
                 console.log(v);
                 if(v === that.get(key)){
-                    console.log('属性不符合规则，拒绝修改');
                     return false;
                 }else{
                     that.trigger(ATTR_CHANGE, {
-                        'attrKey':key,
-                        'attrValue':value
+                        attrKey:key,
+                        attrValue:value
                     });
                 }
             });

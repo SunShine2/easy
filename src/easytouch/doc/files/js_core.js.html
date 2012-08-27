@@ -137,7 +137,7 @@ var
     EVN_APP_PAGE_NAV = &#x27;page::nav&#x27;,
     &#x2F;**
     &lt;code&gt;navPage&lt;&#x2F;code&gt;开始前促发
-    @event page::before_nav
+    @event page::beforeNav
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -145,10 +145,10 @@ var
         @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
         @param {String|Undefined} params.anim the animation name
     **&#x2F;
-    EVN_APP_BEFORE_PAGE_NAV = &#x27;page::before_nav&#x27;,
+    EVN_APP_BEFORE_PAGE_NAV = &#x27;page::beforeNav&#x27;,
     &#x2F;**
     &lt;code&gt;navPage&lt;&#x2F;code&gt;或者&lt;code&gt;pageBack&lt;&#x2F;code&gt;开始前促发
-    @event page::before_change
+    @event page::beforeChange
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -156,10 +156,10 @@ var
         @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
         @param {String|Undefined} params.anim the animation name
     **&#x2F;
-    EVN_APP_BEFORE_PAGE_CHANGE = &#x27;page::before_change&#x27;,
+    EVN_APP_BEFORE_PAGE_CHANGE = &#x27;page::beforeChange&#x27;,
     &#x2F;**
     &lt;code&gt;pageBack&lt;&#x2F;code&gt;开始前促发
-    @event page::before_back
+    @event page::beforeBack
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -167,8 +167,9 @@ var
         @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
         @param {String|Undefined} params.anim the animation name
     **&#x2F;
-    EVN_APP_BEFORE_PAGE_BACK = &#x27;page::before_back&#x27;,
-    EVN_PAGE_READY = &#x27;page::ready&#x27;,
+    EVN_APP_BEFORE_PAGE_BACK = &#x27;page::beforeBack&#x27;,
+    EVN_PAGE_LEAVE = &#x27;leave&#x27;,
+    EVN_PAGE_READY = &#x27;ready&#x27;,
     CLASS_APP = &#x27;easytouch&#x27;,
     CLASS_PREFIX = &#x27;et-&#x27;,
     SESSION_HISTORY = &#x27;easytouch::page_history&#x27;,
@@ -284,6 +285,13 @@ $.EasyTouch = function(options){
         _this.reset();
     });
 
+    &#x2F;&#x2F;page的离开事件
+    this.bind(EVN_APP_PAGE_CHANGE, function(e, params){
+        if(params.from){
+            this.getPage(params.from).trigger(&#x27;leave&#x27;);
+        }
+    }, this);
+
     this.init(options);
 };
 $.Base.extend($.EasyTouch, {
@@ -377,6 +385,15 @@ $.Base.extend($.EasyTouch, {
     *   cubeLeftIn
     *   cubeRightIn
 
+    include the animation css in your less file like this:
+&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;@import &lt;span class=&quot;str&quot;&gt;&quot;easytouch&#x2F;less&#x2F;anim.less&quot;&lt;&#x2F;span&gt;;
+     &lt;span class=&quot;com&quot;&gt;
+    &#x2F;&#x2F;Notice: When the slideRightIn included, the slideLeftOut is also ready.
+    &#x2F;&#x2F;The same, when you include slideLeftOut, slideRightIn is ready too.
+    &#x2F;&#x2F;All the animation function has two params: &quot;duration&quot; and &quot;function&quot;.&lt;&#x2F;span&gt;
+    &lt;span style=&quot;color:#30418C&quot;&gt;.easytouch&lt;&#x2F;span&gt; &gt; &lt;span style=&quot;color:#30418C&quot;&gt;.anim-slideRightIn&lt;&#x2F;span&gt;(&lt;span class=&quot;lit&quot;&gt;.6&lt;&#x2F;span&gt;s, &lt;span class=&quot;str&quot;&gt;ease-in&lt;&#x2F;span&gt;);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+
     @param {Boolean} ifPushToHistory if push rhe page to history
     **&#x2F;
     navPage: function(id, params, anim, ifPushToHistory){
@@ -452,7 +469,8 @@ $.Base.extend($.EasyTouch, {
                 _this.trigger(EVN_APP_PAGE_CHANGE, [eventArgus]);
             };
 
-        params = params || preRecord.params || {};
+        &#x2F;&#x2F;如果没有初始化过该页面，说明来至单页面刷新，获取缓存中的params
+        params = (this._pages[id] ? params : preRecord.params) || {};
         anim = anim || lastRecord.anim;
         anim = anim?reverseAnimation(anim, &#x2F;Left|Right|Up|Down&#x2F;g):null;
         eventArgus = {
@@ -681,10 +699,14 @@ $.EasyTouch.Page = function(id, params, app){
             _this.el = el;
             _this.id = id;
             _this.init(params);
-            _this.reset(params);
             _this._ready = true;
             _this.trigger(EVN_PAGE_READY);
         };
+
+    this.bind(EVN_PAGE_LEAVE, function(e){
+        _this.leave();
+    });
+
     if(this.el){
         if(REGEX_HTML_ADRESS.test(this.el)){
             $.get(this.el, function(response){
@@ -738,16 +760,25 @@ $.Base.extend($.EasyTouch.Page, {
     &#x2F;**
      * 页面第一次被访问时会执行该方法
      * @method init
+     * @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt;
      *&#x2F;
-    init: function(){
+    init: function(params){
         console.log(&#x27;[EasyTouch.Page] &#x27;+this.id+&#x27; init&#x27;, arguments);
     },
     &#x2F;**
      * 页面每一次被访问时都会执行该方法
      * @method reset
+     * @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt;
      *&#x2F;
-    reset: function(){
+    reset: function(params){
         console.log(&#x27;[EasyTouch.Page] &#x27;+this.id+&#x27; reset&#x27;, arguments);
+    },
+    &#x2F;**
+     * 每一次离开页面后执行该方法
+     * @method leave
+     *&#x2F;
+    leave: function(){
+        console.log(&#x27;[EasyTouch.Page] &#x27;+this.id+&#x27; leave&#x27;);
     }
 },{
 },{
@@ -777,6 +808,9 @@ $.Base.extend($.EasyTouch.Page, {
 
             },
             reset: function(){
+
+            },
+            leave： function(){
 
             }
         });
