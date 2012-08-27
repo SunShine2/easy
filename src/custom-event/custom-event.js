@@ -26,7 +26,7 @@
         BEFORE_EVENT = 'before',
         AFTER_EVENT = 'after',
         CUSTOMEVENT = 'customEvents';
-        
+
     //可以在外部访问到事件对象集合
     $.ceHandlers = handlers;
 
@@ -48,8 +48,8 @@
         });
     }
 
-    function wrapName(evt, agent){
-        return agent.constructor.NAME ? agent.constructor.NAME + ':' +evt : evt;
+    function wrapName(evt, agent) {
+        return agent.constructor.NAME ? agent.constructor.NAME + ':' + evt : evt;
     }
 
     /**
@@ -78,13 +78,13 @@
                 proxyfn = function (e, data) {
                     return callback.apply(agent, [e].concat(data));
                 };
-            if(!agent){
+            if (!agent) {
 
             }
             o = $.extend(o, {fn:callback, proxy:proxyfn, agent:agent});
             if (flag === BEFORE_EVENT) {
                 item.unshift(o);
-            } else{
+            } else {
                 item.push(o);
             }
             reIndex(item);
@@ -102,7 +102,7 @@
                 var o = {};
                 o.fn = item.proxy;
                 o.event = item;
-                if(data){
+                if (data) {
                     o.data = data;
                 }
                 o.option = item.option;
@@ -110,10 +110,10 @@
             });
             queue.run();
         },
-        after : function(evt, callback, option, agent){
+        after:function (evt, callback, option, agent) {
             return $.bind(evt, callback, option, agent, AFTER_EVENT)
         },
-        before : function(evt, callback, option, agent){
+        before:function (evt, callback, option, agent) {
             return $.bind(evt, callback, option, agent, BEFORE_EVENT)
         },
         /**

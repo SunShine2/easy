@@ -41,6 +41,7 @@
  *  20120827
  *  修改ATTRS不存在的时候，option过滤的策略，如果传入的参数在ATTRS中没有对应的值，则不做过滤
  *  修改ATTRS.validator规范，validator只检查value为字符串或者数字的情况
+ *  修正进行两次属性写入的问题
  *  TODO:后续需要考虑这个策略是否完备
  */
 
@@ -52,12 +53,11 @@
 
     function addAttr() {
         this.set = function (key, value) {
-            var that = this,ret;
-            ret = filterHandler(value, this.constructor.ATTRS[key], function(v){
-                if(v === that.get(key)){
+            var that = this, ret;
+            ret = filterHandler(value, this.constructor.ATTRS[key], function (v) {
+                if (v === that.get(key)) {
                     return false;
-                }else{
-                    that[key] = v;
+                } else {
                     that.trigger(ATTR_CHANGE, {
                         attrKey:key,
                         attrValue:value
@@ -72,9 +72,7 @@
 
     var INIT = 'init',
         DESTROY = 'destroy',
-        ATTR_CHANGE = 'attrChange',
-        INITIALIZED = "initialized",
-        DESTROYED = "destroyed";
+        ATTR_CHANGE = 'attrChange';
 
     /**
      * 增加filter系统，用于对初始化时传入的option进行处理，只接受
@@ -82,15 +80,15 @@
     function optionFilter(option, attrObj) {
         var ret = {};
         //如果option内的属性在attr中并没有对应的值，则直接将其传入
-        $.each(attrObj, function(key,item){
+        $.each(attrObj, function (key, item) {
             var value = option[key];
-            filterHandler(value, item, function(v){
+            filterHandler(value, item, function (v) {
                 ret[key] = v;
             });
         });
         //如果attr的属性在option中没有对应的值，则使用attr中的默认值
-        $.each(option, function(key, item){
-            filterHandler(item, attrObj[key], function(v){
+        $.each(option, function (key, item) {
+            filterHandler(item, attrObj[key], function (v) {
                 ret[key] = v;
             });
         });
@@ -104,19 +102,19 @@
      * @param callback
      */
 
-    function filterHandler(value, item, callback){
-        if(!item) {
+    function filterHandler(value, item, callback) {
+        if (!item) {
             callback(value);
             return false;
         }
         var v;
-        if(value){
-            if(itemFilter(value, item)){
+        if (value) {
+            if (itemFilter(value, item)) {
                 v = value;
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             v = item['value'];
         }
         callback(v);
@@ -128,12 +126,12 @@
      * @param item
      * @return {*}
      */
-    function itemFilter(value, item){
-        if(item.setter){
+    function itemFilter(value, item) {
+        if (item.setter) {
             return item.setter(value)
-        }else if(item.validator){
-            return ~['string','number'].indexOf($.type(value)) ? item.validator.test(value) : false;
-        }else{
+        } else if (item.validator) {
+            return ~['string', 'number'].indexOf($.type(value)) ? item.validator.test(value) : false;
+        } else {
             return true
         }
     }
@@ -157,14 +155,14 @@
         /**
          * 静态属性，用于记录数据
          */
-        initialized : false,
-        destroyed : false,
-        attrChangeHistory : [],
+        initialized:false,
+        destroyed:false,
+        attrChangeHistory:[],
         /**
          * 生命周期内的方法
          */
         _init:function (option) {
-            option = optionFilter(option,this.constructor.ATTRS);
+            option = optionFilter(option, this.constructor.ATTRS);
             $.extend(this, option);
             this.bind(INIT, this._defInitFn);
             this.initializer && this.initializer(option);
@@ -176,16 +174,19 @@
          * 静态的默认属性，可以在子类中进行覆写
          */
         _defInitFn:function (e) {
-            this.set(INITIALIZED, true);
+            this.initialized = true;
             this.bind(ATTR_CHANGE, this._defAttrChange);
         },
         _defDestroyFn:function (e) {
-            this.set(DESTROYED, true);
+            this.destroyed = true;
             this.destructor && this.destructor(arguments);
         },
-        _defAttrChange:function (e) {
-            this.attrChangeHistory.push(e);
-            this[e.attrKey] = e.attrValue;
+        _defAttrChange:function (e,data) {
+            this.attrChangeHistory.push({
+                event : e,
+                data : data
+            });
+            this[data.attrKey] = data.attrValue;
         }
     });
 
@@ -199,29 +200,30 @@
      * @private
      */
 
-    Base._build = function(moduleName, superModule, protoMethod, attrMember, staticMember){
+    Base._build = function (moduleName, superModule, protoMethod, attrMember, staticMember) {
         //使用prototype方式继承
-        var Module = function(option){
+        var Module = function (option) {
                 //防止报错
                 option = option || {};
-                Module.superclass.constructor.call(this,option);
+                Module.superclass.constructor.call(this, option);
             },
-            tempFn = function(){},
+            tempFn = function () {
+            },
             o = {
-                name : moduleName,
-                value : Module
+                name:moduleName,
+                value:Module
             };
 
         //模块名字
         Module.NAME = moduleName;
         /*Module.toString = function(){
-            return moduleName;
-        };*/
+         return moduleName;
+         };*/
         //如果没有传入要继承的对象，则默认为Base
         superModule = superModule || Base;
         //挂载ATTRS属性
         //如果是继承于另外一个模块，则需要将ATTRS进行合并处理
-        if(superModule.NAME !== 'base'){
+        if (superModule.NAME !== 'base') {
             $.extend(attrMember, superModule.ATTRS);
         }
         Module.ATTRS = (attrMember || {});
@@ -236,7 +238,7 @@
         Module.prototype.constructor = Module;
         //保存对超类的引用
         Module.superclass = superModule.prototype;
-        if(superModule.prototype.constructor == Object.prototype.constructor){
+        if (superModule.prototype.constructor == Object.prototype.constructor) {
             superModule.prototype.constructor = superModule;
         }
         //保存生成的对象
@@ -252,7 +254,7 @@
      * @param staticMember 挂载在模块本身上的静态数据
      * @return {*} 返回新构建的模块
      */
-    Base.build = function(moduleName, protoMethod, attrMember, staticMember){
+    Base.build = function (moduleName, protoMethod, attrMember, staticMember) {
         return Base._build(moduleName, null, protoMethod, attrMember, staticMember)
     };
 
@@ -265,7 +267,7 @@
      * @param staticMember 挂载在模块本身上的静态数据
      * @return {*} 返回新构建的模块
      */
-    Base.extend = function(moduleName, superModule, protoMethod, attrMember, staticMember){
+    Base.extend = function (moduleName, superModule, protoMethod, attrMember, staticMember) {
         return Base._build(moduleName, superModule, protoMethod, attrMember, staticMember)
     };
 

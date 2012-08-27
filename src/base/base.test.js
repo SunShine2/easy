@@ -128,7 +128,6 @@ describe('测试Base模块', function () {
                 });
 
                 var objTest = new $.Test02({a:1});
-                console.log(objTest);
                 expect(objTest.get('a')).toEqual(1);
             });
             it('测试原型方法参数为空的情况', function () {
@@ -314,7 +313,6 @@ describe('测试Base模块', function () {
                 });
 
                 var objTest = new $.Test13({a:1});
-                console.log(objTest);
                 expect(objTest.get('a')).toEqual(1);
             });
             it('测试原型方法参数为空的情况', function () {
