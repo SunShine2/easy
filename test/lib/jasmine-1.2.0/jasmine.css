@@ -38,7 +38,7 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
 #HTMLReporter.showDetails #details { display: block; }
 #HTMLReporter .summaryMenuItem { font-weight: bold; text-decoration: underline; }
 #HTMLReporter .summary { margin-top: 14px; }
-#HTMLReporter .summary .suite .suite, #HTMLReporter .summary .specSummary { margin-left: 14px; }
+#HTMLReporter .summary .suite .suite, #HTMLReporter .summary .specSummary { margin-left: 20px; }
 #HTMLReporter .summary .specSummary.passed a { color: #5e7d00; }
 #HTMLReporter .summary .specSummary.failed a { color: #b03911; }
 #HTMLReporter .description + .suite { margin-top: 0; }

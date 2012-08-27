@@ -37,6 +37,9 @@
  *
  *  20120820 新增extend方法，支持对Base产生的对象进行二次继承
  *  Base.extend(moduleName, superModule, protoMethod, attrMember, staticMember)
+ *  20120827
+ *  修改ATTRS不存在的时候，option过滤的策略，如果传入的参数在ATTRS中没有对应的值，则不做过滤
+ *  TODO:后续需要考虑这个策略是否完备
  */
 
 (function ($) {
@@ -47,12 +50,12 @@
 
     function addAttr() {
         this.set = function (key, value) {
-            var that = this;
-            filterHandler(value, this.constructor.ATTRS[key], function(v){
-                console.log(v);
+            var that = this,ret;
+            ret = filterHandler(value, this.constructor.ATTRS[key], function(v){
                 if(v === that.get(key)){
                     return false;
                 }else{
+                    that[key] = v;
                     that.trigger(ATTR_CHANGE, {
                         attrKey:key,
                         attrValue:value
@@ -75,11 +78,17 @@
      * 增加filter系统，用于对初始化时传入的option进行处理，只接受
      */
     function optionFilter(option, attrObj) {
-        var ret = {},
-            option = option || {};
+        var ret = {};
+        //如果option内的属性在attr中并没有对应的值，则直接将其传入
         $.each(attrObj, function(key,item){
             var value = option[key];
             filterHandler(value, item, function(v){
+                ret[key] = v;
+            });
+        });
+        //如果attr的属性在option中没有对应的值，则使用attr中的默认值
+        $.each(option, function(key, item){
+            filterHandler(item, attrObj[key], function(v){
                 ret[key] = v;
             });
         });
@@ -95,11 +104,16 @@
 
     function filterHandler(value, item, callback){
         if(!item) {
+            callback(value);
             return false;
         }
         var v;
-        if(value && itemFilter(value, item)){
-            v = value;
+        if(value){
+            if(itemFilter(value, item)){
+                v = value;
+            }else{
+                return false;
+            }
         }else{
             v = item['value'];
         }
@@ -116,7 +130,7 @@
         if(item.setter){
             return item.setter(value)
         }else if(item.validator){
-            return item.validator.test(value);
+            return ~['string','number'].indexOf($.type(value)) ? item.validator.test(value) : false;
         }else{
             return true
         }
@@ -134,6 +148,7 @@
         this._init.apply(this, arguments);
     }
 
+    Base.NAME = 'base';
     Base.classList = [];
 
     $.extend(Base.prototype, {
@@ -147,28 +162,24 @@
          * 生命周期内的方法
          */
         _init:function (option) {
-            console.log(this.constructor.ATTRS, option);
             option = optionFilter(option,this.constructor.ATTRS);
             $.extend(this, option);
             this.bind(INIT, this._defInitFn);
+            this.initializer && this.initializer(option);
             this.trigger(INIT);
-            this.initializer && this.initializer(arguments);
-        },
-        _destroy:function () {
+            //绑定destroy对应的方法
             this.bind(DESTROY, this._defDestroyFn);
-            this.trigger(DESTROY);
-            this.destructor && this.destructor(arguments);
         },
         /**
          * 静态的默认属性，可以在子类中进行覆写
          */
         _defInitFn:function (e) {
-            console.log(this);
             this.set(INITIALIZED, true);
             this.bind(ATTR_CHANGE, this._defAttrChange);
         },
         _defDestroyFn:function (e) {
             this.set(DESTROYED, true);
+            this.destructor && this.destructor(arguments);
         },
         _defAttrChange:function (e) {
             this.attrChangeHistory.push(e);
@@ -215,6 +226,8 @@
 
         //使用prototype方式继承
         var Module = function(option){
+                //防止报错
+                option = option || {};
                 Module.superclass.constructor.call(this,option);
             },
             tempFn = function(){},
@@ -224,16 +237,20 @@
             };
 
         //模块名字
-        Module.name = moduleName;
+        Module.NAME = moduleName;
         /*Module.toString = function(){
             return moduleName;
         };*/
-        //挂载ATTRS属性
-        Module.ATTRS = attrMember;
-        //挂在静态属性
-        $.extend(Module, staticMember);
         //如果没有传入要继承的对象，则默认为Base
         superModule = superModule || Base;
+        //挂载ATTRS属性
+        //如果是继承于另外一个模块，则需要将ATTRS进行合并处理
+        if(superModule.NAME !== 'base'){
+            $.extend(attrMember, superModule.ATTRS);
+        }
+        Module.ATTRS = (attrMember || {});
+        //挂在静态属性
+        $.extend(Module, staticMember);
         //拷贝一份prototype，防止构造函数直接执行
         tempFn.prototype = superModule.prototype;
         Module.prototype = new tempFn();
@@ -248,7 +265,6 @@
         }
         //保存生成的对象
         Base.classList.push(o);
-        console.log(Module);
         return Module;
     };
 

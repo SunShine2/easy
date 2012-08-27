@@ -48,6 +48,10 @@
         });
     }
 
+    function wrapName(evt, agent){
+        return agent.constructor.NAME ? agent.constructor.NAME + ':' +evt : evt;
+    }
+
     /**
      * 队列系统，用于控制多个回调函数的执行
      * @flag 用于区分队列的形式
@@ -117,18 +121,23 @@
          */
         addCustomEvent:function () {
             this.bind = function (evt, callback, option) {
+                evt = wrapName(evt, this);
                 return $.bind(evt, callback, option, this)
             };
             this.unbind = function (evt, callback) {
+                evt = wrapName(evt, this);
                 return $.unbind(evt, callback, this)
             };
             this.trigger = function (evt, data) {
+                evt = wrapName(evt, this);
                 return $.trigger(evt, data, this)
             };
             this.before = function (evt, callback, option) {
+                evt = wrapName(evt, this);
                 return $.before(evt, callback, option)
             };
             this.after = function (evt, callback, option) {
+                evt = wrapName(evt, this);
                 return $.after(evt, callback, option)
             }
         }
@@ -136,3 +145,8 @@
     });
 
 })(Zepto);
+
+/**
+ * change log
+ * @20120827 增加name的处理，如果在模块内进行事件绑定，会有模块的前缀
+ */

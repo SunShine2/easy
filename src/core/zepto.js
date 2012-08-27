@@ -254,6 +254,16 @@ var Zepto = (function() {
     return elements
   }
 
+//@modify add type method for Zepto
+var class2type = {}
+$.each("Boolean Number String Function Array Date RegExp Object".split(" "), function(i, name) {
+    class2type[ "[object " + name + "]" ] = name.toLowerCase();
+});
+$.type = function( obj ) {
+    return obj == null ?
+        String( obj ) : class2type[ toString.call(obj) ] || "object"
+}
+
   if (window.JSON) $.parseJSON = JSON.parse
 
   // Define methods that will be available on all
