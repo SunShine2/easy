@@ -112,7 +112,7 @@ describe('测试Base模块', function () {
                 expect(obj1.set).toBeTruthy();
                 expect(obj1.get).toBeTruthy();
             });
-            it('测试distroy方法是否正常', function () {
+            it('测试destroy方法是否正常', function () {
                 obj1.trigger('destroy');
                 expect(obj1.destroyed).toBeTruthy();
             })
@@ -194,7 +194,7 @@ describe('测试Base模块', function () {
             });
         });
         describe('测试Base中事件相关的处理', function () {
-            it('测试distroy事件的触发', function () {
+            it('测试destroy事件的触发', function () {
                 $.Test07 = $.Base.build(nameA, protoMethod, attrTest, {
                     MSG:msg
                 });
@@ -298,7 +298,7 @@ describe('测试Base模块', function () {
                 expect(obj1.set).toBeTruthy();
                 expect(obj1.get).toBeTruthy();
             });
-            it('测试distroy方法是否正常', function () {
+            it('测试destroy方法是否正常', function () {
                 obj1.trigger('destroy');
                 expect(obj1.destroyed).toBeTruthy();
             })
@@ -400,7 +400,7 @@ describe('测试Base模块', function () {
             });
         });
         describe('测试Base中事件相关的处理', function () {
-            it('测试distroy事件的触发', function () {
+            it('测试destroy事件的触发', function () {
                 $.Test18 = $.Base.extend(nameB, $.Test10, protoMethod01, attrTest01, {
                     MSG:msg
                 });

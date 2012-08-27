@@ -35,10 +35,12 @@
  *  3. 提供组件的生成函数
  *  4. 提供基础的初始化组件方法
  *
+ *  @changeLog
  *  20120820 新增extend方法，支持对Base产生的对象进行二次继承
  *  Base.extend(moduleName, superModule, protoMethod, attrMember, staticMember)
  *  20120827
  *  修改ATTRS不存在的时候，option过滤的策略，如果传入的参数在ATTRS中没有对应的值，则不做过滤
+ *  修改ATTRS.validator规范，validator只检查value为字符串或者数字的情况
  *  TODO:后续需要考虑这个策略是否完备
  */
 
@@ -198,32 +200,6 @@
      */
 
     Base._build = function(moduleName, superModule, protoMethod, attrMember, staticMember){
-        /*var Module = function(option){
-            //$.extend(attrMember, option);  //合并默认的属性和实例化时传入的属性
-            this.ATTRS = attrMember;
-            option = optionFilter(option,attrMember);
-            Module.inheritModule = baseModule || Base;
-            $.extend(this, option);  //将属性放入this中
-            //this.constructor = Base;
-            this.inheritModule.call(this, arguments);
-        };
-        //模块名字
-        Module.name = moduleName;
-        Base.classList.push(moduleName);
-        Module.toString = function(){
-            return moduleName;
-        };
-
-        //将静态属性挂在在模块构造器本身
-        $.extend(Module, staticMember);
-        *//**
-         * TODO:静态对象可能会含有对应的filter
-         *//*
-        $.extend(Module.prototype, protoMethod);
-        $.extend(Module.prototype, Base.prototype);
-        //返回构造后的模块
-        return Module;*/
-
         //使用prototype方式继承
         var Module = function(option){
                 //防止报错
