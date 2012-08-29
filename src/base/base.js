@@ -36,13 +36,17 @@
  *  4. 提供基础的初始化组件方法
  *
  *  @changeLog
- *  20120820 新增extend方法，支持对Base产生的对象进行二次继承
+ *  @20120820
+ *  1. 新增extend方法，支持对Base产生的对象进行二次继承
  *  Base.extend(moduleName, superModule, protoMethod, attrMember, staticMember)
- *  20120827
- *  修改ATTRS不存在的时候，option过滤的策略，如果传入的参数在ATTRS中没有对应的值，则不做过滤
- *  修改ATTRS.validator规范，validator只检查value为字符串或者数字的情况
- *  修正进行两次属性写入的问题
+ *  @20120827
+ *  1. 修改ATTRS不存在的时候，option过滤的策略，如果传入的参数在ATTRS中没有对应的值，则不做过滤
+ *  2. 修改ATTRS.validator规范，validator只检查value为字符串或者数字的情况
+ *  3. 修正进行两次属性写入的问题
  *  TODO:后续需要考虑这个策略是否完备
+ *  @20120829
+ *  1. 如果ATTRS中不含有value属性，则认为该属性为必须的属性，直接抛出一个错误
+ *  2. 对setter方法进行扩充，可以在setter中对传入的参数进行处理，让模块内部接收到一个稳定的值
  */
 
 (function ($) {
@@ -107,15 +111,25 @@
             callback(value);
             return false;
         }
-        var v;
+        var v,
+            ret;
         if (value) {
-            if (itemFilter(value, item)) {
+            ret = itemFilter(value, item);
+            //如果返回的是boolean类型且值为true，则用true和false来判断是否setter通过
+            if ($.type(ret) === 'boolean' && ret) {
                 v = value;
-            } else {
-                return false;
+            } else if(ret){ //如果返回的值非boolean类型，而且非undefined/null，则表示是经过setter处理后的值
+                v = ret;
             }
-        } else {
-            v = item['value'];
+        }
+        if(!ret || !value) {
+            //如果ATTRS中含有value属性，则默认采用value
+            //如果不含value属性，则意味着这个属性是必须指定的
+            if(item['value']){
+                v = item['value'];
+            } else{
+                throw new Error('[Base filterHandler] ：a suitable value required');
+            }
         }
         callback(v);
     }
@@ -221,12 +235,13 @@
          };*/
         //如果没有传入要继承的对象，则默认为Base
         superModule = superModule || Base;
+        attrMember = attrMember || {};
         //挂载ATTRS属性
         //如果是继承于另外一个模块，则需要将ATTRS进行合并处理
         if (superModule.NAME !== 'base') {
             $.extend(attrMember, superModule.ATTRS);
         }
-        Module.ATTRS = (attrMember || {});
+        Module.ATTRS = attrMember;
         //挂在静态属性
         $.extend(Module, staticMember);
         //拷贝一份prototype，防止构造函数直接执行

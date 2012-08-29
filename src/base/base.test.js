@@ -217,7 +217,8 @@ describe('测试Base模块', function () {
                     o.value = attr.attrValue;
                 });
                 beforeEach(function () {
-                    o = {}
+                    objTest.set('width', 5);
+                    o = {};
                 });
                 it('测试修改成功时触发的处理', function () {
                     objTest.set('width', 1);
@@ -250,6 +251,72 @@ describe('测试Base模块', function () {
                 })
             })
         });
+
+        /**
+         * @20120829 增加对应的测试
+         */
+
+        describe('测试setter方法的处理', function(){
+            var Test = $.Base.build('abc', {}, {
+                number : {
+                    setter : function(v){
+                        if($.type(v) === 'string'){
+                            v = parseInt(v, 10);
+                        }
+                        if($.type(v) === 'number'){
+                            return v;
+                        }
+                        return false;
+                    }
+                }
+            }, {
+                MSG:msg
+            }),
+                Test01 = $.Base.build('abc', {}, {
+                    number : {
+                        value : 10,
+                        setter : function(v){
+                            if($.type(v) === 'string'){
+                                v = parseInt(v, 10);
+                            }
+                            if($.type(v) === 'number'){
+                                return v;
+                            }
+                            return false;
+                        }
+                    }
+                }, {
+                    MSG:msg
+                });
+
+            it('测试不带默认value的逻辑', function(){
+                var obj,
+                    index;
+                try{
+                    obj = new Test({
+                        number : []
+                    });
+                } catch (e){
+                    index = 1;
+                }
+                expect(index).toEqual(1)
+            });
+            it('测试带默认value的逻辑', function(){
+                var obj = new Test01({
+                    number : []
+                });
+                expect(obj.number).toEqual(10)
+            });
+            it('测试setter对value的预处理', function(){
+                var obj = new Test({
+                        number : '11px'
+                    }),
+                    obj01 = new Test({
+                        number : 11
+                    });
+                expect(obj.number).toEqual(obj01.number);
+            });
+        })
     });
 
     describe('测试extend函数的功能', function () {
@@ -423,6 +490,8 @@ describe('测试Base模块', function () {
                     o.value = attr.attrValue;
                 });
                 beforeEach(function () {
+                    objTest.set('width',5);
+                    objTest.set('top',5);
                     o = {}
                 });
                 it('测试修改父类属性成功时触发的处理', function () {
