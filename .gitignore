@@ -20,3 +20,4 @@ lib/
 lib/*
 tools
 tools/*
+.idea
