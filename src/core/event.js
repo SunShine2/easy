@@ -2,12 +2,6 @@
 //     (c) 2010-2012 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
 
-/**
- * @easyModify
- * @butian.wth
- * version : 0-0-1
- */
-
 ;(function($){
   var $$ = $.zepto.qsa, handlers = {}, _zid = 1, specialEvents={}
   specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
@@ -33,7 +27,8 @@
   function matcherFor(ns) {
     return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)')
   }
-  function isCustomEventsHandler(o){return o.selector === 'customEvents'}
+  //add isCustomEventsHandler to diff the custom event handler
+  function isCustomEventsHandler(o){return $.isPlainObject(o)}
   function eachEvent(events, fn, iterator){
     if ($.isObject(events)) $.each(events, iterator)
     else events.split(/\s/).forEach(function(type){ iterator(type, fn) })
@@ -55,6 +50,7 @@
       !isCeh && element.addEventListener(handler.e, proxyfn, capture) //if not custom event, don't addEventListener
     })
   }
+  
   function remove(element, events, fn, selector){
     var id = zid(element), isCeh = isCustomEventsHandler(element)
     eachEvent(events || '', fn, function(event, fn){
@@ -80,8 +76,8 @@
   }
 
   $.fn.bind = function(event, callback){
-    if(isCustomEventsHandler(this)){
-      add(this, event, callback);
+    if(isCustomEventsHandler(this[0])){
+      add(this[0], event, callback);
       return this
     }
     return this.each(function(){
@@ -89,8 +85,8 @@
     })
   }
   $.fn.unbind = function(event, callback){
-    if(isCustomEventsHandler(this)){
-      remove(this, event, callback);
+    if(isCustomEventsHandler(this[0])){
+      remove(this[0], event, callback);
       return this
     }
     return this.each(function(){
@@ -202,8 +198,8 @@
   }
 
   $.fn.trigger = function(event, data){
-    if(isCustomEventsHandler(this)){
-      publish(this, event, data)
+    if(isCustomEventsHandler(this[0])){
+      publish(this[0], event, data)
       return this
     }
     if (typeof event == 'string') event = $.Event(event)

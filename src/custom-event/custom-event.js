@@ -22,13 +22,14 @@
      *      ]
      *  }
      */
-    var handlers = {}, _zid = 1,
+    var handlers = {},
         BEFORE_EVENT = 'before',
         AFTER_EVENT = 'after',
         CUSTOMEVENT = 'customEvents';
 
     //可以在外部访问到事件对象集合
     $.ceHandlers = handlers;
+    $._zid = 1;
 
     function findHandlers(event, fn, agent) {
         return (handlers[event] || []).filter(function (handler) {
@@ -39,8 +40,10 @@
     }
 
     function zid(element) {
-        return element._zid || (element._zid = _zid++)
+        return element._zid || (element._zid = $._zid++)
     }
+
+    $.zid = zid;
 
     function reIndex(arr) {
         arr.forEach(function (e, index) {

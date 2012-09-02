@@ -2,6 +2,9 @@
  * 测试Zepto事件处理模块
  * @version : 0-0-1
  * @author : butian.wth
+ * @changeLog
+ * @20120830
+ * 补充$.Base.connect方法相关的测试用例
  */
 
 describe('测试Base模块', function () {
@@ -110,7 +113,9 @@ describe('测试Base模块', function () {
             });
             it('测试ATTRS方法是否已经挂载', function () {
                 expect(obj1.set).toBeTruthy();
+                expect(obj1._set).toBeTruthy();
                 expect(obj1.get).toBeTruthy();
+                expect(obj1._get).toBeTruthy();
             });
             it('测试destroy方法是否正常', function () {
                 obj1.trigger('destroy');
@@ -191,6 +196,11 @@ describe('测试Base模块', function () {
                 objTest.set('height', v);
                 expect(objTest.height).toEqual(v);
             });
+            it('测试ATTR的setter检测通过的情况', function () {
+                var v = '5px';
+                objTest.set('height', v);
+                expect(objTest.height).toEqual(v);
+            });
         });
         describe('测试Base中事件相关的处理', function () {
             it('测试destroy事件的触发', function () {
@@ -256,30 +266,30 @@ describe('测试Base模块', function () {
          * @20120829 增加对应的测试
          */
 
-        describe('测试setter方法的处理', function(){
+        describe('测试setter方法的处理', function () {
             var Test = $.Base.build('abc', {}, {
-                number : {
-                    setter : function(v){
-                        if($.type(v) === 'string'){
-                            v = parseInt(v, 10);
-                        }
-                        if($.type(v) === 'number'){
-                            return v;
-                        }
-                        return false;
-                    }
-                }
-            }, {
-                MSG:msg
-            }),
-                Test01 = $.Base.build('abc', {}, {
-                    number : {
-                        value : 10,
-                        setter : function(v){
-                            if($.type(v) === 'string'){
+                    number:{
+                        setter:function (v) {
+                            if ($.type(v) === 'string') {
                                 v = parseInt(v, 10);
                             }
-                            if($.type(v) === 'number'){
+                            if ($.type(v) === 'number') {
+                                return v;
+                            }
+                            return false;
+                        }
+                    }
+                }, {
+                    MSG:msg
+                }),
+                Test01 = $.Base.build('abc', {}, {
+                    number:{
+                        value:10,
+                        setter:function (v) {
+                            if ($.type(v) === 'string') {
+                                v = parseInt(v, 10);
+                            }
+                            if ($.type(v) === 'number') {
                                 return v;
                             }
                             return false;
@@ -289,30 +299,30 @@ describe('测试Base模块', function () {
                     MSG:msg
                 });
 
-            it('测试不带默认value的逻辑', function(){
+            it('测试不带默认value的逻辑', function () {
                 var obj,
                     index;
-                try{
+                try {
                     obj = new Test({
-                        number : []
+                        number:[]
                     });
-                } catch (e){
+                } catch (e) {
                     index = 1;
                 }
                 expect(index).toEqual(1)
             });
-            it('测试带默认value的逻辑', function(){
+            it('测试带默认value的逻辑', function () {
                 var obj = new Test01({
-                    number : []
+                    number:[]
                 });
                 expect(obj.number).toEqual(10)
             });
-            it('测试setter对value的预处理', function(){
+            it('测试setter对value的预处理', function () {
                 var obj = new Test({
-                        number : '11px'
+                        number:'11px'
                     }),
                     obj01 = new Test({
-                        number : 11
+                        number:11
                     });
                 expect(obj.number).toEqual(obj01.number);
             });
@@ -352,7 +362,7 @@ describe('测试Base模块', function () {
             it('测试initialized属性是否已经设置为true', function () {
                 expect(obj1.initialized).toBeTruthy();
             });
-            it('测试从父模块继承下来的方法是否生效', function(){
+            it('测试从父模块继承下来的方法是否生效', function () {
                 expect(obj1.getStaticName).toBeTruthy();
             });
             it('测试自定义事件方法是否已经挂载', function () {
@@ -371,7 +381,7 @@ describe('测试Base模块', function () {
         });
         describe('测试生成实例时参数的传递', function () {
             it('测试ATTRS参数为空的情况', function () {
-                $.Test13 = $.Base.extend(nameA, $.Test10,{
+                $.Test13 = $.Base.extend(nameA, $.Test10, {
                     initializer:function () {
                         this.fucked = true;
                     }
@@ -383,7 +393,7 @@ describe('测试Base模块', function () {
                 expect(objTest.get('a')).toEqual(1);
             });
             it('测试原型方法参数为空的情况', function () {
-                $.Test14 = $.Base.extend(nameA,$.Test10, {
+                $.Test14 = $.Base.extend(nameA, $.Test10, {
                 }, attrTest, {
                     MSG:msg
                 });
@@ -394,7 +404,7 @@ describe('测试Base模块', function () {
                 expect($.Test14.MSG).toEqual(msg);
             });
             it('测试静态方法参数为空的情况', function () {
-                $.Test15 = $.Base.extend(nameA,$.Test10, {
+                $.Test15 = $.Base.extend(nameA, $.Test10, {
                     initializer:function () {
                         this.fucked = true;
                     }
@@ -479,7 +489,7 @@ describe('测试Base模块', function () {
                 expect(name).toEqual('b');
             });
             describe('测试ATTR中修改属性产生的处理', function () {
-                $.Test19 = $.Base.extend('attrChangeTest', $.Test10,{}, attrTest01, {
+                $.Test19 = $.Base.extend('attrChangeTest', $.Test10, {}, attrTest01, {
                     MSG:msg
                 });
                 var objTest = new $.Test19,
@@ -490,8 +500,8 @@ describe('测试Base模块', function () {
                     o.value = attr.attrValue;
                 });
                 beforeEach(function () {
-                    objTest.set('width',5);
-                    objTest.set('top',5);
+                    objTest.set('width', 5);
+                    objTest.set('top', 5);
                     o = {}
                 });
                 it('测试修改父类属性成功时触发的处理', function () {
@@ -516,9 +526,8 @@ describe('测试Base模块', function () {
                 });
             });
             describe('测试自定义事件的处理', function () {
-                $.Test20 = $.Base.extend('attrChangeTest', $.Test10,{
+                $.Test20 = $.Base.extend('attrChangeTest', $.Test10, {
                     setValue:function () {
-                        var a = 1;
                         this.trigger('initFinished', {value:1});
                     }
                 }, attrTest, {
@@ -544,5 +553,422 @@ describe('测试Base模块', function () {
             })
         });
     });
+    /**
+     * @20120830 增加connect方法的测试用例
+     */
+    describe('测试connect方法的处理', function () {
+        var ConnectTest, pm, sm,
+            msg = 'asdas',
+            superClass = $.Base,
+            reset = function(){
+                ConnectTest = function () {
+                    ConnectTest.superclass.constructor.apply(this, arguments);
+                };
+                pm = {
+                    initializer:function () {
+                        this._set('fucked', true);
+                    },
+                    getIndex:function () {
+                        return this.index;
+                    }
+                };
+                sm = {
+                    INDEX:2
+                };
+                ConnectTest.ATTRS = {
+                    index:{
+                        value:1
+                    }
+                };
+            },
+            obj1,
+            objTest;
+        reset();
+        describe('测试继承于Base时的处理', function(){
+            describe('测试connect生成模块的完整性', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                    $.Base.connect(ConnectTest, superClass, pm, sm);
+                    obj1 = new ConnectTest({index:5});
+                });
+                it('测试prototype上的方法是否已经挂载成功', function () {
+                    expect(obj1.getIndex()).toEqual(5);
+                });
+                it('测试initializer上的方法是否已经执行成功', function () {
+                    expect(obj1.fucked).toEqual(true);
+                });
+                it('测试ATTR属性是否已经成功挂载', function () {
+                    expect(ConnectTest.ATTRS).toEqual(attrTest)
+                });
+                it('测试静态属性是否成功挂载', function () {
+                    expect(ConnectTest.INDEX).toEqual(sm.INDEX);
+                })
+            });
+            describe('测试继承下来的方法是否完整', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                    $.Base.connect(ConnectTest, superClass, pm, sm);
+                    obj1 = new ConnectTest();
+                });
+                it('测试initialized属性是否已经设置为true', function () {
+                    expect(obj1.initialized).toBeTruthy();
+                });
+                it('测试自定义事件方法是否已经挂载', function () {
+                    expect(obj1.bind).toBeTruthy();
+                    expect(obj1.trigger).toBeTruthy();
+                    expect(obj1.unbind).toBeTruthy();
+                });
+                it('测试ATTRS方法是否已经挂载', function () {
+                    expect(obj1.set).toBeTruthy();
+                    expect(obj1._set).toBeTruthy();
+                    expect(obj1.get).toBeTruthy();
+                    expect(obj1._get).toBeTruthy();
+                });
+                it('测试destroy方法是否正常', function () {
+                    obj1.trigger('destroy');
+                    expect(obj1.destroyed).toBeTruthy();
+                })
+            });
+            describe('测试生成实例时参数的传递', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                });
+                it('测试ATTRS参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                        initializer:function () {
+                            this.fucked = true;
+                        }
+                    }, {
+                        MSG:msg
+                    });
 
+                    var objTest = new ConnectTest({a:1});
+                    expect(objTest.get('a')).toEqual(1);
+                });
+                it('测试原型方法参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                    }, {
+                        MSG:msg
+                    });
+
+                    var objTest = new ConnectTest();
+                    expect(objTest.bind).toBeTruthy();
+                    expect(ConnectTest.MSG).toEqual(msg);
+                });
+                it('测试静态方法参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                        initializer:function () {
+                            this.fucked = true;
+                        }
+                    }, {
+                    });
+
+                    var objTest = new ConnectTest();
+                    expect(objTest.bind).toBeTruthy();
+                    expect(ConnectTest.MSG).not.toBeTruthy();
+                });
+                it('测试传入参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass);
+                    var objTest = new ConnectTest();
+                    expect(objTest.bind).toBeTruthy();
+                    expect(ConnectTest.MSG).not.toBeTruthy();
+                })
+            });
+            describe('测试ATTRS是否有效', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                    $.Base.connect(ConnectTest, superClass, protoMethod, {
+                        MSG:msg
+                    });
+                    objTest = new ConnectTest;
+                });
+                it('测试不在ATTRS里的属性写入', function () {
+                    objTest.set('playing', true);
+                    expect(objTest.playing).toBeTruthy()
+                });
+                it('测试ATTR的validator检测没有通过的情况', function () {
+                    var v = 'px';
+                    objTest.set('width', v);
+                    expect(objTest.width).not.toEqual(v);
+                });
+                it('测试ATTR的setter没有检测通过的情况', function () {
+                    var v = 'px';
+                    objTest.set('height', v);
+                    expect(objTest.height).not.toEqual(v);
+                });
+                it('测试ATTR的validator检测通过的情况', function () {
+                    var v = '5px';
+                    objTest.set('width', v);
+                    expect(objTest.width).toEqual(v);
+                });
+                it('测试ATTR的setter检测通过的情况', function () {
+                    var v = '5px';
+                    objTest.set('height', v);
+                    expect(objTest.height).toEqual(v);
+                });
+            });
+            describe('测试事件相关的处理', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                });
+                it('测试destroy事件的触发', function () {
+                    $.Base.connect(ConnectTest, superClass, protoMethod, {
+                        MSG:msg
+                    });
+                    var objTest = new ConnectTest,
+                        name = 'a';
+                    objTest.bind('destroy', function () {
+                        name = 'b';
+                    });
+                    objTest.trigger('destroy');
+                    expect(objTest.destroyed).toBeTruthy();
+                    expect(name).toEqual('b');
+                });
+                describe('测试ATTR中修改属性产生的处理', function () {
+                    var objTest,
+                        o = {};
+                    beforeEach(function () {
+                        reset();
+                        ConnectTest.ATTRS = attrTest;
+                        $.Base.connect(ConnectTest, superClass, {}, {
+                            MSG:msg
+                        });
+                        objTest = new ConnectTest;
+                        objTest.set('width', 5);
+                        o = {};
+                        objTest.bind('attrChange', function (e, attr) {
+                            o.key = attr.attrKey;
+                            o.value = attr.attrValue;
+                        });
+                    });
+                    it('测试修改成功时触发的处理', function () {
+                        objTest.set('width', 1);
+                        expect(o.key).toEqual('width');
+                        expect(o.value).toEqual(1);
+                    });
+                    it('测试修改失败时触发的处理', function () {
+                        objTest.set('width', {});
+                        expect(o.key).not.toEqual('width');
+                        expect(o.value).not.toEqual('px');
+                    });
+                });
+                describe('测试自定义事件的处理', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                        setValue:function () {
+                            this.trigger('initFinished', {value:1});
+                        }
+                    }, attrTest, {
+                        MSG:msg
+                    });
+                    var objTest = new ConnectTest;
+                    it('测试在prototype方法中事件的触发', function () {
+                        var value = 2;
+                        objTest.bind('initFinished', function (e, data) {
+                            value = data.value;
+                        });
+                        objTest.setValue();
+                        expect(value).toEqual(1);
+                    })
+                })
+            });
+        });
+        describe('测试继承于其他继承于Base模块时的处理', function(){
+            superClass = $.Base.build(nameA, protoMethod, attrTest, {
+                MSG:msg
+            });
+            describe('测试connect生成模块的完整性', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                    $.Base.connect(ConnectTest, superClass, pm, sm);
+                    obj1 = new ConnectTest({index:5});
+                });
+                it('测试prototype上的方法是否已经挂载成功', function () {
+                    expect(obj1.getIndex()).toEqual(5);
+                });
+                it('测试initializer上的方法是否已经执行成功', function () {
+                    expect(obj1.fucked).toEqual(true);
+                });
+                it('测试静态属性是否成功挂载', function () {
+                    expect(ConnectTest.INDEX).toEqual(sm.INDEX);
+                })
+            });
+            describe('测试继承下来的方法是否完整', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                    $.Base.connect(ConnectTest, superClass, pm, sm);
+                    obj1 = new ConnectTest();
+                });
+                it('测试initialized属性是否已经设置为true', function () {
+                    expect(obj1.initialized).toBeTruthy();
+                });
+                it('测试自定义事件方法是否已经挂载', function () {
+                    expect(obj1.bind).toBeTruthy();
+                    expect(obj1.trigger).toBeTruthy();
+                    expect(obj1.unbind).toBeTruthy();
+                });
+                it('测试ATTRS方法是否已经挂载', function () {
+                    expect(obj1.set).toBeTruthy();
+                    expect(obj1._set).toBeTruthy();
+                    expect(obj1.get).toBeTruthy();
+                    expect(obj1._get).toBeTruthy();
+                });
+                it('测试destroy方法是否正常', function () {
+                    obj1.trigger('destroy');
+                    expect(obj1.destroyed).toBeTruthy();
+                })
+            });
+            describe('测试生成实例时参数的传递', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                });
+                it('测试ATTRS参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                        initializer:function () {
+                            this.fucked = true;
+                        }
+                    }, {
+                        MSG:msg
+                    });
+
+                    var objTest = new ConnectTest({a:1});
+                    expect(objTest.get('a')).toEqual(1);
+                });
+                it('测试原型方法参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                    }, {
+                        MSG:msg
+                    });
+
+                    var objTest = new ConnectTest();
+                    expect(objTest.bind).toBeTruthy();
+                    expect(ConnectTest.MSG).toEqual(msg);
+                });
+                it('测试静态方法参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                        initializer:function () {
+                            this.fucked = true;
+                        }
+                    }, {
+                    });
+
+                    var objTest = new ConnectTest();
+                    expect(objTest.bind).toBeTruthy();
+                    expect(ConnectTest.MSG).not.toBeTruthy();
+                });
+                it('测试传入参数为空的情况', function () {
+                    $.Base.connect(ConnectTest, superClass);
+                    var objTest = new ConnectTest();
+                    expect(objTest.bind).toBeTruthy();
+                    expect(ConnectTest.MSG).not.toBeTruthy();
+                })
+            });
+            describe('测试ATTRS是否有效', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                    $.Base.connect(ConnectTest, superClass, protoMethod, {
+                        MSG:msg
+                    });
+                    objTest = new ConnectTest;
+                });
+                it('测试不在ATTRS里的属性写入', function () {
+                    objTest.set('playing', true);
+                    expect(objTest.playing).toBeTruthy()
+                });
+                it('测试ATTR的validator检测没有通过的情况', function () {
+                    var v = 'px';
+                    objTest.set('width', v);
+                    expect(objTest.width).not.toEqual(v);
+                });
+                it('测试ATTR的setter没有检测通过的情况', function () {
+                    var v = 'px';
+                    objTest.set('height', v);
+                    expect(objTest.height).not.toEqual(v);
+                });
+                it('测试ATTR的validator检测通过的情况', function () {
+                    var v = '5px';
+                    objTest.set('width', v);
+                    expect(objTest.width).toEqual(v);
+                });
+                it('测试ATTR的setter检测通过的情况', function () {
+                    var v = '5px';
+                    objTest.set('height', v);
+                    expect(objTest.height).toEqual(v);
+                });
+            });
+            describe('测试事件相关的处理', function () {
+                beforeEach(function(){
+                    reset();
+                    ConnectTest.ATTRS = attrTest;
+                });
+                it('测试destroy事件的触发', function () {
+                    $.Base.connect(ConnectTest, superClass, protoMethod, {
+                        MSG:msg
+                    });
+                    var objTest = new ConnectTest,
+                        name = 'a';
+                    objTest.bind('destroy', function () {
+                        name = 'b';
+                    });
+                    objTest.trigger('destroy');
+                    expect(objTest.destroyed).toBeTruthy();
+                    expect(name).toEqual('b');
+                });
+                describe('测试ATTR中修改属性产生的处理', function () {
+                    var objTest,
+                        o = {};
+                    beforeEach(function () {
+                        reset();
+                        ConnectTest.ATTRS = attrTest;
+                        $.Base.connect(ConnectTest, superClass, {}, {
+                            MSG:msg
+                        });
+                        objTest = new ConnectTest;
+                        objTest.set('width', 5);
+                        o = {};
+                        objTest.bind('attrChange', function (e, attr) {
+                            o.key = attr.attrKey;
+                            o.value = attr.attrValue;
+                        });
+                    });
+                    it('测试修改成功时触发的处理', function () {
+                        objTest.set('width', 1);
+                        expect(o.key).toEqual('width');
+                        expect(o.value).toEqual(1);
+                    });
+                    it('测试修改失败时触发的处理', function () {
+                        objTest.set('width', {});
+                        expect(o.key).not.toEqual('width');
+                        expect(o.value).not.toEqual('px');
+                    });
+                });
+                describe('测试自定义事件的处理', function () {
+                    $.Base.connect(ConnectTest, superClass, {
+                        setValue:function () {
+                            this.trigger('initFinished', {value:1});
+                        }
+                    }, attrTest, {
+                        MSG:msg
+                    });
+                    var objTest = new ConnectTest;
+                    it('测试在prototype方法中事件的触发', function () {
+                        var value = 2;
+                        objTest.bind('initFinished', function (e, data) {
+                            value = data.value;
+                        });
+                        objTest.setValue();
+                        expect(value).toEqual(1);
+                    })
+                })
+            });
+        });
+    });
 });

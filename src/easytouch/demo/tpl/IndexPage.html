@@ -1,24 +1,37 @@
 <div id="IndexPage" class="et-page">
-    <header>IndexPage - Hello "<b id="name"></b>"</header>
-    <p>This is IndexPage from ajax.</p>
+    <header>EasyTouch</header>
 
-    <select id="select-anim">
-        <option value="slideRightIn">slideRightIn</option>
-        <option value="slideLeftIn">slideLeftIn</option>
-        <option value="slideUpIn">slideUpIn</option>
-        <option value="slideDownIn">slideDownIn</option>
-        <option value="fadeIn">fadeIn</option>
-        <option value="dissolveIn">dissolveIn</option>
-        <option value="popIn">popIn</option>
-        <option value="flipLeftIn">flipLeftIn</option>
-        <option value="flipRightIn">flipRightIn</option>
-        <option value="swapLeftIn">swapLeftIn</option>
-        <option value="swapRightIn">swapRightIn</option>
-        <option value="cubeLeftIn">cubeLeftIn</option>
-        <option value="cubeRightIn">cubeRightIn</option>
-    </select>
-    <button id="detail-page">Go DetailPage</button>
-    <button id="about-page">Go AboutPage</button>
-    <button id="list-page">Go ListPage</button>
-    <button id="person-page">Go PersonPage</button>
+    <ul id="animation-examples" class="et-listview et-corner et-shadow">
+        <li data-anim="slideRightIn"><a href="#"><i class="et-icon"></i>slideRightIn</a></li>
+        <li data-anim="slideLeftIn"><a href="#"><i class="et-icon"></i>slideLeftIn</a></li>
+        <li data-anim="slideUpIn"><a href="#"><i class="et-icon"></i>slideUpIn</a></li>
+        <li data-anim="slideDownIn"><a href="#"><i class="et-icon"></i>slideDownIn</a></li>
+        <li data-anim="fadeIn"><a href="#"><i class="et-icon"></i>fadeIn</a></li>
+        <li data-anim="dissolveIn"><a href="#"><i class="et-icon"></i>dissolveIn</a></li>
+        <li data-anim="popIn"><a href="#"><i class="et-icon"></i>popIn</a></li>
+        <li data-anim="flipLeftIn"><a href="#"><i class="et-icon"></i>flipLeftIn</a></li>
+        <li data-anim="flipRightIn"><a href="#"><i class="et-icon"></i>flipRightIn</a></li>
+        <li data-anim="swapLeftIn"><a href="#"><i class="et-icon"></i>swapLeftIn</a></li>
+        <li data-anim="swapRightIn"><a href="#"><i class="et-icon"></i>swapRightIn</a></li>
+        <li data-anim="cubeLeftIn"><a href="#"><i class="et-icon"></i>cubeLeftIn</a></li>
+        <li data-anim="cubeRightIn"><a href="#"><i class="et-icon"></i>cubeRightIn</a></li>
+    </ul>
+
+    <pre><code class="javascript">
+        var IndexPage = $.EasyTouch.Page.extend({
+            el: 'tpl/IndexPage.html',
+            render: function(response){
+                console.log('IndexPage render', arguments);
+                return response;
+            },
+            init: function(params){
+                hljs.initHighlighting();
+
+                var _this = this;
+                $('#animation-examples li').tap(function(e){
+                    _this.app.navPage('AboutPage', {}, this.getAttribute('data-anim'));
+                });
+            }
+        });
+    </code></pre>
 </div>

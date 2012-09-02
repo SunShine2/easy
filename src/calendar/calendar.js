@@ -3,60 +3,65 @@
  * author : butian.wth@aliyun-inc.com
  * version : 0-0-1
  */
+
 (function($){
 
-  var Calendar = function(y, m, options) {
-    var _d = new Date();
+  var CALENDAR_HTML = '<div class="calendar-wrap"><div class="calendar-hd"><div class="calendar-action"><span class="calendar-prev" _action="calPrev"><s></s></span><span class="calendar-year"></span>年<span class="calendar-month"></span>月<span class="calendar-next" _action="calNext"><s></s></span></div><div id="calendarInfo" class="calendar-info"></div></div><div class="calendar-box"></div></div>',
+    CALENDAR_STYLE = '',
+    Calendar;
+
+  Calendar = function(container, year, month, options) {
+    var now = new Date();
     //获取当前年月日
-    this.c_y = _d.getFullYear();
-    this.c_m = _d.getMonth();//0-11
-    this.c_d = _d.getDate();//1-31
-    if (this.c_m < 10) this.c_m = "0" + this.c_m;
-    if (this.c_d < 10) this.c_d = "0" + this.c_d;
+    this.curYear = now.getFullYear();
+    this.curMonth = now.getMonth();//0-11
+    this.curDay = now.getDate();//1-31
+    this.curMonth < 10 || (this.curMonth = "0" + this.curMonth);
+    this.curDay < 10 || (this.curDay = "0" + this.curDay);
     //如果参数中有年月，使用设置的时间
-    if (y && m) {
-      this.y = y;
-      this.m = m - 1;
+    if (year && month) {
+      this.year = year;
+      this.month = month - 1;
     } else {
-      this.y = this.c_y;
-      this.m = this.c_m;
+      this.year = this.curYear;
+      this.month = this.curMonth;
     }
-    this.d = this.c_d;
+    this.day = this.curDay;
+
     if (options) {
       for (var i in options) {
         this[i] = options[i];
       }
     }
-    this.elem = document.querySelector("#calendar");
-    this.prevBtn = this.elem.querySelector(".cal_prev");
-    this.nextBtn = this.elem.querySelector(".cal_next");
-    this.box = this.elem.querySelector(".cal_box");
-    this.cal_y = this.elem.querySelector(".cal_y");
-    this.cal_m = this.elem.querySelector(".cal_m");
+    this.cont = $(container);
     this.json = null;
-    this.pubTime = 0;//发布时间"2012-01-07"
+    //自动进行初始化
+    this.init();
   };
   Calendar.prototype = {
     init : function() {
-      var self = this;
-      this.prevBtn.onclick = function() {
-        self.prev();
-      };
-      this.nextBtn.onclick = function() {
-        self.next();
-      };
-      this.show();
+      var that = this;
+      $(CALENDAR_HTML).appendTo(this.cont);
+      setTimeout(function(){
+        that.prevBtn = that.cont.find(".calendar-prev");
+        that.nextBtn = that.cont.find(".calendar-next");
+        that.box = that.cont.find(".calendar-box");
+        that.calendarYear = that.cont.find(".calendar-year");
+        that.calendarMonth = that.cont.find(".calendar-month");
+        that.initEvent();
+        that.show();
+      },100);
+    },
+    initEvent : function(){
+      var that = this;
     },
     //获取第一天是周几
     getWeek : function() {
-      return new Date(this.y, parseInt(this.m), 1).getDay();
+      return new Date(this.year, parseInt(this.month), 1).getDay();
     },
     //获取当月有多少天
     getAllDay : function() {
-      return new Date(this.y, parseInt(this.m) + 1, 0).getDate();
-    },
-    getData : function() {
-
+      return new Date(this.year, parseInt(this.month) + 1, 0).getDate();
     },
     //生成月视图
     show : function() {
@@ -67,13 +72,13 @@
         //打印出日期
         if (i > wk && i <= (days + wk)) {
           var d = i - wk,
-            m = parseInt(this.m) < 10 ? "0" + parseInt(this.m) : this.m + "";
+            m = parseInt(this.month) < 10 ? "0" + parseInt(this.month) : this.month + "";
           if (d < 10) d = "0" + d;
-          //console.log(parseInt(this.c_y+this.c_m+this.c_d),parseInt(this.y+ m+ d));
-          if (d == this.c_d && this.c_m == this.m && this.c_y == this.y) {
+          //console.log(parseInt(this.curYear+this.curMonth+this.curDay),parseInt(this.year+ m+ d));
+          if (d == this.curDay && this.curMonth == this.month && this.curYear == this.year) {
             html.push('<td class="active now" _action="ensure">' + d + '</td>');
-          } else if (parseInt(this.c_y + this.c_m + this.c_d) > parseInt(this.y + m + d)) {
-            html.push('<td class="active before">' + d + '</td>');
+          } else if (parseInt(this.curYear + this.curMonth + this.curDay) > parseInt(this.year + m + d)) {
+            html.push('<td class="active before" _action="ensure">' + d + '</td>');
           } else {
             html.push('<td class="active" _action="ensure">' + d + '</td>');
           }
@@ -85,45 +90,48 @@
         }
       }
       html.push('</tr></tbody></table>');
-      this.box.innerHTML = html.join(" ");
+      this.box.html(html.join(" "));
+      setTimeout(function(){
+        datePage.initActionElements(datePage._self, datePage, ["div","li","span","td"]);
+      }, 300);
       this.showStr();
     },
     //上月
     prev : function() {
-      this.m = parseInt(this.m, 10);
-      this.y = parseInt(this.y, 10);
-      this.nextBtn.style.display = "block";
-      this.m--;
-      if (this.m < 0) {
-        this.m = 11;
-        this.y--;
+      this.month = parseInt(this.month, 10);
+      this.year = parseInt(this.year, 10);
+      this.nextBtn.show();
+      this.month--;
+      if (this.month < 0) {
+        this.month = 11;
+        this.year--;
       }
       this.show();
     },
     next : function() {
-      this.m = parseInt(this.m, 10);
-      this.y = parseInt(this.y, 10);
-      this.m++;
-      if (this.m > 11) {
-        this.m = 0;
-        this.y++;
+      this.month = parseInt(this.month, 10);
+      this.year = parseInt(this.year, 10);
+      this.month++;
+      if (this.month > 11) {
+        this.month = 0;
+        this.year++;
       }
       this.show();
     },
     //显示数字日期
     showStr : function() {
-      this.cal_y.innerHTML = this.y;
-      this.cal_m.innerHTML = parseInt(this.m, 10) + 1;
-      //document.getElementById("d").innerHTML=this.d;
+      this.calendarYear.html(this.year);
+      this.calendarMonth.html(parseInt(this.month, 10) + 1);
     },
     getDate : function() {
-      console.log(this.m);
-      var m = parseInt(this.m, 10) + 1;
+      var m = parseInt(this.month, 10) + 1;
       if (m < 10) {
         m = "0" + m;
       }
-      return this.y + "年" + m + "月";
+      return this.year + "年" + m + "月";
     }
   };
+
+  $.Calendar = Calendar;
 
 })(Zepto);

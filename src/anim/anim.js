@@ -1,6 +1,9 @@
 /**
  * 动画模块，对zepto的动画模块进行补充
  * version: 0-0-1
+ * TODO:调用zepto fx中的method完成动画
+ * TODO:增加slideup,slidedown等基本的动画函数，和jQuery的基本动画函数保持一致
+ * TODO:解决同一个元素上绑定多个动画时的冲突问题
  */
 
 (function ($) {
@@ -8,15 +11,32 @@
      * 用于存储生成anim对象的参数
      * @type {Object}
      */
-    var animation = {},
+    var NAME = 'Anim',
+        //动画暂停的时候触发
+        EVENT_PAUSE = 'pause',
+        //动画继续的时候触发
+        EVENT_RESUME = 'resume',
+        //tween事件会在每一帧动画结束时触发
+        EVENT_TWEEN = 'tween',
         RUNNING = 'running',
         START_TIME = 'startTime',
         ELAPSED_TIME = 'elapsedTime',
         START = 'start',
         END = 'end',
         NODE = 'node',
-        PAUSED = 'paused';
+        PAUSED = 'paused',
+        STRING = 'string',
+        NODE_ERROR = '[Anim error] ：node is required when initializing $.Anim',
+        _timer,
+        _running = {};
 
+    $.Anim = function () {
+        $.Anim.superclass.constructor.apply(this, arguments);
+        $.Anim._instances[$.zid(this)] = this;
+    };
+
+    $.Anim._instances = {};
+    $.Anim.NAME = NAME;
     /**
      * 静态参数的处理
      * @type {*}
@@ -25,47 +45,43 @@
      * 默认的单位
      * @type {String}
      */
-    animation.DEFAULT_UNIT = 'px';
+    $.Anim.DEFAULT_UNIT = 'px';
     /**
      * 使用到默认单位的css属性
      * @type {RegExp}
      */
-    animation.RE_DEFAULT_UNIT = /^width|height|top|right|bottom|left|margin.*|padding.*|border.*$/i;
+    $.Anim.RE_DEFAULT_UNIT = /^width|height|top|right|bottom|left|margin.*|padding.*|border.*$/i;
     /**
      * 每一帧动画的默认间隔时间，单位是毫秒
      * @type {Number}
      * @private
      */
-    animation._intervalTime = 20;
+    $.Anim._intervalTime = 20;
     /**
      * 默认的easing
      * @type {String}
      */
-    animation.DEFAULT_EASING = 'linear';
-    /**
-     * 动画的执行队列
-     * @type {Object}
-     */
-    animation._running = {};
+    $.Anim.DEFAULT_EASING = 'linear';
+
     /**
      * ATTRS属性的处理
      * @type {Object}
      */
-    animation.ATTRS = {
+    $.Anim.ATTRS = {
         /**
          * 动画所在的节点
          */
         node:{
             setter:function () {
                 if (node) {
-                    if (typeof node == 'string' || node.nodeType) {
+                    if (typeof node == STRING || node.nodeType) {
                         node = $(node);
                     }
                 }
 
                 this._node = node;
                 if (!node) {
-                    throw new Error('[Anim error] ：node is required when initializing $.Anim');
+                    throw new Error(NODE_ERROR);
                 }
                 return node;
             }
@@ -80,10 +96,10 @@
          * 动画的平滑效果，主要与浏览器对ease的支持有关
          */
         easing:{
-            value:animation.DEFAULT_EASING,
+            value:$.Anim.DEFAULT_EASING,
             setter:function (val) {
-                if (typeof val === 'string' && animation.Easing) {
-                    return animation.Easing[val];
+                if (typeof val === STRING && $.Anim.Easing) {
+                    return $.Anim.Easing[val];
                 }
             }
         },
@@ -133,67 +149,67 @@
     };
 
     /**
-     * 动画模块含有的方法
+     * 动画模块含有的静态方法
      * @type {*}
      */
 
     /**
      * 启动动画
      */
-    animation.run = function () {
-        var instances = animation._instances;
-        for (var i in instances) {
-            if (instances[i].run) {
-                instances[i].run();
+    $.Anim.run = function () {
+        var instances = $.Anim._instances;
+        $.each(instances, function (key, item) {
+            if (instances[item].run) {
+                instances[item].run()
             }
-        }
+        })
     };
     /**
      * 暂停动画
      */
-    animation.pause = function () {
-        for (var i in _running) { // stop timer if nothing running
-            if (_running[i].pause) {
-                _running[i].pause();
+    $.Anim.pause = function () {
+        $.each(_running, function (key, item) {
+            if (_running[item].pause) {
+                _running[item].pause();
             }
-        }
+        });
 
-        animation._stopTimer();
+        $.Anim._stopTimer();
     };
     /**
      * 停止动画
      */
-    animation.stop = function () {
-        for (var i in _running) { // stop timer if nothing running
-            if (_running[i].stop) {
-                _running[i].stop();
+    $.Anim.stop = function () {
+        $.each(_running, function (key, item) {
+            if (_running[item].stop) {
+                _running[item].stop();
             }
-        }
-        animation._stopTimer();
+        });
+        $.Anim._stopTimer();
     };
 
-    animation._startTimer = function () {
+    $.Anim._startTimer = function () {
         if (!_timer) {
-            _timer = setInterval(animation._runFrame, animation._intervalTime);
+            _timer = setInterval($.Anim._runFrame, $.Anim._intervalTime);
         }
     };
 
-    animation._stopTimer = function () {
+    $.Anim._stopTimer = function () {
         clearInterval(_timer);
         _timer = 0;
     };
 
-    animation._runFrame = function () {
+    $.Anim._runFrame = function () {
         var done = true;
-        for (var anim in _running) {
-            if (_running[anim]._runFrame) {
+        $.each(_running, function (key, item) {
+            if (_running[item]._runFrame) {
                 done = false;
-                _running[anim]._runFrame();
+                _running[item]._runFrame();
             }
-        }
+        });
 
         if (done) {
-            animation._stopTimer();
+            $.Anim._stopTimer();
         }
     };
     /**
@@ -215,9 +231,9 @@
             }
             return this;
         },
-        stop:function (finish) {
+        stop:function () {
             if (this.get(RUNNING) || this.get(PAUSED)) {
-                this._end(finish);
+                this._end();
             }
             return this;
         },
@@ -226,11 +242,9 @@
         _start:function () {
             this._set(START_TIME, new Date() - this.get(ELAPSED_TIME));
             this._actualFrames = 0;
-            if (!this.get(PAUSED)) {
-                this._initAnimAttr();
-            }
-            _running[] = this;
-            animation._startTimer();
+
+            _running[$.zid(this)] = this;
+            $.Anim._startTimer();
 
             this.fire(START);
         },
@@ -238,73 +252,49 @@
         _pause:function () {
             this._set(START_TIME, null);
             this._set(PAUSED, true);
-            delete _running[];
+            delete _running[$.zid(this)];
 
-            /**
-             * @event pause
-             * @description fires when an animation is paused.
-             * @param {Event} ev The pause event.
-             * @type Event.Custom
-             */
-            this.fire('pause');
+            this.fire(EVENT_PAUSE);
         },
 
         _resume:function () {
             this._set(PAUSED, false);
-            _running[] = this;
+            _running[$.zid(this)] = this;
             this._set(START_TIME, new Date() - this.get(ELAPSED_TIME));
-            animation._startTimer();
+            $.Anim._startTimer();
 
-            /**
-             * @event resume
-             * @description fires when an animation is resumed (run from pause).
-             * @param {Event} ev The pause event.
-             * @type Event.Custom
-             */
-            this.fire('resume');
+            this.fire(EVENT_RESUME);
         },
 
-        _end:function (finish) {
+        _end:function () {
             var duration = this.get('duration') * 1000;
-            if (finish) { // jump to last frame
-                this._runAttrs(duration, duration, this.get(REVERSE));
-            }
 
             this._set(START_TIME, null);
             this._set(ELAPSED_TIME, 0);
             this._set(PAUSED, false);
 
-            delete _running[];
+            delete _running[$.zid(this)];
             this.fire(END, {elapsed:this.get(ELAPSED_TIME)});
         },
 
         _runFrame:function () {
-            var d = this._runtimeAttr.duration,
-                t = new Date() - this.get(START_TIME),
-                reverse = this.get(REVERSE),
-                done = (t >= d),
-                attribute,
-                setter;
+            var t = new Date() - this.get(START_TIME);
 
-            this._runAttrs(t, d, reverse);
-            this._actualFrames += 1;
+            this._actualFrames = this._actualFrames + 1;
             this._set(ELAPSED_TIME, t);
 
-            this.fire(TWEEN);
-            if (done) {
-                this._lastFrame();
-            }
+            this.fire(EVENT_TWEEN);
         },
 
         destructor:function () {
-            delete animation._instances[];
+            delete $.Anim._instances[$.zid(this)];
         }
     };
 
     /**
-     * 使用Base的build方法生成动画模块
+     * 使用Base的connect方法生成动画模块
      */
 
-    $.Anim = $.Base.build('anim', proto, animation.ATTRS, {});
+    $.Base.connect($.Anim, $.Base, proto);
 
 })(Zepto);

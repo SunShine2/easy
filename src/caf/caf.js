@@ -144,7 +144,7 @@
                     __runtime__.getActiveApp().netInvoke("GET", url, "", "json", this, function (json) {
                         if (json.code == 200) {
                             _sign = json.data;
-                            $.os_token = json.data
+                            $.os_token = json.data;
                             win[onSuccess](_sign);
                         } else {
                             win[onFailure]("PIM.getSign failure");
@@ -157,14 +157,12 @@
             var osToken = $.os_token;
             if (osToken || !update) {
                 callback.call(agent);
-                return osToken;
+                return true;
             } else {
-                agent.sign = CloudAPI.PIM.peekSign();
-                $.os_token = agent.sign;
-                if (agent.sign == "false") {
+                $.os_token = CloudAPI.PIM.peekSign();
+                if ($.os_token == "false") {
                     agent.apiInvoke("sign", [true], agent, function (mysign) {
                         if (mysign) {
-                            agent.sign = mysign;
                             $.os_token = mysign;
                             callback && callback.call(agent, agent.sign);
                             return mysign;
@@ -174,7 +172,7 @@
                         }
                     });
                 } else {
-                    callback && callback.call(agent, agent.sign);
+                    callback && callback.call(agent, $.os_token);
                 }
             }
 
@@ -186,7 +184,7 @@
             };
         },
         "netInvokeSign":function (method, url, params, type, agent, callback) {
-            if (!window.localStorage.getItem("os_token")) {
+            if (!$.os_token) {
                 $.getSign(function () {
                     $.getApp().netInvoke(method, url, params, type, agent, function (data) {
                         callback.call(agent, data);

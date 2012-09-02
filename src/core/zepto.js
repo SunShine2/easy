@@ -2,12 +2,6 @@
 //     (c) 2010-2012 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
 
-/**
- * @easyModify
- * @butian.wth
- * version : 0-0-1
- */
-
 var Zepto = (function() {
   var undefined, key, $, classList, emptyArray = [], slice = emptyArray.slice,
     document = window.document,
@@ -58,9 +52,6 @@ var Zepto = (function() {
     return isObject(value) && value.__proto__ == Object.prototype
   }
   function isArray(value) { return value instanceof Array }
-  //add isNode method @easyModify
-  function isNode(value) { return ~value.toString().indexOf("HTML") }
-  function isRegExp(value) { return value instanceof RegExp }
   function likeArray(obj) { return typeof obj.length == 'number' }
 
   function compact(array) { return array.filter(function(item){ return item !== undefined && item !== null }) }
@@ -142,10 +133,7 @@ var Zepto = (function() {
     else if (isFunction(selector)) return $(document).ready(selector)
     // If a Zepto collection is given, juts return it
     else if (zepto.isZ(selector)) return selector
-    // If a normal object is given, it means that Zepto is used to handling custom event(not related with DOM)
-    else if (isObject(selector) && !isNode(selector) && !isRegExp(selector)) return zepto.Z(selector, "customEvents")
     else {
-      if (isRegExp(selector)) return false //a regexp can lead to a DOM error in zepto.qsa
       var dom
       // normalize array if an array of nodes is given
       if (isArray(selector)) dom = compact(selector)
@@ -253,16 +241,6 @@ var Zepto = (function() {
 
     return elements
   }
-
-//@modify add type method for Zepto
-var class2type = {}
-$.each("Boolean Number String Function Array Date RegExp Object".split(" "), function(i, name) {
-    class2type[ "[object " + name + "]" ] = name.toLowerCase();
-});
-$.type = function( obj ) {
-    return obj == null ?
-        String( obj ) : class2type[ toString.call(obj) ] || "object"
-}
 
   if (window.JSON) $.parseJSON = JSON.parse
 

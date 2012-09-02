@@ -92,7 +92,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;js_core.js.html#l105"><code>js\core.js:105</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;js_core.js.html#l103"><code>js\core.js:103</code></a>
         </div>
     
 
@@ -106,13 +106,14 @@
 <div class="box intro">
     <p>Touch UI Library for Easy, Examples:</p>
 
+<h4>You can create a instance of EasyTouch:</h4>
+
 <pre class="code"><code class="prettyprint">var Page1 = $.EasyTouch.Page.extend({
     el: '#xxx .xxx',
     init: function(){},
     reset: function(){}
 });
 
-//you can new a $.EasyTouch
 new $.EasyTouch({
     pages: {
         //class inherit from $.EasyTouch.Page
@@ -136,7 +137,8 @@ new $.EasyTouch({
             el: $('#xxx')
         },
 
-        //get template from tpl, parse the template in the function of &lt;code&gt;parse&lt;/code&gt;
+
+        //get template from tpl, render the template in the function of &lt;code&gt;render&lt;/code&gt;
         "Page6": {
             tpl: 'xxx.html'
         },
@@ -150,7 +152,7 @@ new $.EasyTouch({
             tpl: $('#xxx')
         }
     },
-    //this function will run will new
+    //this function will run when creating instance
     init: function(params){},
     //for YunOS resume event
     resume: function(){},
@@ -159,7 +161,7 @@ new $.EasyTouch({
 });
 </code></pre>
 
-<p>Or you can extend a EasyTouch, like this:</p>
+<h4>Or you can extend a EasyTouch, like this:</h4>
 
 <pre class="code"><code class="prettyprint">var App = $.EasyTouch.extend({
     el: 'xxx',
@@ -215,7 +217,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l105"><code>js\core.js:105</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l103"><code>js\core.js:103</code></a>
         
         </p>
 
@@ -253,12 +255,12 @@ new App();
                             <li class="param">
                                 
                                     <code class="param-name">pages</code>
-                                    <span class="type">Object | Class</span>
+                                    <span class="type">Object</span>
                                 
 
                                 <div class="param-description">
                                     <p>页面配置：
-        如果是一个Object，EasyTouch会调用<code>$.EasyTouch.extend</code>，将这个Object作为prototype属性扩展出一个Page；
+        如果是一个Object，EasyTouch会调用<code>$.EasyTouch.Page.extend</code>，将这个Object作为prototype属性扩展出一个Page；
         如果是一个Class，则将直接使用该类作为一个Page；</p>
                                 </div>
 
@@ -283,7 +285,7 @@ new App();
                                             
 
                                             <div class="param-description">
-                                                将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>parse</code>方法中使用任意模板引擎渲染改模板
+                                                将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板
                                             </div>
                                         </li>
                                         
@@ -317,6 +319,8 @@ new App();
         
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
+        
+            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
         
         
             <li class="api-class-tab events"><a href="#events">Events</a></li>
@@ -478,24 +482,26 @@ new App();
                                 
                             </li>
                         
-                            <li class="index-item property">
-                                <a href="#property_el">el</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_pages">pages</a>
-
-                                
-                                
-                            </li>
-                        
                     </ul>
                 </div>
             
 
+            
+                <div class="index-section attrs">
+                    <h3>Attributes</h3>
+
+                    <ul class="index-list attrs">
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_el">el</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_pages">pages</a>
+                            </li>
+                        
+                    </ul>
+                </div>
             
 
             
@@ -604,7 +610,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l573"><code>js\core.js:573</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l578"><code>js\core.js:578</code></a>
         
         </p>
 
@@ -718,7 +724,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l437"><code>js\core.js:437</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l419"><code>js\core.js:419</code></a>
         
         </p>
 
@@ -855,7 +861,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l406"><code>js\core.js:406</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l383"><code>js\core.js:383</code></a>
         
         </p>
 
@@ -993,7 +999,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l460"><code>js\core.js:460</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l446"><code>js\core.js:446</code></a>
         
         </p>
 
@@ -1094,7 +1100,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l486"><code>js\core.js:486</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l472"><code>js\core.js:472</code></a>
         
         </p>
 
@@ -1165,7 +1171,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l494"><code>js\core.js:494</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l480"><code>js\core.js:480</code></a>
         
         </p>
 
@@ -1246,7 +1252,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l474"><code>js\core.js:474</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l460"><code>js\core.js:460</code></a>
         
         </p>
 
@@ -1349,7 +1355,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l540"><code>js\core.js:540</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l526"><code>js\core.js:526</code></a>
         
         </p>
 
@@ -1469,7 +1475,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l532"><code>js\core.js:532</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l518"><code>js\core.js:518</code></a>
         
         </p>
 
@@ -1523,7 +1529,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l559"><code>js\core.js:559</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l545"><code>js\core.js:545</code></a>
         
         </p>
 
@@ -1587,7 +1593,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l508"><code>js\core.js:508</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l494"><code>js\core.js:494</code></a>
         
         </p>
 
@@ -1712,7 +1718,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l238"><code>js\core.js:238</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l215"><code>js\core.js:215</code></a>
         
         </p>
 
@@ -1817,7 +1823,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l271"><code>js\core.js:271</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l248"><code>js\core.js:248</code></a>
         
         </p>
 
@@ -1987,7 +1993,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l351"><code>js\core.js:351</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l328"><code>js\core.js:328</code></a>
         
         </p>
 
@@ -2084,7 +2090,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l253"><code>js\core.js:253</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l230"><code>js\core.js:230</code></a>
         
         </p>
 
@@ -2138,7 +2144,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l260"><code>js\core.js:260</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l237"><code>js\core.js:237</code></a>
         
         </p>
 
@@ -2192,7 +2198,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l246"><code>js\core.js:246</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l223"><code>js\core.js:223</code></a>
         
         </p>
 
@@ -2247,7 +2253,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l231"><code>js\core.js:231</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l208"><code>js\core.js:208</code></a>
         
         </p>
 
@@ -2293,7 +2299,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l224"><code>js\core.js:224</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l201"><code>js\core.js:201</code></a>
         
         </p>
 
@@ -2314,7 +2320,16 @@ new App();
 </div>
 
                 
-                    <div id="property_el" class="property item">
+            </div>
+        
+
+        
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_el" class="attr item">
+    <a name="config_el"></a> 
     <h3 class="name"><code>el</code></h3>
     <span class="type">HTMLElement | Node | String</span>
 
@@ -2322,6 +2337,12 @@ new App();
 
     
 
+    
+
+    
+
+    
+        <span class="flag optional">optional</span>
     
 
     
@@ -2337,7 +2358,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l208"><code>js\core.js:208</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l558"><code>js\core.js:558</code></a>
         
         </p>
 
@@ -2360,7 +2381,8 @@ new App();
 </div>
 
                 
-                    <div id="property_pages" class="property item">
+                    <div id="attr_pages" class="attr item">
+    <a name="config_pages"></a> 
     <h3 class="name"><code>pages</code></h3>
     <span class="type">Object</span>
 
@@ -2370,6 +2392,12 @@ new App();
 
     
 
+    
+
+    
+
+    
+        <span class="flag required">required</span>
     
 
     <div class="meta">
@@ -2383,7 +2411,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l216"><code>js\core.js:216</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l568"><code>js\core.js:568</code></a>
         
         </p>
 
@@ -2405,8 +2433,6 @@ new App();
 
                 
             </div>
-        
-
         
 
         

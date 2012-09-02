@@ -5,30 +5,34 @@
  */
 
 describe('Zepto自定义事件功能测试：', function() {
-    describe('测试简单的解绑和绑定：', function(){
-        var testObj = {
+    var testObj = {
             name : 'foolish'
         },
         name,
         testFn = function(){
+            console.log(this);
             name = this.name;
-        };
+        },
+        test;
+    describe('测试简单的解绑和绑定：', function(){
         beforeEach(function() {
             name = "";
+            test = $(testObj);
         });
         it('测试绑定自定义事件以及触发自定义事件的功能是否通过', function() {
-            $(testObj).bind('testEvent01', testFn);
-            $(testObj).trigger('testEvent01');
+            test.bind('testEvent01', testFn);
+            console.log(testObj._zid);
+            test.trigger('testEvent01');
             expect(name).toEqual('foolish');
         });
         it("测试解绑自定义事件的功能", function(){
-            $(testObj).unbind('testEvent01', testFn);
-            $(testObj).trigger('testEvent01');
+            test.unbind('testEvent01', testFn);
+            test.trigger('testEvent01');
             expect(name).not.toEqual('testEvent01');
         });
         it('测试解绑功能，只传一个参数', function(){
-            $(testObj).bind('testEvent01', testFn);
-            $(testObj).unbind('testEvent01');
+            test.bind('testEvent01', testFn);
+            test.unbind('testEvent01');
             expect(name).toEqual('')
         });
     });
@@ -41,21 +45,22 @@ describe('Zepto自定义事件功能测试：', function() {
             index = index +1;
             return index;
         };
-        beforeEach(function(){
-            $(testObj).unbind('testEvent01');
+        beforeEach(function() {
+            name = "";
+            test = $(testObj);
             index = 1;
         });
         it('测试重复绑定', function(){
-            $(testObj).bind('testEvent01', testFn);
-            $(testObj).bind('testEvent01', testFn);
-            $(testObj).trigger('testEvent01');
+            test.bind('testEvent01', testFn);
+            test.bind('testEvent01', testFn);
+            test.trigger('testEvent01');
             expect(index).toEqual(3)
         });
         it('测试解绑所有监听器的功能，只传一个参数', function(){
-            $(testObj).bind('testEvent01', testFn);
-            $(testObj).bind('testEvent01', testFn);
-            $(testObj).bind('testEvent01', testFn);
-            $(testObj).unbind('testEvent01');
+            test.bind('testEvent01', testFn);
+            test.bind('testEvent01', testFn);
+            test.bind('testEvent01', testFn);
+            test.unbind('testEvent01');
             expect(index).toEqual(1)
         });
     });
@@ -71,23 +76,22 @@ describe('Zepto自定义事件功能测试：', function() {
                 return index
             };
 
-        beforeEach(function(){
-            $(testObj).unbind(eventObj01);
-            $(testObj).unbind(eventObj02);
+        beforeEach(function() {
+            test = $(testObj);
             index = 1;
         });
 
         it("测试数组形式多事件的绑定和解绑功能：", function(){
-            $(testObj).bind(eventObj01, testFn);
-            $(testObj).trigger('event01');
-            $(testObj).trigger('event02');
+            test.bind(eventObj01, testFn);
+            test.trigger('event01');
+            test.trigger('event02');
             expect(index).not.toEqual(3)
         });
 
         it("测试字符串形式多事件的绑定和解绑功能：", function(){
-            $(testObj).bind(eventObj02, testFn);
-            $(testObj).trigger('event01');
-            $(testObj).trigger('event02');
+            test.bind(eventObj02, testFn);
+            test.trigger('event01');
+            test.trigger('event02');
             expect(index).toEqual(3)
         });
     });
@@ -105,8 +109,8 @@ describe('Zepto自定义事件功能测试：', function() {
             };
 
         it('测试简单数据的传递', function(){
-            $(testObj).bind(event, testFn);
-            $(testObj).trigger(event, dataObj);
+            test.bind(event, testFn);
+            test.trigger(event, dataObj);
             expect(index).toEqual(3);
         })
     })

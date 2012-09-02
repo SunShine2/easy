@@ -46,28 +46,28 @@ h1,
 /*
 -webkit-margin-before: 0.83__qem;
 -webkit-margin-after: 0.83em;
-*/
 :-webkit-any(article,aside,nav,section) h1,
+*/
 /*
 -webkit-margin-before: 1__qem;
 -webkit-margin-after: 1em;
-*/
 :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+*/
 /*
 -webkit-margin-before: 1.33__qem;
 -webkit-margin-after: 1.33em;
-*/
 :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+*/
 /*
 -webkit-margin-before: 1.67__qem;
 -webkit-margin-after: 1.67em;
-*/
 :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+*/
 /*
 -webkit-margin-before: 2.33__qem;
 -webkit-margin-after: 2.33em;
-*/
 :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) :-webkit-any(article,aside,nav,section) h1,
+*/
 /*
 -webkit-margin-before: 0.83__qem;
 -webkit-margin-after: 0.83em;
@@ -121,8 +121,8 @@ dd,
 fieldset,
 /*
 margin-left: 2px;
-*/
 input::-webkit-outer-spin-button,
+*/
 /*
 margin: 3px 0.5ex;
 */
@@ -134,11 +134,11 @@ input[type="range"],
 /*
 margin: 1__qem 0
 */
-pre, xmp, plaintext, listing,
+pre, xmp, plaintext, listing
 /*
 margin-right: 0.4em;
+,summary::-webkit-details-marker
 */
-summary::-webkit-details-marker
 {
     margin: 0;
 }
@@ -174,19 +174,20 @@ padding: initial;
 input[type="hidden"], input[type="image"], input[type="file"], input[type="radio"], input[type="checkbox"], input[type="range"],
 /*
 padding: 2px 6px 3px 6px;
+input[type="file"]::-webkit-file-upload-button,
 */
-input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button,
+input[type="button"], input[type="submit"], input[type="reset"], button
 /*
 padding: 8px;
+,::-webkit-validation-bubble-message
 */
-::-webkit-validation-bubble-message
 {
     padding: 0;
 }
 
 /*TODO*/
 input[type="text"], input[type="password"], input[type="search"], input[type="file"]{
-    padding: initial;
+    padding: inherit;
 }
 
 h1,
@@ -255,4 +256,11 @@ input, textarea, select, button{
     font-family:inherit;
     font-size:inherit;
     font-weight:inherit;
+}
+
+/*
+android点击链接或js绑定事件的元素时
+*/
+div, p, blockquote, pre, code, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, legend, textarea, table, th, td{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
