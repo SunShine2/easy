@@ -3,8 +3,8 @@
  * author: butian.wth
  * version : 0-0-1
  **/
-
-(function ($) {
+define('base',['core'],function(require, exports, module){
+    var $ = require('core');
 
     /**
      * 事件对象格式
@@ -146,8 +146,9 @@
         }
 
     });
-
-})(Zepto);
+    
+    module.exports = $;
+});
 
 /**
  * change log

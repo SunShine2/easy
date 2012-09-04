@@ -10,11 +10,11 @@ var
     页面切换完成时促发，包括<code>navPage</code>和<code>pageBack</code>
 
         var app = new EasyTouch({...});
-        app.bind('page::change', function(e, params){
+        app.bind('page:change', function(e, params){
             var fromPage = this.getPage(params.from);
         }, app);
 
-    @event page::change
+    @event page:change
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -22,10 +22,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_PAGE_CHANGE = 'page::change',
+    EVN_APP_PAGE_CHANGE = 'page:change',
     /**
     <code>pageBack</code>完成时促发
-    @event page::back
+    @event page:back
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -33,10 +33,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_PAGE_BACK = 'page::back',
+    EVN_APP_PAGE_BACK = 'page:back',
     /**
     <code>navPage</code>完成时促发
-    @event page::nav
+    @event page:nav
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -44,10 +44,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_PAGE_NAV = 'page::nav',
+    EVN_APP_PAGE_NAV = 'page:nav',
     /**
     <code>navPage</code>开始前促发
-    @event page::beforeNav
+    @event page:beforeNav
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -55,10 +55,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_BEFORE_PAGE_NAV = 'page::beforeNav',
+    EVN_APP_BEFORE_PAGE_NAV = 'page:beforeNav',
     /**
     <code>navPage</code>或者<code>pageBack</code>开始前促发
-    @event page::beforeChange
+    @event page:beforeChange
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -66,10 +66,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_BEFORE_PAGE_CHANGE = 'page::beforeChange',
+    EVN_APP_BEFORE_PAGE_CHANGE = 'page:beforeChange',
     /**
     <code>pageBack</code>开始前促发
-    @event page::beforeBack
+    @event page:beforeBack
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -77,10 +77,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_BEFORE_PAGE_BACK = 'page::beforeBack',
+    EVN_APP_BEFORE_PAGE_BACK = 'page:beforeBack',
     CLASS_APP = 'easytouch',
     CLASS_PREFIX = 'et-',
-    SESSION_HISTORY = 'easytouch::page_history',
+    SESSION_HISTORY = 'easytouch:page_history',
     REGEX_HTML_ADRESS = /^[\S]+\.html$/i,
     REGEX_SELECTOR = /^[a-zA-Z0-9\.#>\[\]'"=\s~\*\+:\(\)\-\$\^]+$/i;
 
@@ -438,7 +438,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             return;
         }
         if(this._pages[id]._inited){
-            callback();
+            callback()
         }else{
             this._pages[id].bind(EVN_PAGE_INIT, callback);
         }
@@ -695,9 +695,11 @@ $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
                 _this.app.el.append(el);
                 _this.el = el;
                 _this.id = options.id;
-                _this.init(params);
-                _this._inited = true;
-                _this.trigger(EVN_PAGE_INIT);
+                setTimeout(function(){
+                    _this.init(params);
+                    _this._inited = true;
+                    _this.trigger(EVN_PAGE_INIT);
+                }, 0);
             };
 
         this.bind(EVN_PAGE_RESET, function(e, params){

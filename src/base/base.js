@@ -55,9 +55,8 @@
  *  5. 增加_set和_get方法，用于直接操作模块属性，不触发ATTR_CHANGE事件
  *  6. 修复构造函数自带ATTRS时对应的处理方式，从直接赋值修改为合并
  */
-
-(function ($) {
-
+define('base',['core'],function(require, exports, module){
+    var $ = require('core');
     /**
      * Attribute集合
      */
@@ -350,6 +349,5 @@
         return Base._build(null, superModule, prototypeMethod, null, staticMember, curConstructor);
     };
 
-    $.Base = Base;
-
-})(Zepto);
+    module.exports = $;
+});

@@ -27,6 +27,9 @@
             -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
             font-weight: bold;
         }
+        .et-page{
+            background-color: #fff;
+        }
         .et-listview .et-arrow{
             content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAMCAYAAABfnvydAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARZJREFUeNpiXLJkiQETE9NqFhaW4////08JCwv7xYAEgHJM9hwcHCr8/PyxfHx8K9atW8eMogCIFwN13+Tk5GQAKgrk5eWdj6yAEWgsw/r166WBkse4uLjkQPwvX77McnV1TYcrAIGNGzeqAK04DFQk8e/fP4bPnz/3ubm5FcMVgMCmTZt0gYoOAK0T+vv3L0hRPQuyfd++fWMAuucvKysrAxsbGwM3Nzc/XAHQuypAye1ApihUaJaNjQ3ECqCkNDMz82GgDkWgFQxAKxabm5vHgVQxq6ioCAEl9wMdpwaSBNJrgI6MlZWV/Q8LqFhgQGkB/Q/SuRUoGW1pafkXZjULIyPjQaDdj4AOOwW0Lg4oiRLUAAEGAHnIXrpvFbnTAAAAAElFTkSuQmCC);
             float: right;
@@ -43,7 +46,7 @@
         }
     </style>
 </head>
-<body class="easytouch ui-mobile-viewport ui-overlay-c">
+<body class="easytouch">
 <script>
     $(function(){
         var IndexPage = $.EasyTouch.Page.extend({
@@ -82,23 +85,23 @@
                     });
                 });
 
-                _this.bind('page::beforeNav', function(){
-                    console.log('page::beforeNav', arguments);
+                _this.bind('page:beforeNav', function(){
+                    console.log('page:beforeNav', arguments);
                 }, _this);
-                _this.bind('page::nav', function(){
-                    console.log('page::nav', arguments);
+                _this.bind('page:nav', function(){
+                    console.log('page:nav', arguments);
                 }, _this);
-                _this.bind('page::beforeBack', function(){
-                    console.log('page::beforeBack', arguments);
+                _this.bind('page:beforeBack', function(){
+                    console.log('page:beforeBack', arguments);
                 }, _this);
-                _this.bind('page::back', function(){
-                    console.log('page::back', arguments);
+                _this.bind('page:back', function(){
+                    console.log('page:back', arguments);
                 }, _this);
-                _this.bind('page::beforeChange', function(){
-                    console.log('page::beforeChange', arguments);
+                _this.bind('page:beforeChange', function(){
+                    console.log('page:beforeChange', arguments);
                 }, _this);
-                _this.bind('page::change', function(){
-                    console.log('page::change', arguments);
+                _this.bind('page:change', function(){
+                    console.log('page:change', arguments);
                 }, _this);
 
                 this.history.start({
