@@ -1,0 +1,141 @@
+@import "../../css/anim.less";
+
+@darkcolor: #6D767B;
+@lightcolor: #F3F5F4;
+@importantcolor: #f60;
+
+.easytouch > .anim-slideRightIn();
+
+.bottom-line{
+    -webkit-box-shadow: 0 -1px 0 #DDE0E1 inset;
+    border-bottom: 1px solid white;
+}
+
+.et-list{
+    li{
+        .bottom-line();
+        padding: 1em;
+        position: relative;
+    }
+    .et-arrow::before{
+        content: '';
+        background: url(../img/arrow.png?datauri) no-repeat 50% 50%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 2em;
+    }
+}
+
+.et-maplist{
+    margin: 1em .5em;
+
+    li{
+        margin-bottom: .35em;
+    }
+    .k{
+        float: left;
+        width: 5em;
+        margin-right: 1em;
+        text-align: right;
+    }
+    .v{
+        overflow: hidden;
+    }
+}
+
+.et-text{
+    font-size: inherit;
+    border: 1px solid lighten(@darkcolor, 38%);
+    padding: .5em;
+    border-radius: 3px;
+}
+
+.et-hb-get{
+    color: #4ec624;
+}
+.et-hb-use{
+    color: #f70;
+}
+.et-hb-freeze{
+    color: #39f;
+}
+
+.et-edit{
+    background: url(../img/edit.png?datauri) no-repeat 50% 50%;
+}
+
+.easytouch{
+    color: @darkcolor;
+    background-color: @lightcolor;
+    font: 10px/1.5 '微软雅黑';
+}
+b{
+    color: @importantcolor;
+}
+.et-list{
+    font-size: 2em;
+
+    b{
+        margin-left: .8em;
+        font-weight: normal;
+    }
+    time{
+        float: right;
+        color: #a7abad;
+        font-size: .9em;
+        margin: .1em 1.5em 0 0;
+    }
+}
+.et-maplist{
+    font-size: 1.8em;
+}
+header{
+    background-color: @darkcolor;
+    height: 60px;
+    line-height: 60px;
+    position: relative;
+
+    h1{
+        text-align: center;
+        font-size: 3em;
+        color: #fff;
+    }
+    .et-back{
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 6em;
+        background: url(../img/back.png?datauri) no-repeat 50% 50%;
+    }
+}
+#HBDetailPage{
+    .summary{
+        padding: 0.9em;
+        font-size: 2.2em;
+        .bottom-line();
+
+        .freeze{
+            margin-left: 1.5em;
+        }
+    }
+    .et-list{
+        font-size: 1.8em;
+    }
+}
+#PersonPage{
+    section{
+        position: relative;
+
+        .et-edit{
+            position: absolute;
+            right: 1em;
+            top: 50%;
+            margin-top: -3em;
+            width: 6em;
+            height: 6em;
+        }
+    }
+}

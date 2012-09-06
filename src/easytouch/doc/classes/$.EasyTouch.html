@@ -92,7 +92,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;js_core.js.html#l103"><code>js\core.js:103</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;js_core.js.html#l181"><code>js\core.js:181</code></a>
         </div>
     
 
@@ -104,70 +104,22 @@
 
 
 <div class="box intro">
-    <p>Touch UI Library for Easy, Examples:</p>
-
-<h4>You can create a instance of EasyTouch:</h4>
-
-<pre class="code"><code class="prettyprint">var Page1 = $.EasyTouch.Page.extend({
-    el: '#xxx .xxx',
-    init: function(){},
-    reset: function(){}
-});
-
-new $.EasyTouch({
-    pages: {
-        //class inherit from $.EasyTouch.Page
-        "Page1": Page1,
-
-        //get html from el
-        //html file
-        "Page2": {
-            el: 'xxx.html'
-        },
-        //css selector
-        "Page3": {
-            el: '#xxx'
-        },
-        //HTML Element
-        "Page4": {
-            el: document.getElementById('xxx')
-        },
-        //Zepto
-        "Page5": {
-            el: $('#xxx')
-        },
-
-
-        //get template from tpl, render the template in the function of &lt;code&gt;render&lt;/code&gt;
-        "Page6": {
-            tpl: 'xxx.html'
-        },
-        "Page7": {
-            tpl: '#xxx'
-        },
-        "Page8": {
-            tpl: document.getElementById('xxx')
-        },
-        "Page9": {
-            tpl: $('#xxx')
-        }
-    },
-    //this function will run when creating instance
-    init: function(params){},
-    //for YunOS resume event
-    resume: function(){},
-    //for YunOS suspend event
-    pause: function(){}
-});
-</code></pre>
-
-<h4>Or you can extend a EasyTouch, like this:</h4>
+    <p>EasyTouch，为移动设备设计的UI框架。使用方法：用<code>$.EasyTouch.extend</code>方法扩展一个App类，然后初始化。<code>extend</code>的具体说明，请看<code>$.EasyTouch.extend</code>；参数<code>pages</code>的说明请看<code>$.EasyTouch.Page</code>：</p>
 
 <pre class="code"><code class="prettyprint">var App = $.EasyTouch.extend({
-    el: 'xxx',
-    init: xxx
-    ...
+    id: xxx,
+    container: xxx,
+    pages: {
+        ...
+    },
+    apps: {
+        ...
+    },
+    events: {
+        ...
+    }
 });
+
 new App();
 </code></pre>
 </div>
@@ -179,17 +131,7 @@ new App();
     <h3 class="name"><code>$.EasyTouch</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>options</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
     
@@ -217,7 +159,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l103"><code>js\core.js:103</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l181"><code>js\core.js:181</code></a>
         
         </p>
 
@@ -231,74 +173,6 @@ new App();
         
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">options</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">pages</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    <p>页面配置：
-        如果是一个Object，EasyTouch会调用<code>$.EasyTouch.Page.extend</code>，将这个Object作为prototype属性扩展出一个Page；
-        如果是一个Class，则将直接使用该类作为一个Page；</p>
-                                </div>
-
-                                
-                                    <ul class="params-list">
-                                        
-                                        <li class="param">
-                                            
-                                                <code class="param-name">el</code>
-                                                <span class="type">HTMLElement | Node | String</span>
-                                            
-
-                                            <div class="param-description">
-                                                <code>el</code>和<code>tpl</code>属性二选一，<code>el</code>将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）
-                                            </div>
-                                        </li>
-                                        
-                                        <li class="param">
-                                            
-                                                <code class="param-name">tpl</code>
-                                                <span class="type">HTMLElement | Node | String</span>
-                                            
-
-                                            <div class="param-description">
-                                                将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板
-                                            </div>
-                                        </li>
-                                        
-                                    </ul>
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -319,8 +193,6 @@ new App();
         
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
-        
-            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
         
         
             <li class="api-class-tab events"><a href="#events">Events</a></li>
@@ -368,6 +240,27 @@ new App();
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_back">back</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_exit">exit</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getApp">getApp</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_getCurrentPage">getCurrentPage</a>
 
                                 
@@ -388,21 +281,21 @@ new App();
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method private">
                                 <a href="#method_history.add">history.add</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method private">
                                 <a href="#method_history.pop">history.pop</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method private">
                                 <a href="#method_history.save">history.save</a>
 
                                 
@@ -418,6 +311,13 @@ new App();
                         
                             <li class="index-item method">
                                 <a href="#method_init">init</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_navApp">navApp</a>
 
                                 
                                 
@@ -452,6 +352,13 @@ new App();
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_resetbutton">resetbutton</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_resume">resume</a>
 
                                 
@@ -468,6 +375,27 @@ new App();
 
                     <ul class="index-list properties">
                         
+                            <li class="index-item property">
+                                <a href="#property_$el">$el</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__active">_active</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__apps">_apps</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item property private">
                                 <a href="#property__history">_history</a>
 
@@ -482,26 +410,59 @@ new App();
                                 
                             </li>
                         
+                            <li class="index-item property">
+                                <a href="#property_apps">apps</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_container">container</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_el">el</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_events">events</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property_host">host</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_id">id</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_pages">pages</a>
+
+                                
+                                
+                            </li>
+                        
                     </ul>
                 </div>
             
 
-            
-                <div class="index-section attrs">
-                    <h3>Attributes</h3>
-
-                    <ul class="index-list attrs">
-                        
-                            <li class="index-item attr">
-                                <a href="#attr_el">el</a>
-                            </li>
-                        
-                            <li class="index-item attr">
-                                <a href="#attr_pages">pages</a>
-                            </li>
-                        
-                    </ul>
-                </div>
             
 
             
@@ -511,42 +472,84 @@ new App();
                     <ul class="index-list events">
                         
                             <li class="index-item event">
-                                <a href="#event_page::back">page::back</a>
+                                <a href="#event_beforeLoadApp">beforeLoadApp</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item event">
-                                <a href="#event_page::beforeBack">page::beforeBack</a>
+                                <a href="#event_beforeNavApp">beforeNavApp</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item event">
-                                <a href="#event_page::beforeChange">page::beforeChange</a>
+                                <a href="#event_beforeNavPage">beforeNavPage</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item event">
-                                <a href="#event_page::beforeNav">page::beforeNav</a>
+                                <a href="#event_beforePageBack">beforePageBack</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item event">
-                                <a href="#event_page::change">page::change</a>
+                                <a href="#event_beforePageChange">beforePageChange</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event private">
+                                <a href="#event_exit">exit</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item event">
-                                <a href="#event_page::nav">page::nav</a>
+                                <a href="#event_loadApp">loadApp</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_navApp">navApp</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_navPage">navPage</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_pageBack">pageBack</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_pageChange">pageChange</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event private">
+                                <a href="#event_reset">reset</a>
 
                                 
                                 
@@ -571,7 +574,7 @@ new App();
             
                 <li class="arg">
                     
-                        <code>property</code>
+                        <code>options</code>
                     
                 </li>
             
@@ -610,7 +613,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l578"><code>js\core.js:578</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l786"><code>js\core.js:786</code></a>
         
         </p>
 
@@ -622,6 +625,29 @@ new App();
 
     <div class="description">
         <p>通过该方法来继承并扩展一个<code>$.EasyTouch</code></p>
+
+<pre class="code"><code class="prettyprint">var App = $.EasyTouch.extend({
+    id: 'market',
+    container: '#app',
+    pages: {
+
+    },
+    apps: {
+        'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'
+    },
+    events: {
+        'tap header': 'tapHeader',
+        'tap .back': this.app.back
+    },
+    //this function will run when creating instance
+    init: function(params){},
+    //for YunOS resume event
+    resume: function(){},
+    //for YunOS suspend event
+    pause: function(){}
+});
+new App();
+</code></pre>
     </div>
 
     
@@ -632,16 +658,74 @@ new App();
             
                 <li class="param">
                     
-                        <code class="param-name">property</code>
+                        <code class="param-name">options</code>
                         <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>property or function add to <code>$.EasyTouch</code></p>
+                        <p>需要扩展的属性列表</p>
                     </div>
 
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">id</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>应用ID，用于EasyTouch内部识别</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">container</code>
+                                    <span class="type">Node | HTMLElement | String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>应用容器，默认为<code>body</code></p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">pages</code>
+                                    <span class="type">Object</span>
+                                
+
+                                <div class="param-description">
+                                    <p>页面配置：
+    如果是一个Object，EasyTouch会调用<code>$.EasyTouch.Page.extend</code>，将这个Object作为prototype属性扩展出一个Page，具体请看<code>$.EasyTouch.Page.extend</code>；
+    如果是一个<code>$.EasyTouch.Page.extend</code>产生的Class，则将直接使用该类作为一个Page；</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">apps</code>
+                                    <span class="type">Object</span>
+                                
+
+                                <div class="param-description">
+                                    <p>子应用配置：key为应用的id，value为应用的访问地址，子应用将作为一个iframe的形式存在</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
                     
                 </li>
             
@@ -724,7 +808,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l419"><code>js\core.js:419</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l643"><code>js\core.js:643</code></a>
         
         </p>
 
@@ -861,7 +945,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l383"><code>js\core.js:383</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l605"><code>js\core.js:605</code></a>
         
         </p>
 
@@ -999,7 +1083,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l446"><code>js\core.js:446</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l670"><code>js\core.js:670</code></a>
         
         </p>
 
@@ -1064,6 +1148,286 @@ new App();
 </div>
 
                 
+                    <div id="method_back" class="method item">
+    <h3 class="name"><code>back</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>params</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l380"><code>js\core.js:380</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>从子应用回到宿主应用时调用</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>when the child app call <code>exit</code></p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_exit" class="method item">
+    <h3 class="name"><code>exit</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>params</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l388"><code>js\core.js:388</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>退出应用</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the params for the parent app, the parent app can get the params from <code>back</code></p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getApp" class="method item">
+    <h3 class="name"><code>getApp</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>id</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l458"><code>js\core.js:458</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>通过ID获取某一个app</p>
+
+<p>app.getApp('hongbao');</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">id</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>app's id</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <code>app</code>: {HTMLElement} app.el the iframe of app; {Node} app.$el the iframe of app; {HTMLElement} app.window the contentWindow of iframe
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_getCurrentPage" class="method item">
     <h3 class="name"><code>getCurrentPage</code></h3>
 
@@ -1100,7 +1464,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l472"><code>js\core.js:472</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l696"><code>js\core.js:696</code></a>
         
         </p>
 
@@ -1171,7 +1535,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l480"><code>js\core.js:480</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l704"><code>js\core.js:704</code></a>
         
         </p>
 
@@ -1252,7 +1616,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l460"><code>js\core.js:460</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l684"><code>js\core.js:684</code></a>
         
         </p>
 
@@ -1313,7 +1677,7 @@ new App();
 </div>
 
                 
-                    <div id="method_history.add" class="method item">
+                    <div id="method_history.add" class="method item private">
     <h3 class="name"><code>history.add</code></h3>
 
     
@@ -1335,6 +1699,8 @@ new App();
     
 
     
+        <span class="flag private">private</span>
+    
 
     
 
@@ -1355,7 +1721,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l526"><code>js\core.js:526</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l751"><code>js\core.js:751</code></a>
         
         </p>
 
@@ -1443,7 +1809,7 @@ new App();
 </div>
 
                 
-                    <div id="method_history.pop" class="method item">
+                    <div id="method_history.pop" class="method item private">
     <h3 class="name"><code>history.pop</code></h3>
 
     
@@ -1454,6 +1820,8 @@ new App();
 
     
 
+    
+        <span class="flag private">private</span>
     
 
     
@@ -1475,7 +1843,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l518"><code>js\core.js:518</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l742"><code>js\core.js:742</code></a>
         
         </p>
 
@@ -1497,7 +1865,7 @@ new App();
 </div>
 
                 
-                    <div id="method_history.save" class="method item">
+                    <div id="method_history.save" class="method item private">
     <h3 class="name"><code>history.save</code></h3>
 
     
@@ -1508,6 +1876,8 @@ new App();
 
     
 
+    
+        <span class="flag private">private</span>
     
 
     
@@ -1529,7 +1899,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l545"><code>js\core.js:545</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l771"><code>js\core.js:771</code></a>
         
         </p>
 
@@ -1593,7 +1963,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l494"><code>js\core.js:494</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l718"><code>js\core.js:718</code></a>
         
         </p>
 
@@ -1718,7 +2088,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l215"><code>js\core.js:215</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l350"><code>js\core.js:350</code></a>
         
         </p>
 
@@ -1748,6 +2118,114 @@ new App();
 
                     <div class="param-description">
                          
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_navApp" class="method item">
+    <h3 class="name"><code>navApp</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>id</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>params</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l414"><code>js\core.js:414</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">id</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the target app's id</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>params for the target app</p>
                     </div>
 
                     
@@ -1823,7 +2301,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l248"><code>js\core.js:248</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l470"><code>js\core.js:470</code></a>
         
         </p>
 
@@ -1897,13 +2375,13 @@ new App();
 <li>slideDownIn</li>
 <li>fadeIn</li>
 <li>dissolveIn</li>
-<li>popIn</li>
-<li>flipLeftIn</li>
-<li>flipRightIn</li>
-<li>swapLeftIn</li>
-<li>swapRightIn</li>
-<li>cubeLeftIn</li>
-<li>cubeRightIn</li>
+<li>popIn <sup>4.0+</sup></li>
+<li>flipLeftIn <sup>4.0+</sup></li>
+<li>flipRightIn <sup>4.0+</sup></li>
+<li>swapLeftIn <sup>4.0+</sup></li>
+<li>swapRightIn <sup>4.0+</sup></li>
+<li>cubeLeftIn <sup>4.0+</sup></li>
+<li>cubeRightIn <sup>4.0+</sup></li>
 </ul>
 
 <p>include the animation css in your less file like this:</p>
@@ -1993,7 +2471,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l328"><code>js\core.js:328</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l550"><code>js\core.js:550</code></a>
         
         </p>
 
@@ -2090,7 +2568,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l230"><code>js\core.js:230</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l365"><code>js\core.js:365</code></a>
         
         </p>
 
@@ -2114,6 +2592,93 @@ new App();
                 
                     <div id="method_reset" class="method item">
     <h3 class="name"><code>reset</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>params</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l372"><code>js\core.js:372</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>第二次<code>navApp</code>之后调用</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>params for the target app</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_resetbutton" class="method item">
+    <h3 class="name"><code>resetbutton</code></h3>
 
     
         <span class="paren">()</span>
@@ -2144,7 +2709,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l237"><code>js\core.js:237</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l406"><code>js\core.js:406</code></a>
         
         </p>
 
@@ -2155,7 +2720,7 @@ new App();
     </div>
 
     <div class="description">
-        <p>重置应用</p>
+        <p>按云键</p>
     </div>
 
     
@@ -2198,7 +2763,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l223"><code>js\core.js:223</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l358"><code>js\core.js:358</code></a>
         
         </p>
 
@@ -2228,6 +2793,142 @@ new App();
                 <h2 class="off-left">Properties</h2>
 
                 
+                    <div id="property_$el" class="property item">
+    <h3 class="name"><code>$el</code></h3>
+    <span class="type">Node</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l259"><code>js\core.js:259</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>容器（Zepto对象）</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__active" class="property item private">
+    <h3 class="name"><code>_active</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l294"><code>js\core.js:294</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>宿主应用是否处于可视状态</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__apps" class="property item private">
+    <h3 class="name"><code>_apps</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l273"><code>js\core.js:273</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>子应用</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="property__history" class="property item private">
     <h3 class="name"><code>_history</code></h3>
     <span class="type">Array</span>
@@ -2253,7 +2954,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l208"><code>js\core.js:208</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l280"><code>js\core.js:280</code></a>
         
         </p>
 
@@ -2299,7 +3000,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l201"><code>js\core.js:201</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l266"><code>js\core.js:266</code></a>
         
         </p>
 
@@ -2320,29 +3021,14 @@ new App();
 </div>
 
                 
-            </div>
-        
-
-        
-            <div id="attrs" class="api-class-tabpanel">
-                <h2 class="off-left">Attributes</h2>
-
-                
-                    <div id="attr_el" class="attr item">
-    <a name="config_el"></a> 
-    <h3 class="name"><code>el</code></h3>
-    <span class="type">HTMLElement | Node | String</span>
+                    <div id="property_apps" class="property item">
+    <h3 class="name"><code>apps</code></h3>
+    <span class="type">Object</span>
 
     
 
     
 
-    
-
-    
-
-    
-        <span class="flag optional">optional</span>
     
 
     
@@ -2358,7 +3044,56 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l558"><code>js\core.js:558</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l240"><code>js\core.js:240</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>子应用的配置</p>
+
+<pre class="code"><code class="prettyprint"> {
+     'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'
+ }
+</code></pre>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_container" class="property item">
+    <h3 class="name"><code>container</code></h3>
+    <span class="type">HTMLElement | Node | String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l212"><code>js\core.js:212</code></a>
         
         </p>
 
@@ -2381,10 +3116,9 @@ new App();
 </div>
 
                 
-                    <div id="attr_pages" class="attr item">
-    <a name="config_pages"></a> 
-    <h3 class="name"><code>pages</code></h3>
-    <span class="type">Object</span>
+                    <div id="property_el" class="property item">
+    <h3 class="name"><code>el</code></h3>
+    <span class="type">HTMLElement</span>
 
     
 
@@ -2392,12 +3126,6 @@ new App();
 
     
 
-    
-
-    
-
-    
-        <span class="flag required">required</span>
     
 
     <div class="meta">
@@ -2411,7 +3139,193 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l568"><code>js\core.js:568</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l252"><code>js\core.js:252</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>容器（原生dom）</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_events" class="property item">
+    <h3 class="name"><code>events</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l220"><code>js\core.js:220</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>代理的事件列表，<code>handler</code>可是一个字符串也可以是一个<code>function</code>，当是字符串时，将访问<code>this['nav']</code></p>
+
+<pre class="code"><code class="prettyprint"> {
+     'tap #contariner header': 'nav',
+     'tap #contariner': function(){}
+ }
+</code></pre>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_host" class="property item private">
+    <h3 class="name"><code>host</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l287"><code>js\core.js:287</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>宿主应用</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_id" class="property item">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l204"><code>js\core.js:204</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>应用id</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;easytouch&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_pages" class="property item">
+    <h3 class="name"><code>pages</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l233"><code>js\core.js:233</code></a>
         
         </p>
 
@@ -2436,12 +3350,14 @@ new App();
         
 
         
+
+        
             <div id="events" class="api-class-tabpanel">
                 <h2 class="off-left">Events</h2>
 
                 
-                    <div id="event_page::back" class="events item">
-    <h3 class="name"><code>page::back</code></h3>
+                    <div id="event_beforeLoadApp" class="events item">
+    <h3 class="name"><code>beforeLoadApp</code></h3>
     <span class="type"></span>
 
     
@@ -2463,7 +3379,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l26"><code>js\core.js:26</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l111"><code>js\core.js:111</code></a>
         
         </p>
 
@@ -2473,7 +3389,7 @@ new App();
     </div>
 
     <div class="description">
-        <p><code>pageBack</code>完成时促发</p>
+        <p>第一次加载子应用时促发</p>
     </div>
 
     
@@ -2513,44 +3429,26 @@ new App();
                         <ul class="params-list">
                             
                             <li class="param">
-                                <code class="param-name">from</code>
-                                <span class="type">String</span>
+                                
+                                    <code class="param-name">id</code>
+                                    <span class="type">String</span>
+                                
 
                                 <div class="param-description">
-                                    <p>page id of prev page</p>
+                                    <p>the target app's id</p>
                                 </div>
 
                                 
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">to</code>
-                                <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>page id of next page</p>
-                                </div>
-
                                 
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">params</code>
-                                <span class="type">Object | Undefined</span>
-
-                                <div class="param-description">
-                                    <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
-                                </div>
-
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object</span>
                                 
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">anim</code>
-                                <span class="type">String | Undefined</span>
 
                                 <div class="param-description">
-                                    <p>the animation name</p>
+                                    <p>the params for the target app</p>
                                 </div>
 
                                 
@@ -2569,8 +3467,8 @@ new App();
 </div>
 
                 
-                    <div id="event_page::beforeBack" class="events item">
-    <h3 class="name"><code>page::beforeBack</code></h3>
+                    <div id="event_beforeNavApp" class="events item">
+    <h3 class="name"><code>beforeNavApp</code></h3>
     <span class="type"></span>
 
     
@@ -2592,7 +3490,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l70"><code>js\core.js:70</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l102"><code>js\core.js:102</code></a>
         
         </p>
 
@@ -2602,7 +3500,7 @@ new App();
     </div>
 
     <div class="description">
-        <p><code>pageBack</code>开始前促发</p>
+        <p><code>navApp</code>前促发</p>
     </div>
 
     
@@ -2642,44 +3540,26 @@ new App();
                         <ul class="params-list">
                             
                             <li class="param">
-                                <code class="param-name">from</code>
-                                <span class="type">String</span>
+                                
+                                    <code class="param-name">id</code>
+                                    <span class="type">String</span>
+                                
 
                                 <div class="param-description">
-                                    <p>page id of prev page</p>
+                                    <p>the target app's id</p>
                                 </div>
 
                                 
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">to</code>
-                                <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>page id of next page</p>
-                                </div>
-
                                 
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">params</code>
-                                <span class="type">Object | Undefined</span>
-
-                                <div class="param-description">
-                                    <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
-                                </div>
-
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object</span>
                                 
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">anim</code>
-                                <span class="type">String | Undefined</span>
 
                                 <div class="param-description">
-                                    <p>the animation name</p>
+                                    <p>the params for the target app</p>
                                 </div>
 
                                 
@@ -2698,137 +3578,8 @@ new App();
 </div>
 
                 
-                    <div id="event_page::beforeChange" class="events item">
-    <h3 class="name"><code>page::beforeChange</code></h3>
-    <span class="type"></span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l59"><code>js\core.js:59</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p><code>navPage</code>或者<code>pageBack</code>开始前促发</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Event Payload:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">e</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>event object from custom-event</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">params</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                <code class="param-name">from</code>
-                                <span class="type">String</span>
-
-                                <div class="param-description">
-                                    <p>page id of prev page</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">to</code>
-                                <span class="type">String | Undefined</span>
-
-                                <div class="param-description">
-                                    <p>page id of next page</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">params</code>
-                                <span class="type">Object | Undefined</span>
-
-                                <div class="param-description">
-                                    <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">anim</code>
-                                <span class="type">String | Undefined</span>
-
-                                <div class="param-description">
-                                    <p>the animation name</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-
-    
-</div>
-
-                
-                    <div id="event_page::beforeNav" class="events item">
-    <h3 class="name"><code>page::beforeNav</code></h3>
+                    <div id="event_beforeNavPage" class="events item">
+    <h3 class="name"><code>beforeNavPage</code></h3>
     <span class="type"></span>
 
     
@@ -2900,8 +3651,10 @@ new App();
                         <ul class="params-list">
                             
                             <li class="param">
-                                <code class="param-name">from</code>
-                                <span class="type">String</span>
+                                
+                                    <code class="param-name">from</code>
+                                    <span class="type">String</span>
+                                
 
                                 <div class="param-description">
                                     <p>page id of prev page</p>
@@ -2911,8 +3664,10 @@ new App();
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">to</code>
-                                <span class="type">String | Undefined</span>
+                                
+                                    <code class="param-name">to</code>
+                                    <span class="type">String | Undefined</span>
+                                
 
                                 <div class="param-description">
                                     <p>page id of next page</p>
@@ -2922,8 +3677,10 @@ new App();
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">params</code>
-                                <span class="type">Object | Undefined</span>
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object | Undefined</span>
+                                
 
                                 <div class="param-description">
                                     <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
@@ -2933,8 +3690,10 @@ new App();
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">anim</code>
-                                <span class="type">String | Undefined</span>
+                                
+                                    <code class="param-name">anim</code>
+                                    <span class="type">String | Undefined</span>
+                                
 
                                 <div class="param-description">
                                     <p>the animation name</p>
@@ -2956,8 +3715,8 @@ new App();
 </div>
 
                 
-                    <div id="event_page::change" class="events item">
-    <h3 class="name"><code>page::change</code></h3>
+                    <div id="event_beforePageBack" class="events item">
+    <h3 class="name"><code>beforePageBack</code></h3>
     <span class="type"></span>
 
     
@@ -2979,7 +3738,7 @@ new App();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l9"><code>js\core.js:9</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l70"><code>js\core.js:70</code></a>
         
         </p>
 
@@ -2989,13 +3748,7 @@ new App();
     </div>
 
     <div class="description">
-        <p>页面切换完成时促发，包括<code>navPage</code>和<code>pageBack</code></p>
-
-<pre class="code"><code class="prettyprint">var app = new EasyTouch({...});
-app.bind('page::change', function(e, params){
-    var fromPage = this.getPage(params.from);
-}, app);
-</code></pre>
+        <p><code>pageBack</code>开始前促发</p>
     </div>
 
     
@@ -3035,8 +3788,10 @@ app.bind('page::change', function(e, params){
                         <ul class="params-list">
                             
                             <li class="param">
-                                <code class="param-name">from</code>
-                                <span class="type">String</span>
+                                
+                                    <code class="param-name">from</code>
+                                    <span class="type">String</span>
+                                
 
                                 <div class="param-description">
                                     <p>page id of prev page</p>
@@ -3046,8 +3801,10 @@ app.bind('page::change', function(e, params){
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">to</code>
-                                <span class="type">String | Undefined</span>
+                                
+                                    <code class="param-name">to</code>
+                                    <span class="type">String</span>
+                                
 
                                 <div class="param-description">
                                     <p>page id of next page</p>
@@ -3057,8 +3814,10 @@ app.bind('page::change', function(e, params){
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">params</code>
-                                <span class="type">Object | Undefined</span>
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object | Undefined</span>
+                                
 
                                 <div class="param-description">
                                     <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
@@ -3068,8 +3827,10 @@ app.bind('page::change', function(e, params){
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">anim</code>
-                                <span class="type">String | Undefined</span>
+                                
+                                    <code class="param-name">anim</code>
+                                    <span class="type">String | Undefined</span>
+                                
 
                                 <div class="param-description">
                                     <p>the animation name</p>
@@ -3091,8 +3852,412 @@ app.bind('page::change', function(e, params){
 </div>
 
                 
-                    <div id="event_page::nav" class="events item">
-    <h3 class="name"><code>page::nav</code></h3>
+                    <div id="event_beforePageChange" class="events item">
+    <h3 class="name"><code>beforePageChange</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l59"><code>js\core.js:59</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><code>navPage</code>或者<code>pageBack</code>开始前促发</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>event object from custom-event</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">from</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>page id of prev page</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">to</code>
+                                    <span class="type">String | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>page id of next page</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">anim</code>
+                                    <span class="type">String | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the animation name</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_exit" class="events item private">
+    <h3 class="name"><code>exit</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l81"><code>js\core.js:81</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>退出应用时促发</p>
+    </div>
+
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_loadApp" class="events item">
+    <h3 class="name"><code>loadApp</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l120"><code>js\core.js:120</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>第一次加载子应用完成时促发</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>event object from custom-event</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">id</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the target app's id</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the params for the target app</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_navApp" class="events item">
+    <h3 class="name"><code>navApp</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l93"><code>js\core.js:93</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><code>navApp</code>后促发</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>event object from custom-event</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">id</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the target app's id</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the params for the target app</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_navPage" class="events item">
+    <h3 class="name"><code>navPage</code></h3>
     <span class="type"></span>
 
     
@@ -3164,8 +4329,10 @@ app.bind('page::change', function(e, params){
                         <ul class="params-list">
                             
                             <li class="param">
-                                <code class="param-name">from</code>
-                                <span class="type">String</span>
+                                
+                                    <code class="param-name">from</code>
+                                    <span class="type">String</span>
+                                
 
                                 <div class="param-description">
                                     <p>page id of prev page</p>
@@ -3175,8 +4342,10 @@ app.bind('page::change', function(e, params){
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">to</code>
-                                <span class="type">String</span>
+                                
+                                    <code class="param-name">to</code>
+                                    <span class="type">String</span>
+                                
 
                                 <div class="param-description">
                                     <p>page id of next page</p>
@@ -3186,8 +4355,10 @@ app.bind('page::change', function(e, params){
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">params</code>
-                                <span class="type">Object | Undefined</span>
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object | Undefined</span>
+                                
 
                                 <div class="param-description">
                                     <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
@@ -3197,8 +4368,10 @@ app.bind('page::change', function(e, params){
                             </li>
                             
                             <li class="param">
-                                <code class="param-name">anim</code>
-                                <span class="type">String | Undefined</span>
+                                
+                                    <code class="param-name">anim</code>
+                                    <span class="type">String | Undefined</span>
+                                
 
                                 <div class="param-description">
                                     <p>the animation name</p>
@@ -3213,6 +4386,331 @@ app.bind('page::change', function(e, params){
             
             </ul>
         </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_pageBack" class="events item">
+    <h3 class="name"><code>pageBack</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l26"><code>js\core.js:26</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><code>pageBack</code>完成时促发</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>event object from custom-event</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">from</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>page id of prev page</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">to</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>page id of next page</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">anim</code>
+                                    <span class="type">String | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the animation name</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_pageChange" class="events item">
+    <h3 class="name"><code>pageChange</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l9"><code>js\core.js:9</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>页面切换完成时促发，包括<code>navPage</code>和<code>pageBack</code></p>
+
+<pre class="code"><code class="prettyprint">var app = new EasyTouch({...});
+app.bind('pageChange', function(e, params){
+    var fromPage = this.getPage(params.from);
+}, app);
+</code></pre>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>event object from custom-event</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">from</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>page id of prev page</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">to</code>
+                                    <span class="type">String | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>page id of next page</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">params</code>
+                                    <span class="type">Object | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the params when you call <code>navPage</code> or <code>pageBack</code></p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">anim</code>
+                                    <span class="type">String | Undefined</span>
+                                
+
+                                <div class="param-description">
+                                    <p>the animation name</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_reset" class="events item private">
+    <h3 class="name"><code>reset</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l87"><code>js\core.js:87</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>用<code>navApp</code>第二次进入应用时促发</p>
+    </div>
+
     
 
 

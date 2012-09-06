@@ -10,11 +10,11 @@ var
     页面切换完成时促发，包括<code>navPage</code>和<code>pageBack</code>
 
         var app = new EasyTouch({...});
-        app.bind('page:change', function(e, params){
+        app.bind('pageChange', function(e, params){
             var fromPage = this.getPage(params.from);
         }, app);
 
-    @event page:change
+    @event pageChange
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -22,10 +22,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_PAGE_CHANGE = 'page:change',
+    EVN_APP_PAGE_CHANGE = 'pageChange',
     /**
     <code>pageBack</code>完成时促发
-    @event page:back
+    @event pageBack
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -33,10 +33,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_PAGE_BACK = 'page:back',
+    EVN_APP_PAGE_BACK = 'pageBack',
     /**
     <code>navPage</code>完成时促发
-    @event page:nav
+    @event navPage
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -44,10 +44,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_PAGE_NAV = 'page:nav',
+    EVN_APP_PAGE_NAV = 'navPage',
     /**
     <code>navPage</code>开始前促发
-    @event page:beforeNav
+    @event beforeNavPage
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -55,10 +55,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_BEFORE_PAGE_NAV = 'page:beforeNav',
+    EVN_APP_BEFORE_PAGE_NAV = 'beforeNavPage',
     /**
     <code>navPage</code>或者<code>pageBack</code>开始前促发
-    @event page:beforeChange
+    @event beforePageChange
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -66,10 +66,10 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_BEFORE_PAGE_CHANGE = 'page:beforeChange',
+    EVN_APP_BEFORE_PAGE_CHANGE = 'beforePageChange',
     /**
     <code>pageBack</code>开始前促发
-    @event page:beforeBack
+    @event beforePageBack
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
@@ -77,10 +77,60 @@ var
         @param {Object|Undefined} params.params the params when you call <code>navPage</code> or <code>pageBack</code>
         @param {String|Undefined} params.anim the animation name
     **/
-    EVN_APP_BEFORE_PAGE_BACK = 'page:beforeBack',
+    EVN_APP_BEFORE_PAGE_BACK = 'beforePageBack',
+    /**
+     * 退出应用时促发
+     * @event exit
+     * @private
+     */
+    EVN_APP_EXIT = 'exit',
+    /**
+     * 用<code>navApp</code>第二次进入应用时促发
+     * @event reset
+     * @private
+     */
+    EVN_APP_RESET = 'reset',
+    /**
+     * <code>navApp</code>后促发
+     * @event navApp
+     * @param {Object} e event object from custom-event
+     * @param {Object} params
+     *      @param {String} params.id the target app's id
+     *      @param {Object} params.params the params for the target app
+     */
+    EVN_APP_NAV = 'navApp',
+    /**
+     * <code>navApp</code>前促发
+     * @event beforeNavApp
+     * @param {Object} e event object from custom-event
+     * @param {Object} params
+     *      @param {String} params.id the target app's id
+     *      @param {Object} params.params the params for the target app
+     */
+    EVN_APP_BEFORE_NAV = 'beforeNavApp',
+    /**
+     * 第一次加载子应用时促发
+     * @event beforeLoadApp
+     * @param {Object} e event object from custom-event
+     * @param {Object} params
+     *      @param {String} params.id the target app's id
+     *      @param {Object} params.params the params for the target app
+     */
+    EVN_APP_BEFORE_LOAD = 'beforeLoadApp',
+    /**
+     * 第一次加载子应用完成时促发
+     * @event loadApp
+     * @param {Object} e event object from custom-event
+     * @param {Object} params
+     *      @param {String} params.id the target app's id
+     *      @param {Object} params.params the params for the target app
+     */
+    EVN_APP_LOAD = 'loadApp',
     CLASS_APP = 'easytouch',
     CLASS_PREFIX = 'et-',
     SESSION_HISTORY = 'easytouch:page_history',
+    MARK_CHILD_APP = 'easytouch-childapp',
+    REGEX_EVENT_SPLITTER = /^(\S+)\s*(.*)$/,
     REGEX_HTML_ADRESS = /^[\S]+\.html$/i,
     REGEX_SELECTOR = /^[a-zA-Z0-9\.#>\[\]'"=\s~\*\+:\(\)\-\$\^]+$/i;
 
@@ -100,104 +150,119 @@ var reverseAnimation = function(animation, regex){
     return animation.replace(regex, _reverse);
 };
 
+var DelegateEvents = function(){};
+DelegateEvents.prototype.delegateEvents = function(events){
+    if (!events){
+        return;
+    }
+    var _this = this;
+    this.undelegateEvents();
+    $.each(events, function(key, method){
+        if ($.type(method) !== 'function'){
+            method = _this[method];
+        }
+        var match = key.match(REGEX_EVENT_SPLITTER);
+        var eventName = match[1], selector = match[2];
+        var proxyfn = function(e){
+            method.apply(_this, [e, this]);
+        };
+        eventName += '.delegateEvents' + _this.id;
+        if (selector === '') {
+            _this.$el.bind(eventName, proxyfn);
+        } else {
+            _this.$el.delegate(selector, eventName, proxyfn);
+        }
+    });
+};
+DelegateEvents.prototype.undelegateEvents = function() {
+    this.$el.unbind('.delegateEvents' + this.id);
+};
+
 /**
-Touch UI Library for Easy, Examples:
-####You can create a instance of EasyTouch:
-
-    var Page1 = $.EasyTouch.Page.extend({
-        el: '#xxx .xxx',
-        init: function(){},
-        reset: function(){}
-    });
-
-    new $.EasyTouch({
-        pages: {
-            //class inherit from $.EasyTouch.Page
-            "Page1": Page1,
-
-            //get html from el
-            //html file
-            "Page2": {
-                el: 'xxx.html'
-            },
-            //css selector
-            "Page3": {
-                el: '#xxx'
-            },
-            //HTML Element
-            "Page4": {
-                el: document.getElementById('xxx')
-            },
-            //Zepto
-            "Page5": {
-                el: $('#xxx')
-            },
-
-
-            //get template from tpl, render the template in the function of <code>render</code>
-            "Page6": {
-                tpl: 'xxx.html'
-            },
-            "Page7": {
-                tpl: '#xxx'
-            },
-            "Page8": {
-                tpl: document.getElementById('xxx')
-            },
-            "Page9": {
-                tpl: $('#xxx')
-            }
-        },
-        //this function will run when creating instance
-        init: function(params){},
-        //for YunOS resume event
-        resume: function(){},
-        //for YunOS suspend event
-        pause: function(){}
-    });
-
-####Or you can extend a EasyTouch, like this:
+EasyTouch，为移动设备设计的UI框架。使用方法：用<code>$.EasyTouch.extend</code>方法扩展一个App类，然后初始化。<code>extend</code>的具体说明，请看<code>$.EasyTouch.extend</code>；参数<code>pages</code>的说明请看<code>$.EasyTouch.Page</code>：
 
     var App = $.EasyTouch.extend({
-        el: 'xxx',
-        init: xxx
-        ...
+        id: xxx,
+        container: xxx,
+        pages: {
+            ...
+        },
+        apps: {
+            ...
+        },
+        events: {
+            ...
+        }
     });
+
     new App();
 
 @class $.EasyTouch
-@param {Object} options
-    @param {Object} options.pages 页面配置：
-        如果是一个Object，EasyTouch会调用<code>$.EasyTouch.Page.extend</code>，将这个Object作为prototype属性扩展出一个Page；
-        如果是一个Class，则将直接使用该类作为一个Page；
-        @param {HTMLElement|Node|String} options.pages.el <code>el</code>和<code>tpl</code>属性二选一，<code>el</code>将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）
-        @param {HTMLElement|Node|String} options.pages.tpl 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板
 @constructor
 **/
 $.EasyTouch = $.Base.build('$.EasyTouch', {
-    initializer: function(options){
-        console.log('[EasyTouch] initializer', options);
-
-        var _this = this;
-        $.extend(this, options);
-        this.el = typeof this.el === 'string'?$(this.el):this.el;
-        this.el.addClass(CLASS_APP);
-        this.history = this.history();
-
-        //yunos event
-        $(document).bind('resume', function(e){
-            _this.resume();
-        }).bind('pause', function(e){
-            _this.pause();
-        }).bind('backbutton', function(e){
-            _this.pageBack();
-        }).bind('resetbutton', function(e){
-            _this.reset();
-        });
-
-        this.init(options);
-    },
-
+    /**
+     * 应用id
+     * @property id
+     * @type String
+     * @default 'easytouch'
+     * @optional
+     */
+    id: 'easytouch',
+    /**
+     * 容器
+     * @property container
+     * @type HTMLElement|Node|String
+     * @default 'body'
+     * @optional
+     */
+    container: 'body',
+    /**
+     * 代理的事件列表，<code>handler</code>可是一个字符串也可以是一个<code>function</code>，当是字符串时，将访问<code>this['nav']</code>
+     *
+     *      {
+     *          'tap #contariner header': 'nav',
+     *          'tap #contariner': function(){}
+     *      }
+     *
+     * @property events
+     * @type Object
+     * @optional
+     */
+    events: {},
+    /**
+     * Page原型
+     * @property pages
+     * @type Object
+     * @required
+     */
+    pages: {},
+    /**
+     * 子应用的配置
+     *
+     *      {
+     *          'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'
+     *      }
+     *
+     * @property apps
+     * @type Object
+     * @optional
+     */
+    apps: {},
+    /**
+     * 容器（原生dom）
+     * @property el
+     * @type HTMLElement
+     * @optional
+     */
+    el: undefined,
+    /**
+     * 容器（Zepto对象）
+     * @property $el
+     * @type Node
+     * @optional
+     */
+    $el: undefined,
     /**
      * Page实例
      * @property _pages
@@ -206,12 +271,82 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
      */
     _pages: {},
     /**
+     * 子应用
+     * @property _apps
+     * @type Object
+     * @private
+     */
+    _apps: {},
+    /**
      * 页面跳转的历史记录
      * @property _history
      * @type Array
      * @private
      */
     _history: [],
+    /**
+     * 宿主应用
+     * @property host
+     * @type Object
+     * @private
+     */
+    host: undefined,
+    /**
+     * 宿主应用是否处于可视状态
+     * @property _active
+     * @type Boolean
+     * @private
+     */
+    _active: true,
+    initializer: function(options){
+        if(window.location.href.indexOf(MARK_CHILD_APP) !== -1){
+            try{
+                options = JSON.parse(decodeURIComponent(window.location.search.substring(MARK_CHILD_APP.length + 2)));
+            }catch(ex){}
+            this.host = {
+                window: window.parent
+            }
+        }
+
+        console.log('[EasyTouch] initializer', options);
+
+        var _this = this;
+        this.history = this.history();
+        this.$el = typeof this.container === 'string'?$(this.container):this.container;
+        this.$el.addClass(CLASS_APP);
+        this.el = this.$el[0];
+        this.delegateEvents(this.events);
+
+        //yunos event
+        $(document).bind('resume', function(e){
+            _this.resume();
+        }).bind('pause', function(e){
+            _this.pause();
+        }).bind('backbutton', function(e){
+            if(_this._active){
+                _this.pageBack();
+            }
+        }).bind('resetbutton', function(e){
+            _this.resetbutton();
+        });
+
+        //child app message
+        window.addEventListener('message', function(e){
+            console.log('[EasyTouch] onmessage', e);
+
+            var data = e.data;
+            if(data.event === EVN_APP_EXIT){
+                _this._apps[data.id] && _this._apps[data.id].$el.hide();
+                _this._active = true;
+                delete data.event;
+                _this.back(data);
+            }else if(data.event === EVN_APP_RESET){
+                _this.reset(data.params);
+            }
+        });
+
+        this.init(options);
+    },
     /**
      * EasyTouch初始化
      * @method init
@@ -235,15 +370,102 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
         console.log('[EasyTouch] pause', arguments);
     },
     /**
-     * 重置应用
+     * 第二次<code>navApp</code>之后调用
      * @method reset
+     * @param {Object} params params for the target app
      */
-    reset: function(){
-        console.log('[EasyTouch] reset');
-        if(!this._history.length){
-            return;
+    reset: function(params){
+        console.log('[EasyTouch] reset', arguments);
+    },
+    /**
+     * 从子应用回到宿主应用时调用
+     * @method back
+     * @param {Object} params when the child app call <code>exit</code>
+     */
+    back: function(params){
+        console.log('[EasyTouch] back', arguments);
+    },
+    /**
+     * 退出应用
+     * @method exit
+     * @param {Object} params the params for the parent app, the parent app can get the params from <code>back</code>
+     */
+    exit: function(params){
+        console.log('[EasyTouch] exit', arguments);
+
+        if(this.host){
+            this.host.window.postMessage({
+                event: EVN_APP_EXIT,
+                id: this.id,
+                params: params
+            }, '*');
+        }else{
+            this.resetbutton();
         }
-        this.navPage(this._history[0].id, this._history[0].params);
+    },
+    /**
+     * 按云键
+     * @method resetbutton
+     */
+    resetbutton: function(){
+        console.log('[EasyTouch] resetbutton', arguments);
+        //TODO退出云应用
+    },
+    /**
+     * @method navApp
+     * @param {String} id the target app's id
+     * @param {Object} params params for the target app
+     */
+    navApp: function(id, params){
+        var _this = this,
+            _params = $.extend({}, params),
+            data = {
+                id: id,
+                params: params
+            };
+
+        this.trigger(EVN_APP_BEFORE_NAV, data);
+
+        if(this._apps[id]){
+            this._apps[id].window.postMessage({
+                event: EVN_APP_RESET,
+                params: _params
+            }, '*');
+            this._apps[id].$el.show();
+        }else{
+            var url = this.apps[id];
+            try{
+                url += '?' + MARK_CHILD_APP + '=' + encodeURIComponent(JSON.stringify(_params));
+            }catch(ex){}
+            this.trigger(EVN_APP_BEFORE_LOAD, data);
+            var iframe = $('<iframe src="'+url+'" class="'+CLASS_PREFIX+'app"></iframe>').bind('load', function(){
+                _this.trigger(EVN_APP_LOAD, data);
+            }).css({
+                height: window.screen.height,
+                width: window.screen.width,
+                display: 'block'
+            }).appendTo(this.$el);
+            this._apps[id] = {
+                $el: iframe,
+                el: iframe[0],
+                window: iframe[0].contentWindow
+            };
+        }
+
+        this._active = false;
+        this.trigger(EVN_APP_NAV, data);
+    },
+    /**
+     通过ID获取某一个app
+
+        app.getApp('hongbao');
+
+     @method getApp
+     @param {String} id app's id
+     @return {Object} <code>app</code>: {HTMLElement} app.el the iframe of app; {Node} app.$el the iframe of app; {HTMLElement} app.window the contentWindow of iframe
+     **/
+    getApp: function(id){
+        return this._apps[id];
     },
     /**
     页面跳转
@@ -264,13 +486,13 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
     *   slideDownIn
     *   fadeIn
     *   dissolveIn
-    *   popIn
-    *   flipLeftIn
-    *   flipRightIn
-    *   swapLeftIn
-    *   swapRightIn
-    *   cubeLeftIn
-    *   cubeRightIn
+    *   popIn <sup>4.0+</sup>
+    *   flipLeftIn <sup>4.0+</sup>
+    *   flipRightIn <sup>4.0+</sup>
+    *   swapLeftIn <sup>4.0+</sup>
+    *   swapRightIn <sup>4.0+</sup>
+    *   cubeLeftIn <sup>4.0+</sup>
+    *   cubeRightIn <sup>4.0+</sup>
 
     include the animation css in your less file like this:
 <pre class="code"><code>@import <span class="str">"easytouch/less/anim.less"</span>;
@@ -339,7 +561,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
     pageBack: function(params, anim){
         console.log('[EasyTouch] pageBack', arguments);
         if(this._history.length <= 1){
-            //TODO: exitApp
+            this.exit();
             return;
         }
 
@@ -391,7 +613,8 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
      */
     _navPage: function(fromPage, toPage, params, anim, callback){
         if(!fromPage){
-            toPage.el.show();
+            this.$el.find('.' + CLASS_PREFIX + 'page').hide(); //TODO: 但页面刷新时，需要隐藏页面上写死的Page
+            toPage.$el.show();
             toPage.trigger(EVN_PAGE_READY, params);
             callback && callback();
             return;
@@ -400,17 +623,18 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             anim = CLASS_PREFIX + anim;
             var reverseClass = reverseAnimation(anim),
                 c_class = CLASS_PREFIX + 'current';
-            fromPage.el.removeClass(c_class).addClass(reverseClass);
-            toPage.el.bind('webkitAnimationEnd', function(){
-                toPage.el.unbind('webkitAnimationEnd').removeClass(anim);
-                fromPage.el.hide().removeClass(reverseClass);
+            fromPage.$el.bind('webkitAnimationEnd', function(){
+                fromPage.$el.hide().removeClass(reverseClass).unbind('webkitAnimationEnd');
                 fromPage.trigger(EVN_PAGE_LEAVE);
+            }).removeClass(c_class).addClass(reverseClass);
+            toPage.$el.bind('webkitAnimationEnd', function(){
+                toPage.$el.removeClass(anim).unbind('webkitAnimationEnd');
                 toPage.trigger(EVN_PAGE_READY, params);
                 callback && callback();
             }).addClass(c_class).addClass(anim).show();
         }else{
-            fromPage.el.hide();
-            toPage.el.show();
+            fromPage.$el.hide();
+            toPage.$el.show();
             fromPage.trigger(EVN_PAGE_LEAVE);
             toPage.trigger(EVN_PAGE_READY, params);
             callback && callback();
@@ -518,6 +742,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             /**
              * 从尾部删除一条历史记录,并写入<code>sessionStorage</code>
              * @method history.pop
+             * @private
              */
             pop: function(){
                 _this._history.pop();
@@ -530,6 +755,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
              *      @param {String} record.id page id
              *      @param {Object} record.params params for navPage
              *      @param {String} record.anim the animation name
+             * @private
              */
             push: function(record){
                 var lastPID = _this.getCurrentPID(),
@@ -545,6 +771,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             /**
              * 将内存中的历史记录写入<code>sessionStorage</code>
              * @method history.save
+             * @private
              */
             save: function(){
                 if(!useHistory){
@@ -555,71 +782,70 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
         }
     }
 },{
-    /**
-     * 容器
-     * @attribute el
-     * @type HTMLElement|Node|String
-     * @default 'body'
-     * @optional
-     */
-    el: {
-        value : 'body'
-    },
-    /**
-     * Page原型
-     * @attribute pages
-     * @type Object
-     * @required
-     */
-    pages: {
-        value: {}
-    }
 },{
     /**
-     * 通过该方法来继承并扩展一个<code>$.EasyTouch</code>
-     * @method $.EasyTouch.extend
-     * @param {Object} property property or function add to <code>$.EasyTouch</code>
-     * @return {Function} the new Class extended from <code>$.EasyTouch</code>
-     * @static
-     */
+    通过该方法来继承并扩展一个<code>$.EasyTouch</code>
+
+        var App = $.EasyTouch.extend({
+            id: 'market',
+            container: '#app',
+            pages: {
+
+            },
+            apps: {
+                'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'
+            },
+            events: {
+                'tap header': 'tapHeader',
+                'tap .back': this.app.back
+            },
+            //this function will run when creating instance
+            init: function(params){},
+            //for YunOS resume event
+            resume: function(){},
+            //for YunOS suspend event
+            pause: function(){}
+        });
+        new App();
+
+    @method $.EasyTouch.extend
+    @param {Object} options 需要扩展的属性列表
+        @param {String} options.id 应用ID，用于EasyTouch内部识别
+        @param {Node|HTMLElement|String} options.container 应用容器，默认为<code>body</code>
+        @param {Object} options.pages 页面配置：
+        如果是一个Object，EasyTouch会调用<code>$.EasyTouch.Page.extend</code>，将这个Object作为prototype属性扩展出一个Page，具体请看<code>$.EasyTouch.Page.extend</code>；
+        如果是一个<code>$.EasyTouch.Page.extend</code>产生的Class，则将直接使用该类作为一个Page；
+        @param {Object} options.apps 子应用配置：key为应用的id，value为应用的访问地址，子应用将作为一个iframe的形式存在
+    @return {Function} the new Class extended from <code>$.EasyTouch</code>
+    @static
+    **/
     extend: function(property){
         return $.Base.extend('', $.EasyTouch, property);
     }
 });
+$.extend($.EasyTouch.prototype, DelegateEvents.prototype);
 
 
 /**
-页面类，该类不需要应用自己实例化，EasyTouch会在<code>navPage</code>时判断是否实例化了该页面，如果没有会自动实例化，
-应用可以通过<code>$.EasyTouch.Page.extend</code>方法创建一个新的Page类：
+页面类，该类不需要应用自己实例化，EasyTouch会在<code>navPage</code>时判断是否实例化了该页面，如果没有会自动实例化，你需要做的就是用<code>$.EasyTouch.Page.extend</code>方法扩展一个Page类，然后配置到APP中：
 
     var Page1 = $.EasyTouch.Page.extend({
-        //set el or tpl property, examples in $.EasyTouch example
-        el: '#Page1',
-        //el: document.getElementById('#Page1'),
-        //el: $('#Page1'),
-        //el: 'pages/Page1.html',
-
-        //tpl: '#Page1',
-        //tpl: document.getElementById('#Page1'),
-        //tpl: $('#Page1'),
-        //tpl: 'pages/Page1.html',
-
-        render: function(template, params){
-            return Mustache.to_html(template, params);
+        html: '#xxx .xxx',
+        //tpl: '',
+        events: {
+            ...
         },
-        init: function(){
-
-        },
-        reset: function(){
-
-        },
-        ready： function(){
-
-        },
-        leave： function(){
-
-        }
+        init: function(){},
+        reset: function(){}
+        ...
     });
+    var App = $.EasyTouch.extend({
+        pages: {
+            'Page1': Page1
+        }
+        ...
+    });
+    new App();
 
 @class $.EasyTouch.Page
 @param {Object} options
@@ -657,23 +883,56 @@ var
     EVN_PAGE_READY = 'ready';
 $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
     /**
+     * <code>html</code>和<code>tpl</code>属性二选一，<code>html</code>将一段HTML作为一个页面，它可以来至：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）
+     * @property html
+     * @type HTMLElement|Node|String
+     * @optional
+     */
+    html: undefined,
+    /**
+     * 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板
+     * @property tpl
+     * @type HTMLElement|Node|String
+     * @optional
+     */
+    tpl: undefined,
+    /**
      * Page的id，用于<code>navPage</code>等操作时的索引
      * @property id
-     * @type Object
+     * @type String
      */
     id: undefined,
     /**
-     * Page的$dom容器
-     * @property el
-     * @type Node
+     * 代理的事件列表，<code>handler</code>可是一个字符串也可以是一个<code>function</code>，当是字符串时，将访问<code>this['nav']</code>
+     *
+     *      {
+     *          'tap #contariner header': 'nav',
+     *          'tap #contariner': function(){}
+     *      }
+     *
+     * @property events
+     * @type Object
+     * @optional
      */
-    el: undefined,
+    events: {},
     /**
      * EasyTouch实例，该page所属app的引用
      * @property app
      * @type Object
      */
     app: undefined,
+    /**
+     * Page的dom容器
+     * @property el
+     * @type HTMLElement
+     */
+    el: undefined,
+    /**
+     * Page的$dom容器
+     * @property $el
+     * @type Node
+     */
+    $el: undefined,
     /**
      * 标识该page是否已经初始化完成
      * @property _inited
@@ -688,19 +947,21 @@ $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
 
         var params = options.params;
         this.app = options.app;
-        var _this = this,
-            _init = function(el){
-                el.attr('id', options.id);
-                el.addClass(CLASS_PREFIX + 'page');
-                _this.app.el.append(el);
-                _this.el = el;
+        var _this = this;
+        var init = function(el){
+            el.attr('id', options.id);
+            el.addClass(CLASS_PREFIX + 'page');
+            _this.app.$el.append(el);
+            setTimeout(function(){
                 _this.id = options.id;
-                setTimeout(function(){
-                    _this.init(params);
-                    _this._inited = true;
-                    _this.trigger(EVN_PAGE_INIT);
-                }, 0);
-            };
+                _this.$el = el;
+                _this.el = _this.$el[0];
+                _this.delegateEvents(_this.events);
+                _this.init(params);
+                _this._inited = true;
+                _this.trigger(EVN_PAGE_INIT);
+            }, 0);
+        };
 
         this.bind(EVN_PAGE_RESET, function(e, params){
             _this.reset(params);
@@ -712,31 +973,31 @@ $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
             _this.ready(params);
         });
 
-        if(this.el){
-            if(REGEX_HTML_ADRESS.test(this.el)){
-                $.get(this.el, function(response){
-                    _init($(response));
+        if(this.html){
+            if(REGEX_HTML_ADRESS.test(this.html)){
+                $.get(this.html, function(response){
+                    init($(response));
                 });
-            }else if(typeof this.el === 'string' || this.el.tagName){
-                _init($(this.el));
+            }else if(typeof this.html === 'string' || this.html.tagName){
+                init($(this.html));
             }else{
-                _init(this.el);
+                init(this.html);
             }
         }else if(this.tpl){
             if(REGEX_HTML_ADRESS.test(this.tpl)){
-                $.get(this.tpl, function(response, status){
+                $.get(this.tpl, function(response){
                     response = _this.render(response, params);
-                    _init($(response));
+                    init($(response));
                 });
             }else if(REGEX_SELECTOR.test(this.tpl) || this.tpl.tagName){
-                _init($(_this.render($(this.tpl).html(), params)));
+                init($(_this.render($(this.tpl).html(), params)));
             }else if(this.tpl.attr){
-                _init($(_this.render(this.tpl.html(), params)));
+                init($(_this.render(this.tpl.html(), params)));
             }else{
-                _init($(_this.render(this.tpl, params)));
+                init($(_this.render(this.tpl, params)));
             }
         }else{
-            console.error('el or tpl param is require');
+            console.error('html or tpl is require');
         }
     },
     /**
@@ -784,28 +1045,67 @@ $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
     }
 },{
     /**
-     * <code>el</code>和<code>tpl</code>属性二选一，<code>el</code>将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）
-     * @attribute el
-     * @type HTMLElement|Node|String
-     * @optional
+     * Page的id，用于<code>navPage</code>等操作时的索引
+     * @attribute id
+     * @type String
      */
-    el: {
-        value: undefined
-    },
+    id: {},
     /**
-     * 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板
-     * @attribute tpl
-     * @type HTMLElement|Node|String
-     * @optional
+     * EasyTouch实例，该page所属app的引用
+     * @attribute app
+     * @type Object
      */
-    tpl: {
-        value: undefined
-    }
+    app: {},
+    /**
+     * 传递给page的参数
+     * @attribute params
+     * @type Object
+     */
+    params: {}
 },{
     /**
-    通过该方法来继承并扩展一个<code>$.EasyTouch.Page</code>
+    通过该方法来继承并扩展一个<code>$.EasyTouch.Page</code>：
+
+        var Page1 = $.EasyTouch.Page.extend({
+            //set html or tpl property, examples in $.EasyTouch example
+            html: '#Page1',
+            //html: document.getElementById('#Page1'),
+            //html: $('#Page1'),
+            //html: 'pages/Page1.html',
+
+            //tpl: '#Page1',
+            //tpl: document.getElementById('#Page1'),
+            //tpl: $('#Page1'),
+            //tpl: 'pages/Page1.html',
+
+            events: {
+                'tap header': 'tapHeader',
+                'tap .back': this.app.back
+            },
+            render: function(template, params){
+                return Mustache.to_html(template, params);
+            },
+            init: function(){
+
+            },
+            reset: function(){
+
+            },
+            ready： function(){
+
+            },
+            leave： function(){
+
+            },
+            tapHeader: function(){
+
+            }
+        });
+
     @method $.EasyTouch.Page.extend
     @param {Object} property property or function add to <code>$.EasyTouch.Page</code>
+        @param {HTMLElement|Node|String} property.html <code>html</code>和<code>tpl</code>属性二选一，<code>html</code>将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）
+        @param {HTMLElement|Node|String} property.tpl 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板
     @return {Function} the new Class extended from <code>$.EasyTouch.Page</code>
     @static
      **/
@@ -813,4 +1113,6 @@ $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
         return $.Base.extend('', $.EasyTouch.Page, property);
     }
 });
+$.extend($.EasyTouch.Page.prototype, DelegateEvents.prototype);
+
 })();

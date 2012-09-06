@@ -3,8 +3,7 @@
  * author: butian.wth
  * version : 0-0-1
  **/
-define('base',['core'],function(require, exports, module){
-    var $ = require('core');
+;(function(){
 
     /**
      * 事件对象格式
@@ -146,10 +145,8 @@ define('base',['core'],function(require, exports, module){
         }
 
     });
-    
-    module.exports = $;
-});
 
+})();
 /**
  * change log
  * @20120827 增加name的处理，如果在模块内进行事件绑定，会有模块的前缀

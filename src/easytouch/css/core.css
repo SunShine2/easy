@@ -7,7 +7,8 @@
     bottom: 0;
     overflow-x: hidden;
 }
-.et-page{
+.et-page,
+.et-app{
     left: 0;
     right: 0;
     top: 0;
@@ -15,6 +16,9 @@
     overflow-x: hidden;
     position: absolute;
     display: none;
+}
+.et-app{
+    z-index: 2;
 }
 .et-page.et-current{
     z-index: 1;

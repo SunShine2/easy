@@ -137,21 +137,6 @@
             /**
              * 开发环境取测试环境的sign
              */
-            if (!__runtime__.isMobile()) {
-                CloudAPI.PIM.getSign = function (flag, onSuccess, onFailure) {
-                    var url = "http://10.249.195.165/newopenapi/createsign.php?appid=60119&tyuid=zhouqicf";
-                    var win = window;
-                    __runtime__.getActiveApp().netInvoke("GET", url, "", "json", this, function (json) {
-                        if (json.code == 200) {
-                            _sign = json.data;
-                            $.os_token = json.data;
-                            win[onSuccess](_sign);
-                        } else {
-                            win[onFailure]("PIM.getSign failure");
-                        }
-                    });
-                };
-            }
 
             agent = agent || $.getApp();
             var osToken = $.os_token;
@@ -172,8 +157,12 @@
                         }
                     });
                 } else {
+                    if (!__runtime__.isMobile()) {
+                        $.os_token = '';
+                    }
                     callback && callback.call(agent, $.os_token);
                 }
+                Loading.hide();
             }
 
             /**
@@ -186,6 +175,7 @@
         "netInvokeSign":function (method, url, params, type, agent, callback) {
             if (!$.os_token) {
                 $.getSign(function () {
+                    params["sign"] = $.os_token;
                     $.getApp().netInvoke(method, url, params, type, agent, function (data) {
                         callback.call(agent, data);
                     });
@@ -207,14 +197,13 @@
         "checkData":function (data, flag, callback, list, agent) {
             agent = typeof agent !== "undefined" ? agent : this;
             if (flag) {
-                if (list &&( list == null || list == [] )) {
-                    agent.toast ? agent.toast("没有对应的数据") : agent._app.toast("没有对应的数据")
-                } else {
-                    callback.call(agent, data)
+                if (list &&( list == null || list.length === 0 )) {
+                    agent.toast ? agent.toast("您的试用列表为空") : agent._app.toast("您的试用列表为空");
                 }
+                callback.call(agent, data)
             } else {
                 //agent.showMsgBox("提示", "网络繁忙，请重试或检查网络", "warn");
-                $.loading.hide();
+                Loading.hide();
             }
         },
         "comparePlain":function (actual, expect) {

@@ -92,7 +92,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;js_core.js.html#l591"><code>js\core.js:591</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;js_core.js.html#l829"><code>js\core.js:829</code></a>
         </div>
     
 
@@ -104,37 +104,25 @@
 
 
 <div class="box intro">
-    <p>页面类，该类不需要应用自己实例化，EasyTouch会在<code>navPage</code>时判断是否实例化了该页面，如果没有会自动实例化，
-应用可以通过<code>$.EasyTouch.Page.extend</code>方法创建一个新的Page类：</p>
+    <p>页面类，该类不需要应用自己实例化，EasyTouch会在<code>navPage</code>时判断是否实例化了该页面，如果没有会自动实例化，你需要做的就是用<code>$.EasyTouch.Page.extend</code>方法扩展一个Page类，然后配置到APP中：</p>
 
 <pre class="code"><code class="prettyprint">var Page1 = $.EasyTouch.Page.extend({
-    //set el or tpl property, examples in $.EasyTouch example
-    el: '#Page1',
-    //el: document.getElementById('#Page1'),
-    //el: $('#Page1'),
-    //el: 'pages/Page1.html',
-
-    //tpl: '#Page1',
-    //tpl: document.getElementById('#Page1'),
-    //tpl: $('#Page1'),
-    //tpl: 'pages/Page1.html',
-
-    render: function(template, params){
-        return Mustache.to_html(template, params);
+    html: '#xxx .xxx',
+    //tpl: '',
+    events: {
+        ...
     },
-    init: function(){
-
-    },
-    reset: function(){
-
-    },
-    ready： function(){
-
-    },
-    leave： function(){
-
-    }
+    init: function(){},
+    reset: function(){}
+    ...
 });
+var App = $.EasyTouch.extend({
+    pages: {
+        'Page1': Page1
+    }
+    ...
+});
+new App();
 </code></pre>
 </div>
 
@@ -183,7 +171,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l591"><code>js\core.js:591</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l829"><code>js\core.js:829</code></a>
         
         </p>
 
@@ -355,6 +343,13 @@
 
                     <ul class="index-list properties">
                         
+                            <li class="index-item property">
+                                <a href="#property_$el">$el</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item property private">
                                 <a href="#property__inited">_inited</a>
 
@@ -377,7 +372,28 @@
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_events">events</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_html">html</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_id">id</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_tpl">tpl</a>
 
                                 
                                 
@@ -394,11 +410,15 @@
                     <ul class="index-list attrs">
                         
                             <li class="index-item attr">
-                                <a href="#attr_el">el</a>
+                                <a href="#attr_app">app</a>
                             </li>
                         
                             <li class="index-item attr">
-                                <a href="#attr_tpl">tpl</a>
+                                <a href="#attr_id">id</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_params">params</a>
                             </li>
                         
                     </ul>
@@ -497,7 +517,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l803"><code>js\core.js:803</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1066"><code>js\core.js:1066</code></a>
         
         </p>
 
@@ -508,7 +528,44 @@
     </div>
 
     <div class="description">
-        <p>通过该方法来继承并扩展一个<code>$.EasyTouch.Page</code></p>
+        <p>通过该方法来继承并扩展一个<code>$.EasyTouch.Page</code>：</p>
+
+<pre class="code"><code class="prettyprint">var Page1 = $.EasyTouch.Page.extend({
+    //set html or tpl property, examples in $.EasyTouch example
+    html: '#Page1',
+    //html: document.getElementById('#Page1'),
+    //html: $('#Page1'),
+    //html: 'pages/Page1.html',
+
+    //tpl: '#Page1',
+    //tpl: document.getElementById('#Page1'),
+    //tpl: $('#Page1'),
+    //tpl: 'pages/Page1.html',
+
+    events: {
+        'tap header': 'tapHeader',
+        'tap .back': this.app.back
+    },
+    render: function(template, params){
+        return Mustache.to_html(template, params);
+    },
+    init: function(){
+
+    },
+    reset: function(){
+
+    },
+    ready： function(){
+
+    },
+    leave： function(){
+
+    },
+    tapHeader: function(){
+
+    }
+});
+</code></pre>
     </div>
 
     
@@ -529,6 +586,36 @@
                         <p>property or function add to <code>$.EasyTouch.Page</code></p>
                     </div>
 
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">html</code>
+                                    <span class="type">HTMLElement | Node | String</span>
+                                
+
+                                <div class="param-description">
+                                    <p><code>html</code>和<code>tpl</code>属性二选一，<code>html</code>将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">tpl</code>
+                                    <span class="type">HTMLElement | Node | String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
                     
                 </li>
             
@@ -597,7 +684,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l751"><code>js\core.js:751</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1014"><code>js\core.js:1014</code></a>
         
         </p>
 
@@ -674,7 +761,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l776"><code>js\core.js:776</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1039"><code>js\core.js:1039</code></a>
         
         </p>
 
@@ -738,7 +825,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l768"><code>js\core.js:768</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1031"><code>js\core.js:1031</code></a>
         
         </p>
 
@@ -835,7 +922,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l740"><code>js\core.js:740</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1003"><code>js\core.js:1003</code></a>
         
         </p>
 
@@ -950,7 +1037,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l759"><code>js\core.js:759</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1022"><code>js\core.js:1022</code></a>
         
         </p>
 
@@ -1004,6 +1091,50 @@
                 <h2 class="off-left">Properties</h2>
 
                 
+                    <div id="property_$el" class="property item">
+    <h3 class="name"><code>$el</code></h3>
+    <span class="type">Node</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l930"><code>js\core.js:930</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Page的$dom容器</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="property__inited" class="property item private">
     <h3 class="name"><code>_inited</code></h3>
     <span class="type">Boolean</span>
@@ -1029,7 +1160,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l677"><code>js\core.js:677</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l936"><code>js\core.js:936</code></a>
         
         </p>
 
@@ -1075,7 +1206,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l671"><code>js\core.js:671</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l918"><code>js\core.js:918</code></a>
         
         </p>
 
@@ -1098,7 +1229,7 @@
                 
                     <div id="property_el" class="property item">
     <h3 class="name"><code>el</code></h3>
-    <span class="type">Node</span>
+    <span class="type">HTMLElement</span>
 
     
 
@@ -1119,7 +1250,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l665"><code>js\core.js:665</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l924"><code>js\core.js:924</code></a>
         
         </p>
 
@@ -1129,7 +1260,7 @@
     </div>
 
     <div class="description">
-        <p>Page的$dom容器</p>
+        <p>Page的dom容器</p>
     </div>
 
     
@@ -1140,8 +1271,8 @@
 </div>
 
                 
-                    <div id="property_id" class="property item">
-    <h3 class="name"><code>id</code></h3>
+                    <div id="property_events" class="property item">
+    <h3 class="name"><code>events</code></h3>
     <span class="type">Object</span>
 
     
@@ -1163,7 +1294,101 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l659"><code>js\core.js:659</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l905"><code>js\core.js:905</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>代理的事件列表，<code>handler</code>可是一个字符串也可以是一个<code>function</code>，当是字符串时，将访问<code>this['nav']</code></p>
+
+<pre class="code"><code class="prettyprint"> {
+     'tap #contariner header': 'nav',
+     'tap #contariner': function(){}
+ }
+</code></pre>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_html" class="property item">
+    <h3 class="name"><code>html</code></h3>
+    <span class="type">HTMLElement | Node | String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l885"><code>js\core.js:885</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><code>html</code>和<code>tpl</code>属性二选一，<code>html</code>将一段HTML作为一个页面，它可以来至：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_id" class="property item">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l899"><code>js\core.js:899</code></a>
         
         </p>
 
@@ -1184,67 +1409,7 @@
 </div>
 
                 
-            </div>
-        
-
-        
-            <div id="attrs" class="api-class-tabpanel">
-                <h2 class="off-left">Attributes</h2>
-
-                
-                    <div id="attr_el" class="attr item">
-    <a name="config_el"></a> 
-    <h3 class="name"><code>el</code></h3>
-    <span class="type">HTMLElement | Node | String</span>
-
-    
-
-    
-
-    
-
-    
-
-    
-        <span class="flag optional">optional</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l784"><code>js\core.js:784</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p><code>el</code>和<code>tpl</code>属性二选一，<code>el</code>将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="attr_tpl" class="attr item">
-    <a name="config_tpl"></a> 
+                    <div id="property_tpl" class="property item">
     <h3 class="name"><code>tpl</code></h3>
     <span class="type">HTMLElement | Node | String</span>
 
@@ -1256,8 +1421,59 @@
 
     
 
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l892"><code>js\core.js:892</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板</p>
+    </div>
+
     
-        <span class="flag optional">optional</span>
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_app" class="attr item">
+    <a name="config_app"></a> 
+    <h3 class="name"><code>app</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -1273,7 +1489,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l793"><code>js\core.js:793</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1053"><code>js\core.js:1053</code></a>
         
         </p>
 
@@ -1283,7 +1499,105 @@
     </div>
 
     <div class="description">
-        <p>将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的<code>innerHTML</code>作为模板，可以在<code>render</code>方法中使用任意模板引擎渲染改模板</p>
+        <p>EasyTouch实例，该page所属app的引用</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_id" class="attr item">
+    <a name="config_id"></a> 
+    <h3 class="name"><code>id</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1047"><code>js\core.js:1047</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Page的id，用于<code>navPage</code>等操作时的索引</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_params" class="attr item">
+    <a name="config_params"></a> 
+    <h3 class="name"><code>params</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l1059"><code>js\core.js:1059</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>传递给page的参数</p>
     </div>
 
     
@@ -1325,7 +1639,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l632"><code>js\core.js:632</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l858"><code>js\core.js:858</code></a>
         
         </p>
 
@@ -1406,7 +1720,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l646"><code>js\core.js:646</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l872"><code>js\core.js:872</code></a>
         
         </p>
 
@@ -1449,7 +1763,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l651"><code>js\core.js:651</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l877"><code>js\core.js:877</code></a>
         
         </p>
 
@@ -1530,7 +1844,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_core.js.html#l639"><code>js\core.js:639</code></a>
+        <a href="..&#x2F;files&#x2F;js_core.js.html#l865"><code>js\core.js:865</code></a>
         
         </p>
 

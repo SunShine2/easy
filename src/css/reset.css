@@ -2,6 +2,8 @@
  * reset.css for android
  * version : 0-0-1
  * author : youxiao@alibaba-inc.com
+ * @review
+ * font相关的重置
  */
 
 /*
@@ -185,11 +187,6 @@ padding: 8px;
     padding: 0;
 }
 
-/*TODO*/
-input[type="text"], input[type="password"], input[type="search"], input[type="file"]{
-    padding: inherit;
-}
-
 h1,
 h2,
 h3,
@@ -263,4 +260,9 @@ android点击链接或js绑定事件的元素时
 */
 div, p, blockquote, pre, code, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, legend, textarea, table, th, td{
     -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+/*color: black*/
+select{
+    color: inherit;
 }
