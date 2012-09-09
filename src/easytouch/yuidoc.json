@@ -1,9 +1,0 @@
-{
-    "name": "EasyTouch",
-    "description": "The UI library for Easy.",
-    "version": "0.0.1",
-    "options": {
-        "paths": "js",
-        "outdir": "doc"
-    }
-}

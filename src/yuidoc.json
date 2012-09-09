@@ -1,0 +1,9 @@
+{
+    "name": "Easy API",
+    "description": "The Easy Api for YunOS Cloudapp",
+    "version": "0.0.1",
+    "url": "http://",
+    "options": {
+        "outdir": "../doc"
+    }
+}

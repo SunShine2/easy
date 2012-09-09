@@ -508,31 +508,34 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
     navPage: function(id, params, anim, ifPushToHistory){
         console.log('[EasyTouch] navPage', arguments);
 
-        var currentPage = this.getCurrentPage();
+        var _this = this,
+            argus = [id, params, anim, ifPushToHistory !== false],
+            currentPage = this.getCurrentPage(),
+            _params = $.extend({}, params),
+            pushHistory = function(id, params, anim, ifPushToHistory){
+                if(!ifPushToHistory){
+                    return;
+                }
+                _this.history.push({
+                    id: id,
+                    params: params,
+                    anim: anim
+                });
+            };
         if(currentPage && currentPage.id === id){
+            pushHistory.apply(_this, argus);
+            currentPage.trigger(EVN_PAGE_RESET, _params);
             return;
         }
 
-        var _this = this,
-            _params = $.extend({}, params),
-            eventArgus = {
+        var eventArgus = {
                 from: currentPage?currentPage.id:undefined,
                 to: id,
                 params: params,
                 anim: anim
             },
-            pushHistory = function(id, params, anim, ifPushToHistory){
-                if(!ifPushToHistory){
-                    return;
-                }
-                this.history.push({
-                    id: id,
-                    params: params,
-                    anim: anim
-                });
-            },
             trigger = function(){
-                pushHistory.apply(_this, [id, params, anim, ifPushToHistory !== false]);
+                pushHistory.apply(_this, argus);
                 _this.trigger(EVN_APP_PAGE_NAV, [eventArgus]);
                 _this.trigger(EVN_APP_PAGE_CHANGE, [eventArgus]);
             };
@@ -762,9 +765,11 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
                     firstPID = _this._history.length && _this._history[0].id;
                 if(record.id !== lastPID && record.id !== firstPID){
                     _this._history.push(record);
-                }
-                if(record.id === firstPID){
-                    _this._history.length = 1;
+                }else if(record.id === lastPID){
+                    //相等时，仅更新params参数
+                    _this._history[_this._history.length - 1].params = record.params;
+                }else if(record.id === firstPID){
+                    _this._history = [record];
                 }
                 _this.history.save();
             },

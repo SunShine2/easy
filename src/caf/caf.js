@@ -200,11 +200,12 @@
                 if (list &&( list == null || list.length === 0 )) {
                     agent.toast ? agent.toast("您的试用列表为空") : agent._app.toast("您的试用列表为空");
                 }
-                callback.call(agent, data)
+                callback.call(agent, data);
+
             } else {
                 //agent.showMsgBox("提示", "网络繁忙，请重试或检查网络", "warn");
-                Loading.hide();
             }
+            Loading.hide();
         },
         "comparePlain":function (actual, expect) {
             var e = JSON.stringify(expect),

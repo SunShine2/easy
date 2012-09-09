@@ -248,11 +248,13 @@ ul {
 
 /*
 font: -webkit-small-control;
+margin: 0em; but has margin in browser
 */
 input, textarea, select, button{
     font-family:inherit;
     font-size:inherit;
     font-weight:inherit;
+    margin: 0;
 }
 
 /*
@@ -263,6 +265,6 @@ div, p, blockquote, pre, code, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, f
 }
 
 /*color: black*/
-select{
+select, button, input{
     color: inherit;
 }
