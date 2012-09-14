@@ -1,6 +1,8 @@
 $(function(){
     var App = $.EasyTouch.extend({
         id: 'hongbao',
+        defaultAnimation: 'slideRightIn',
+        debug: true,
         pages: {
             IndexPage: window.IndexPage,
             HBDetailPage: window.HBDetailPage,
@@ -22,7 +24,7 @@ $(function(){
             e.preventDefault();
             var $target = $(sender);
             var data = JSON.parse($target.data('params'));
-            this.navPage.apply(this, [data.id, data.params, data.anim]);
+            this.navPage.apply(this, [data.id, data.params, data.anim, data.history]);
         },
         back: function(e, sender){
             e.preventDefault();

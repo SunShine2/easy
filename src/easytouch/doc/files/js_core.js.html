@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>js\core.js - EasyTouch</title>
+    <title>js&#x2F;core.js - EasyTouch</title>
     <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -49,6 +49,10 @@
 
             <ul id="api-modules" class="apis modules">
             
+                <li><a href="..&#x2F;modules/EasyTouch.html">EasyTouch</a></li>
+            
+                <li><a href="..&#x2F;modules/EasyTouch-Page.html">EasyTouch-Page</a></li>
+            
             </ul>
         </div>
     </div>
@@ -84,90 +88,118 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: js\core.js</h1>
+                        <h1 class="file-heading">File: js&#x2F;core.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 &#x2F;**
- * Easy Touch
+ * EasyTouch
  * @author: youxiao@alibaba-inc.com
  * @version: 0.0.1
- * @beta
+ * @module EasyTouch
+ * @uses EasyTouch-Page
  *&#x2F;
 ;(function(){
 var
     &#x2F;**
-    页面切换完成时促发，包括&lt;code&gt;navPage&lt;&#x2F;code&gt;和&lt;code&gt;pageBack&lt;&#x2F;code&gt;
+    &#x60;navPage&#x60;或者&#x60;pageBack&#x60;开始前促发
+    @event pagebeforechange
+    @param {Object} e event object from custom-event
+    @param {Object} params
+        @param {String} params.from page id of prev page
+        @param {String|Undefined} params.to page id of next page
+        @param {Object|Undefined} params.params the params when you call &#x60;navPage&#x60; or &#x60;pageBack&#x60;
+        @param {String|Undefined} params.anim the animation name
+    **&#x2F;
+    EVN_APP_BEFORE_PAGE_CHANGE = &#x27;pagebeforechange&#x27;,
+    &#x2F;**
+    页面切换完成时促发，包括&#x60;navPage&#x60;和&#x60;pageBack&#x60;
 
         var app = new EasyTouch({...});
-        app.bind(&#x27;pageChange&#x27;, function(e, params){
+        app.bind(&#x27;pagechange&#x27;, function(e, params){
             var fromPage = this.getPage(params.from);
         }, app);
 
-    @event pageChange
+    @event pagechange
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
         @param {String|Undefined} params.to page id of next page
-        @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
+        @param {Object|Undefined} params.params the params when you call &#x60;navPage&#x60; or &#x60;pageBack&#x60;
         @param {String|Undefined} params.anim the animation name
     **&#x2F;
-    EVN_APP_PAGE_CHANGE = &#x27;pageChange&#x27;,
+    EVN_APP_PAGE_CHANGE = &#x27;pagechange&#x27;,
     &#x2F;**
-    &lt;code&gt;pageBack&lt;&#x2F;code&gt;完成时促发
-    @event pageBack
+    &#x60;pageBack&#x60;开始前促发
+    @event beforepageback
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
         @param {String} params.to page id of next page
-        @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
+        @param {Object|Undefined} params.params the params when you call &#x60;navPage&#x60; or &#x60;pageBack&#x60;
         @param {String|Undefined} params.anim the animation name
     **&#x2F;
-    EVN_APP_PAGE_BACK = &#x27;pageBack&#x27;,
+    EVN_APP_BEFORE_PAGE_BACK = &#x27;beforepageback&#x27;,
     &#x2F;**
-    &lt;code&gt;navPage&lt;&#x2F;code&gt;完成时促发
-    @event navPage
+    &#x60;pageBack&#x60;完成时促发
+    @event pageback
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
         @param {String} params.to page id of next page
-        @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
+        @param {Object|Undefined} params.params the params when you call &#x60;navPage&#x60; or &#x60;pageBack&#x60;
         @param {String|Undefined} params.anim the animation name
     **&#x2F;
-    EVN_APP_PAGE_NAV = &#x27;navPage&#x27;,
+    EVN_APP_PAGE_BACK = &#x27;pageback&#x27;,
     &#x2F;**
-    &lt;code&gt;navPage&lt;&#x2F;code&gt;开始前促发
-    @event beforeNavPage
+    &#x60;navPage&#x60;完成时促发
+    @event pagenav
+    @param {Object} e event object from custom-event
+    @param {Object} params
+        @param {String} params.from page id of prev page
+        @param {String} params.to page id of next page
+        @param {Object|Undefined} params.params the params when you call &#x60;navPage&#x60; or &#x60;pageBack&#x60;
+        @param {String|Undefined} params.anim the animation name
+    **&#x2F;
+    EVN_APP_PAGE_NAV = &#x27;pagenav&#x27;,
+    &#x2F;**
+    &#x60;navPage&#x60;开始前促发
+    @event beforepagenav
     @param {Object} e event object from custom-event
     @param {Object} params
         @param {String} params.from page id of prev page
         @param {String|Undefined} params.to page id of next page
-        @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
+        @param {Object|Undefined} params.params the params when you call &#x60;navPage&#x60; or &#x60;pageBack&#x60;
         @param {String|Undefined} params.anim the animation name
     **&#x2F;
-    EVN_APP_BEFORE_PAGE_NAV = &#x27;beforeNavPage&#x27;,
+    EVN_APP_BEFORE_PAGE_NAV = &#x27;beforepagenav&#x27;,
     &#x2F;**
-    &lt;code&gt;navPage&lt;&#x2F;code&gt;或者&lt;code&gt;pageBack&lt;&#x2F;code&gt;开始前促发
-    @event beforePageChange
+    异步获取页面前促发
+    @event beforepageload
     @param {Object} e event object from custom-event
     @param {Object} params
-        @param {String} params.from page id of prev page
-        @param {String|Undefined} params.to page id of next page
-        @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
-        @param {String|Undefined} params.anim the animation name
+        @param {String} params.id page id of prev page
+        @param {Object} params.params page params for the target page
     **&#x2F;
-    EVN_APP_BEFORE_PAGE_CHANGE = &#x27;beforePageChange&#x27;,
+    EVN_APP_BEFORE_PAGE_LOAD = &#x27;beforepageload&#x27;,
     &#x2F;**
-    &lt;code&gt;pageBack&lt;&#x2F;code&gt;开始前促发
-    @event beforePageBack
+    异步获取页面完成后促发
+    @event pageload
     @param {Object} e event object from custom-event
     @param {Object} params
-        @param {String} params.from page id of prev page
-        @param {String} params.to page id of next page
-        @param {Object|Undefined} params.params the params when you call &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
-        @param {String|Undefined} params.anim the animation name
+        @param {String} params.id page id of prev page
+        @param {Object} params.params page params for the target page
     **&#x2F;
-    EVN_APP_BEFORE_PAGE_BACK = &#x27;beforePageBack&#x27;,
+    EVN_APP_PAGE_LOAD = &#x27;pageload&#x27;,
+    &#x2F;**
+    异步获取页面失败时促发
+    @event pageloadfailed
+    @param {Object} e event object from custom-event
+    @param {Object} params
+        @param {String} params.id page id of prev page
+        @param {Object} params.params page params for the target page
+    **&#x2F;
+    EVN_APP_PAGE_LOAD_ERROR = &#x27;pageloadfailed&#x27;,
     &#x2F;**
      * 退出应用时促发
      * @event exit
@@ -175,47 +207,56 @@ var
      *&#x2F;
     EVN_APP_EXIT = &#x27;exit&#x27;,
     &#x2F;**
-     * 用&lt;code&gt;navApp&lt;&#x2F;code&gt;第二次进入应用时促发
+     * 用&#x60;navApp&#x60;第二次进入应用时促发
      * @event reset
      * @private
      *&#x2F;
     EVN_APP_RESET = &#x27;reset&#x27;,
     &#x2F;**
-     * &lt;code&gt;navApp&lt;&#x2F;code&gt;后促发
-     * @event navApp
+     * &#x60;navApp&#x60;后促发
+     * @event appnav
      * @param {Object} e event object from custom-event
      * @param {Object} params
      *      @param {String} params.id the target app&#x27;s id
      *      @param {Object} params.params the params for the target app
      *&#x2F;
-    EVN_APP_NAV = &#x27;navApp&#x27;,
+    EVN_APP_NAV = &#x27;appnav&#x27;,
     &#x2F;**
-     * &lt;code&gt;navApp&lt;&#x2F;code&gt;前促发
-     * @event beforeNavApp
+     * &#x60;navApp&#x60;前促发
+     * @event beforeappnav
      * @param {Object} e event object from custom-event
      * @param {Object} params
      *      @param {String} params.id the target app&#x27;s id
      *      @param {Object} params.params the params for the target app
      *&#x2F;
-    EVN_APP_BEFORE_NAV = &#x27;beforeNavApp&#x27;,
+    EVN_APP_BEFORE_NAV = &#x27;beforeappnav&#x27;,
     &#x2F;**
      * 第一次加载子应用时促发
-     * @event beforeLoadApp
+     * @event beforeappload
      * @param {Object} e event object from custom-event
      * @param {Object} params
      *      @param {String} params.id the target app&#x27;s id
      *      @param {Object} params.params the params for the target app
      *&#x2F;
-    EVN_APP_BEFORE_LOAD = &#x27;beforeLoadApp&#x27;,
+    EVN_APP_BEFORE_LOAD = &#x27;beforeappload&#x27;,
     &#x2F;**
      * 第一次加载子应用完成时促发
-     * @event loadApp
+     * @event appload
      * @param {Object} e event object from custom-event
      * @param {Object} params
      *      @param {String} params.id the target app&#x27;s id
      *      @param {Object} params.params the params for the target app
      *&#x2F;
-    EVN_APP_LOAD = &#x27;loadApp&#x27;,
+    EVN_APP_LOAD = &#x27;appload&#x27;,
+    &#x2F;**
+     * 加载子应用失败时促发
+     * @event apploadfailed
+     * @param {Object} e event object from custom-event
+     * @param {Object} params
+     *      @param {String} params.id the target app&#x27;s id
+     *      @param {Object} params.params the params for the target app
+     *&#x2F;
+    EVN_APP_LOAD_ERROR = &#x27;apploadfailed&#x27;,
     CLASS_APP = &#x27;easytouch&#x27;,
     CLASS_PREFIX = &#x27;et-&#x27;,
     SESSION_HISTORY = &#x27;easytouch:page_history&#x27;,
@@ -269,7 +310,7 @@ DelegateEvents.prototype.undelegateEvents = function() {
 };
 
 &#x2F;**
-EasyTouch，为移动设备设计的UI框架。使用方法：用&lt;code&gt;$.EasyTouch.extend&lt;&#x2F;code&gt;方法扩展一个App类，然后初始化。&lt;code&gt;extend&lt;&#x2F;code&gt;的具体说明，请看&lt;code&gt;$.EasyTouch.extend&lt;&#x2F;code&gt;；参数&lt;code&gt;pages&lt;&#x2F;code&gt;的说明请看&lt;code&gt;$.EasyTouch.Page&lt;&#x2F;code&gt;：
+EasyTouch，为移动设备设计的UI框架。使用方法：用&#x60;$.EasyTouch.extend&#x60;方法扩展一个App类，然后初始化。&#x60;extend&#x60;的具体说明，请看&#x60;$.EasyTouch.extend&#x60;；参数&#x60;pages&#x60;的说明请看&#x60;$.EasyTouch.Page&#x60;：
 
     var App = $.EasyTouch.extend({
         id: xxx,
@@ -288,6 +329,7 @@ EasyTouch，为移动设备设计的UI框架。使用方法：用&lt;code&gt;$.E
     new App();
 
 @class $.EasyTouch
+@extends $.Base
 @constructor
 **&#x2F;
 $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
@@ -308,7 +350,23 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
      *&#x2F;
     container: &#x27;body&#x27;,
     &#x2F;**
-     * 代理的事件列表，&lt;code&gt;handler&lt;&#x2F;code&gt;可是一个字符串也可以是一个&lt;code&gt;function&lt;&#x2F;code&gt;，当是字符串时，将访问&lt;code&gt;this[&#x27;nav&#x27;]&lt;&#x2F;code&gt;
+     * 加载页面和应用时是否显示加载中提示
+     * @property ifShowLoading
+     * @type Boolean
+     * @default true
+     * @optional
+     *&#x2F;
+    ifShowLoading: true,
+    &#x2F;**
+     * 页面切换时的默认动画
+     * @property defaultAnimation
+     * @type String
+     * @default undefined
+     * @optional
+     *&#x2F;
+    defaultAnimation: undefined,
+    &#x2F;**
+     * 代理的事件列表，&#x60;handler&#x60;可是一个字符串也可以是一个&#x60;function&#x60;，当是字符串时，将访问&#x60;this[&#x27;nav&#x27;]&#x60;
      *
      *      {
      *          &#x27;tap #contariner header&#x27;: &#x27;nav&#x27;,
@@ -420,25 +478,64 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
             _this.resetbutton();
         });
 
+        &#x2F;&#x2F;loading
+        if(this.ifShowLoading){
+            this.bind(EVN_APP_BEFORE_PAGE_LOAD, function(){
+                _this.showLoading();
+            });
+            this.bind(EVN_APP_PAGE_LOAD, function(){
+                _this.hideLoading();
+            });
+            this.bind(EVN_APP_PAGE_LOAD_ERROR, function(){
+                _this.hideLoading();
+            });
+            this.bind(EVN_APP_BEFORE_LOAD, function(){
+                _this.showLoading();
+            });
+            this.bind(EVN_APP_LOAD, function(){
+                _this.hideLoading();
+            });
+            this.bind(EVN_APP_LOAD_ERROR, function(){
+                _this.hideLoading();
+            });
+        }
+
+        &#x2F;&#x2F;load fail
+        this.bind(EVN_APP_LOAD_ERROR, function(e, data){
+            var app = this._apps[data.id];
+            if(app){
+                app.$el.remove();
+                delete this._apps[data.id];
+            }
+        }, this);
+        this.bind(EVN_APP_PAGE_LOAD_ERROR, function(e, data){
+            delete this._pages[data.id];
+        }, this);
+
         &#x2F;&#x2F;child app message
         window.addEventListener(&#x27;message&#x27;, function(e){
             console.log(&#x27;[EasyTouch] onmessage&#x27;, e);
 
             var data = e.data;
+            if(!_this._apps[data.id]){
+                return console.error(&#x27;[EasyTouch] onmessage&#x27;, &#x27;app not exist&#x27;);
+            }
             if(data.event === EVN_APP_EXIT){
-                _this._apps[data.id] &amp;&amp; _this._apps[data.id].$el.hide();
+                _this._apps[data.id].$el.hide();
                 _this._active = true;
                 delete data.event;
                 _this.back(data);
             }else if(data.event === EVN_APP_RESET){
                 _this.reset(data.params);
+            }else if(data.event === EVN_APP_LOAD){
+                _this._apps[data.id].loaded = true;
             }
         });
 
         this.init(options);
     },
     &#x2F;**
-     * EasyTouch初始化
+     * Init lifecycle method, invoked during construction. Fires the init event prior to setting up attributes and invoking initializers for the class hierarchy.
      * @method init
      * @param {Object} options
      *&#x2F;
@@ -460,7 +557,7 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
         console.log(&#x27;[EasyTouch] pause&#x27;, arguments);
     },
     &#x2F;**
-     * 第二次&lt;code&gt;navApp&lt;&#x2F;code&gt;之后调用
+     * ［子应用］第二次&#x60;navApp&#x60;到子应用时，调用子应用的reset方法
      * @method reset
      * @param {Object} params params for the target app
      *&#x2F;
@@ -468,17 +565,17 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
         console.log(&#x27;[EasyTouch] reset&#x27;, arguments);
     },
     &#x2F;**
-     * 从子应用回到宿主应用时调用
+     * ［宿主应用］从子应用回到宿主应用时调用宿主应用的back方法
      * @method back
-     * @param {Object} params when the child app call &lt;code&gt;exit&lt;&#x2F;code&gt;
+     * @param {Object} params when the child app call &#x60;exit&#x60;
      *&#x2F;
     back: function(params){
         console.log(&#x27;[EasyTouch] back&#x27;, arguments);
     },
     &#x2F;**
-     * 退出应用
+     * 退出应用，当子应用调用该方法时，可是携带参数，宿主应用会在back方法中获得这些参数
      * @method exit
-     * @param {Object} params the params for the parent app, the parent app can get the params from &lt;code&gt;back&lt;&#x2F;code&gt;
+     * @param {Object} params the params for the parent app, the parent app can get the params from &#x60;back&#x60;
      *&#x2F;
     exit: function(params){
         console.log(&#x27;[EasyTouch] exit&#x27;, arguments);
@@ -494,7 +591,7 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
         }
     },
     &#x2F;**
-     * 按云键
+     * 按云键，默认退出应用
      * @method resetbutton
      *&#x2F;
     resetbutton: function(){
@@ -528,8 +625,16 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
                 url += &#x27;?&#x27; + MARK_CHILD_APP + &#x27;=&#x27; + encodeURIComponent(JSON.stringify(_params));
             }catch(ex){}
             this.trigger(EVN_APP_BEFORE_LOAD, data);
-            var iframe = $(&#x27;&lt;iframe src=&quot;&#x27;+url+&#x27;&quot; class=&quot;&#x27;+CLASS_PREFIX+&#x27;app&quot;&gt;&lt;&#x2F;iframe&gt;&#x27;).bind(&#x27;load&#x27;, function(){
-                _this.trigger(EVN_APP_LOAD, data);
+            var iframe = $(&#x27;&lt;iframe src=&quot;&#x27;+url+&#x27;&quot; class=&quot;&#x27;+CLASS_PREFIX+&#x27;app&quot;&gt;&lt;&#x2F;iframe&gt;&#x27;).bind(&#x27;load&#x27;, function(e){
+                setTimeout(function(){
+                    if(_this._apps[id].loaded){
+                        _this.trigger(EVN_APP_LOAD, data);
+                    }else{
+                        _this.trigger(EVN_APP_LOAD_ERROR, data);
+                    }
+                }, 500);
+            }).bind(&#x27;error&#x27;, function(e){
+                _this.trigger(EVN_APP_LOAD_ERROR, data);
             }).css({
                 height: window.screen.height,
                 width: window.screen.width,
@@ -552,7 +657,7 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
 
      @method getApp
      @param {String} id app&#x27;s id
-     @return {Object} &lt;code&gt;app&lt;&#x2F;code&gt;: {HTMLElement} app.el the iframe of app; {Node} app.$el the iframe of app; {HTMLElement} app.window the contentWindow of iframe
+     @return {Object} &#x60;app&#x60;: {HTMLElement} app.el the iframe of app; {Node} app.$el the iframe of app; {HTMLElement} app.window the contentWindow of iframe
      **&#x2F;
     getApp: function(id){
         return this._apps[id];
@@ -583,6 +688,9 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
     *   swapRightIn &lt;sup&gt;4.0+&lt;&#x2F;sup&gt;
     *   cubeLeftIn &lt;sup&gt;4.0+&lt;&#x2F;sup&gt;
     *   cubeRightIn &lt;sup&gt;4.0+&lt;&#x2F;sup&gt;
+    *   flowLeftIn &lt;sup&gt;4.0+&lt;&#x2F;sup&gt;
+    *   flowRightIn &lt;sup&gt;4.0+&lt;&#x2F;sup&gt;
+    *   turnIn &lt;sup&gt;4.0+&lt;&#x2F;sup&gt;
 
     include the animation css in your less file like this:
 &lt;pre class=&quot;code&quot;&gt;&lt;code&gt;@import &lt;span class=&quot;str&quot;&gt;&quot;easytouch&#x2F;less&#x2F;anim.less&quot;&lt;&#x2F;span&gt;;
@@ -598,31 +706,36 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
     navPage: function(id, params, anim, ifPushToHistory){
         console.log(&#x27;[EasyTouch] navPage&#x27;, arguments);
 
-        var currentPage = this.getCurrentPage();
+        anim = anim || this.defaultAnimation;
+
+        var _this = this,
+            argus = [id, params, anim, ifPushToHistory !== false],
+            currentPage = this.getCurrentPage(),
+            _params = $.extend({}, params),
+            pushHistory = function(id, params, anim, ifPushToHistory){
+                if(!ifPushToHistory){
+                    return;
+                }
+                _this.history.push({
+                    id: id,
+                    params: params,
+                    anim: anim
+                });
+            };
         if(currentPage &amp;&amp; currentPage.id === id){
+            pushHistory.apply(_this, argus);
+            currentPage.trigger(EVN_PAGE_RESET, _params);
             return;
         }
 
-        var _this = this,
-            _params = $.extend({}, params),
-            eventArgus = {
+        var eventArgus = {
                 from: currentPage?currentPage.id:undefined,
                 to: id,
                 params: params,
                 anim: anim
             },
-            pushHistory = function(id, params, anim, ifPushToHistory){
-                if(!ifPushToHistory){
-                    return;
-                }
-                this.history.push({
-                    id: id,
-                    params: params,
-                    anim: anim
-                });
-            },
             trigger = function(){
-                pushHistory.apply(_this, [id, params, anim, ifPushToHistory !== false]);
+                pushHistory.apply(_this, argus);
                 _this.trigger(EVN_APP_PAGE_NAV, [eventArgus]);
                 _this.trigger(EVN_APP_PAGE_CHANGE, [eventArgus]);
             };
@@ -646,7 +759,7 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
 
     @method pageBack
     @param {Object} params params for next page
-    @param {String} anim animation name, as same as &lt;code&gt;navPage&lt;&#x2F;code&gt;
+    @param {String} anim animation name, as same as &#x60;navPage&#x60;
     **&#x2F;
     pageBack: function(params, anim){
         console.log(&#x27;[EasyTouch] pageBack&#x27;, arguments);
@@ -761,7 +874,7 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
     向App添加一个页面
 
         app.addPage(&#x27;DetailPage&#x27;, {
-            el: &#x27;#DetailPage&#x27;
+            html: &#x27;#DetailPage&#x27;
         });
 
     @method addPage
@@ -799,6 +912,32 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
     getCurrentPID: function(){
         return this._history.length?this._history[this._history.length - 1].id:null;
     },
+    &#x2F;**
+     * 显示加载中提示
+     * @method showLoading
+     * @param {Object} params
+     *      @param {String} params.msg 需要显示的文案
+     *      @param {Boolean} params.modal 加载中提示是否覆盖住应用禁止操作
+     *&#x2F;
+    showLoading: function(params){
+        params = params || {};
+        var msg = params.msg || &#x27;&#x27;,
+            modal = !!params.modal,
+            className = CLASS_PREFIX+&#x27;load&#x27;,
+            $load = this.$el.find(&#x27;.&#x27;+className);
+        if($load.length){
+            $load.text(msg).data(&#x27;modal&#x27;, modal).show();
+        }else{
+            this.$el.append(&#x27;&lt;div class=&quot;&#x27;+className+&#x27;&quot; data-modal=&quot;&#x27;+modal+&#x27;&quot;&gt;&lt;&#x2F;div&gt;&#x27;);
+        }
+    },
+    &#x2F;**
+     * 隐藏加载中提示
+     * @method hideLoading
+     *&#x2F;
+    hideLoading: function(){
+        $(&#x27;.&#x27;+CLASS_PREFIX+&#x27;load&#x27;).hide();
+    },
     history: function(){
         var _this = this, useHistory;
         if(sessionStorage.getItem(SESSION_HISTORY)){
@@ -830,7 +969,7 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
                 }
             },
             &#x2F;**
-             * 从尾部删除一条历史记录,并写入&lt;code&gt;sessionStorage&lt;&#x2F;code&gt;
+             * 从尾部删除一条历史记录,并写入&#x60;sessionStorage&#x60;
              * @method history.pop
              * @private
              *&#x2F;
@@ -839,7 +978,7 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
                 _this.history.save();
             },
             &#x2F;**
-             * 增加一条历史记录,并写入&lt;code&gt;sessionStorage&lt;&#x2F;code&gt;
+             * 增加一条历史记录,并写入&#x60;sessionStorage&#x60;
              * @method history.add
              * @param {Object} record
              *      @param {String} record.id page id
@@ -852,14 +991,16 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
                     firstPID = _this._history.length &amp;&amp; _this._history[0].id;
                 if(record.id !== lastPID &amp;&amp; record.id !== firstPID){
                     _this._history.push(record);
-                }
-                if(record.id === firstPID){
-                    _this._history.length = 1;
+                }else if(record.id === lastPID){
+                    &#x2F;&#x2F;相等时，仅更新params参数
+                    _this._history[_this._history.length - 1].params = record.params;
+                }else if(record.id === firstPID){
+                    _this._history = [record];
                 }
                 _this.history.save();
             },
             &#x2F;**
-             * 将内存中的历史记录写入&lt;code&gt;sessionStorage&lt;&#x2F;code&gt;
+             * 将内存中的历史记录写入&#x60;sessionStorage&#x60;
              * @method history.save
              * @private
              *&#x2F;
@@ -874,14 +1015,14 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
 },{
 },{
     &#x2F;**
-    通过该方法来继承并扩展一个&lt;code&gt;$.EasyTouch&lt;&#x2F;code&gt;
+    通过该方法来继承并扩展一个&#x60;$.EasyTouch&#x60;
 
         var App = $.EasyTouch.extend({
             id: &#x27;market&#x27;,
             container: &#x27;#app&#x27;,
-            pages: {
-
-            },
+            ifShowLoading: false,
+            defaultAnimation: &#x27;slideRightIn&#x27;,
+            pages: {},
             apps: {
                 &#x27;hongbao&#x27;: &#x27;http:&#x2F;&#x2F;cloudappfile.aliapp.com&#x2F;prod&#x2F;app_4&#x2F;7184_b6b&#x2F;hongbao&#x2F;&#x27;
             },
@@ -894,19 +1035,25 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
             &#x2F;&#x2F;for YunOS resume event
             resume: function(){},
             &#x2F;&#x2F;for YunOS suspend event
-            pause: function(){}
+            pause: function(){},
+            &#x2F;&#x2F;［子应用］第二次&#x60;navApp&#x60;到子应用时，调用子应用的reset方法
+            reset: function(params){},
+            &#x2F;&#x2F;［宿主应用］从子应用回到宿主应用时调用宿主应用的back方法
+            back: function(params){}
         });
         new App();
 
     @method $.EasyTouch.extend
     @param {Object} options 需要扩展的属性列表
         @param {String} options.id 应用ID，用于EasyTouch内部识别
-        @param {Node|HTMLElement|String} options.container 应用容器，默认为&lt;code&gt;body&lt;&#x2F;code&gt;
+        @param {Node|HTMLElement|String} options.container 应用容器，默认为&#x60;body&#x60;
+        @param {Boolean} options.ifShowLoading 页面加载过程是否显示加载中的提示，默认为&#x60;true&#x60;
+        @param {String} options.defaultAnimation 默认的页面切换效果，默认为&#x60;undefined&#x60;
         @param {Object} options.pages 页面配置：
-        如果是一个Object，EasyTouch会调用&lt;code&gt;$.EasyTouch.Page.extend&lt;&#x2F;code&gt;，将这个Object作为prototype属性扩展出一个Page，具体请看&lt;code&gt;$.EasyTouch.Page.extend&lt;&#x2F;code&gt;；
-        如果是一个&lt;code&gt;$.EasyTouch.Page.extend&lt;&#x2F;code&gt;产生的Class，则将直接使用该类作为一个Page；
+        如果是一个Object，EasyTouch会调用&#x60;$.EasyTouch.Page.extend&#x60;，将这个Object作为prototype属性扩展出一个Page，具体请看&#x60;$.EasyTouch.Page.extend&#x60;；
+        如果是一个&#x60;$.EasyTouch.Page.extend&#x60;产生的Class，则将直接使用该类作为一个Page；
         @param {Object} options.apps 子应用配置：key为应用的id，value为应用的访问地址，子应用将作为一个iframe的形式存在
-    @return {Function} the new Class extended from &lt;code&gt;$.EasyTouch&lt;&#x2F;code&gt;
+    @return {Function} the new Class extended from &#x60;$.EasyTouch&#x60;
     @static
     **&#x2F;
     extend: function(property){
@@ -915,9 +1062,15 @@ $.EasyTouch = $.Base.build(&#x27;$.EasyTouch&#x27;, {
 });
 $.extend($.EasyTouch.prototype, DelegateEvents.prototype);
 
+&#x2F;**
+ * EasyTouch的子模块Page
+ *
+ * @module EasyTouch
+ * @submodule EasyTouch-Page
+ *&#x2F;
 
 &#x2F;**
-页面类，该类不需要应用自己实例化，EasyTouch会在&lt;code&gt;navPage&lt;&#x2F;code&gt;时判断是否实例化了该页面，如果没有会自动实例化，你需要做的就是用&lt;code&gt;$.EasyTouch.Page.extend&lt;&#x2F;code&gt;方法扩展一个Page类，然后配置到APP中：
+页面类，该类不需要应用自己实例化，EasyTouch会在&#x60;navPage&#x60;时判断是否实例化了该页面，如果没有会自动实例化，你需要做的就是用&#x60;$.EasyTouch.Page.extend&#x60;方法扩展一个Page类，然后配置到APP中：
 
     var Page1 = $.EasyTouch.Page.extend({
         html: &#x27;#xxx .xxx&#x27;,
@@ -938,10 +1091,11 @@ $.extend($.EasyTouch.prototype, DelegateEvents.prototype);
     new App();
 
 @class $.EasyTouch.Page
+@extends $.Base
 @param {Object} options
     @param {String} options.id page id
-    @param {Object} options.params property add to &lt;code&gt;$.EasyTouch.Page&lt;&#x2F;code&gt;
-    @param {Object} options.app the instance of &lt;code&gt;$.EasyTouch&lt;&#x2F;code&gt;, the page is in which app
+    @param {Object} options.params property add to &#x60;$.EasyTouch.Page&#x60;
+    @param {Object} options.app the instance of &#x60;$.EasyTouch&#x60;, the page is in which app
 @constructor
  **&#x2F;
 var
@@ -949,14 +1103,15 @@ var
      页面第一次被访问时会促发该事件
      @event init
      @param {Object} e event object from custom-event
-     @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt;
+     @param {Object} params the params from &#x60;navPage&#x60;
+     @private
      **&#x2F;
     EVN_PAGE_INIT = &#x27;init&#x27;,
     &#x2F;**
      除了第一次初始化时,页面每一次被访问时都会促发该事件
      @event reset
      @param {Object} e event object from custom-event
-     @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt;
+     @param {Object} params the params from &#x60;navPage&#x60;
      **&#x2F;
     EVN_PAGE_RESET = &#x27;reset&#x27;,
     &#x2F;**
@@ -968,32 +1123,32 @@ var
      页面每一次页面完全切换完成(初始化完成,动画完成)都会执行该方法
      @event ready
      @param {Object} e event object from custom-event
-     @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
+     @param {Object} params the params from &#x60;navPage&#x60; or &#x60;pageBack&#x60;
      **&#x2F;
     EVN_PAGE_READY = &#x27;ready&#x27;;
 $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
     &#x2F;**
-     * &lt;code&gt;html&lt;&#x2F;code&gt;和&lt;code&gt;tpl&lt;&#x2F;code&gt;属性二选一，&lt;code&gt;html&lt;&#x2F;code&gt;将一段HTML作为一个页面，它可以来至：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http:&#x2F;&#x2F;xxx.com&#x2F;xxx.html）
+     * &#x60;html&#x60;和&#x60;tpl&#x60;属性二选一，&#x60;html&#x60;将一段HTML作为一个页面，它可以来至：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http:&#x2F;&#x2F;xxx.com&#x2F;xxx.html）
      * @property html
      * @type HTMLElement|Node|String
      * @optional
      *&#x2F;
     html: undefined,
     &#x2F;**
-     * 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl&#x2F;xxx.html），对于前三者，EasyTouch会将它们的&lt;code&gt;innerHTML&lt;&#x2F;code&gt;作为模板，可以在&lt;code&gt;render&lt;&#x2F;code&gt;方法中使用任意模板引擎渲染改模板
+     * 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl&#x2F;xxx.html），对于前三者，EasyTouch会将它们的&#x60;innerHTML&#x60;作为模板，可以在&#x60;render&#x60;方法中使用任意模板引擎渲染改模板
      * @property tpl
      * @type HTMLElement|Node|String
      * @optional
      *&#x2F;
     tpl: undefined,
     &#x2F;**
-     * Page的id，用于&lt;code&gt;navPage&lt;&#x2F;code&gt;等操作时的索引
+     * Page的id，用于&#x60;navPage&#x60;等操作时的索引
      * @property id
      * @type String
      *&#x2F;
     id: undefined,
     &#x2F;**
-     * 代理的事件列表，&lt;code&gt;handler&lt;&#x2F;code&gt;可是一个字符串也可以是一个&lt;code&gt;function&lt;&#x2F;code&gt;，当是字符串时，将访问&lt;code&gt;this[&#x27;nav&#x27;]&lt;&#x2F;code&gt;
+     * 代理的事件列表，&#x60;handler&#x60;可是一个字符串也可以是一个&#x60;function&#x60;，当是字符串时，将访问&#x60;this[&#x27;nav&#x27;]&#x60;
      *
      *      {
      *          &#x27;tap #contariner header&#x27;: &#x27;nav&#x27;,
@@ -1035,23 +1190,27 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
     initializer: function(options){
         console.log(&#x27;[EasyTouch.Page] &#x27;+options.id+&#x27; initializer&#x27;, arguments);
 
-        var params = options.params;
         this.app = options.app;
-        var _this = this;
-        var init = function(el){
-            el.attr(&#x27;id&#x27;, options.id);
-            el.addClass(CLASS_PREFIX + &#x27;page&#x27;);
-            _this.app.$el.append(el);
-            setTimeout(function(){
-                _this.id = options.id;
-                _this.$el = el;
-                _this.el = _this.$el[0];
-                _this.delegateEvents(_this.events);
-                _this.init(params);
-                _this._inited = true;
-                _this.trigger(EVN_PAGE_INIT);
-            }, 0);
-        };
+        var _this = this,
+            params = options.params,
+            eventParams = {
+                id: options.id,
+                params: $({}, params)
+            },
+            init = function(el){
+                el.attr(&#x27;id&#x27;, options.id);
+                el.addClass(CLASS_PREFIX + &#x27;page&#x27;);
+                _this.app.$el.append(el);
+                setTimeout(function(){
+                    _this.id = options.id;
+                    _this.$el = el;
+                    _this.el = _this.$el[0];
+                    _this.delegateEvents(_this.events);
+                    _this.init(params);
+                    _this._inited = true;
+                    _this.trigger(EVN_PAGE_INIT);
+                }, 0);
+            };
 
         this.bind(EVN_PAGE_RESET, function(e, params){
             _this.reset(params);
@@ -1064,25 +1223,48 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
         });
 
         if(this.html){
+            &#x2F;&#x2F;xx.html
             if(REGEX_HTML_ADRESS.test(this.html)){
-                $.get(this.html, function(response){
-                    init($(response));
+            	this.app.trigger(EVN_APP_BEFORE_PAGE_LOAD, eventParams);
+                $.ajax({
+                    url: this.html,
+                    success: function(response){
+                        _this.app.trigger(EVN_APP_PAGE_LOAD, eventParams);
+                        init($(response));
+                    },
+                    error: function(){
+                        _this.app.trigger(EVN_APP_PAGE_LOAD_ERROR, eventParams);
+                    }
                 });
+            &#x2F;&#x2F;div &#x2F; &lt;div&gt;xxx&lt;&#x2F;div&gt; &#x2F; document.getElementsByTagName(&#x27;div&#x27;)[0]
             }else if(typeof this.html === &#x27;string&#x27; || this.html.tagName){
                 init($(this.html));
+            &#x2F;&#x2F;$(&#x27;div&#x27;)
             }else{
                 init(this.html);
             }
         }else if(this.tpl){
+            &#x2F;&#x2F;xxx.html
             if(REGEX_HTML_ADRESS.test(this.tpl)){
-                $.get(this.tpl, function(response){
-                    response = _this.render(response, params);
-                    init($(response));
+                this.app.trigger(EVN_APP_BEFORE_PAGE_LOAD, eventParams);
+                $.ajax({
+                    url: this.tpl,
+                    success: function(response){
+                        _this.app.trigger(EVN_APP_PAGE_LOAD, eventParams);
+                        response = _this.render(response, params);
+                        init($(response));
+                    },
+                    error: function(){
+                        _this.app.trigger(EVN_APP_PAGE_LOAD_ERROR, eventParams);
+                    }
                 });
+            &#x2F;&#x2F;div &#x2F; document.getElementsByTagName(&#x27;div&#x27;)[0]
             }else if(REGEX_SELECTOR.test(this.tpl) || this.tpl.tagName){
                 init($(_this.render($(this.tpl).html(), params)));
-            }else if(this.tpl.attr){
+            &#x2F;&#x2F;$(&#x27;div&#x27;) zepto is $.zepto.Z &#x2F; jquery is $
+            }else if(this.tpl instanceof $.zepto.Z || this.tpl instanceof $){
                 init($(_this.render(this.tpl.html(), params)));
+            &#x2F;&#x2F;&lt;div&gt;{{content}}&lt;&#x2F;div&gt;
             }else{
                 init($(_this.render(this.tpl, params)));
             }
@@ -1094,7 +1276,7 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
      * 当页面作为一个模板被加入App前,可以通过该方法渲染模板,默认原样返回
      * @method render
      * @param {String} template the html before render
-     * @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt;
+     * @param {Object} params the params from &#x60;navPage&#x60;
      * @return {String} the html after render
      *&#x2F;
     render: function(template, params){
@@ -1104,7 +1286,7 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
     &#x2F;**
      * 页面第一次被访问时会执行该方法
      * @method init
-     * @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt;
+     * @param {Object} params the params from &#x60;navPage&#x60;
      *&#x2F;
     init: function(params){
         console.log(&#x27;[EasyTouch.Page] &#x27;+this.id+&#x27; init&#x27;, arguments);
@@ -1113,7 +1295,7 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
      * 除了第一次初始化时,页面每一次被访问时都会执行该方法,
      * 初始化时如果需要执行reset方法,请自行在init方法中调用
      * @method reset
-     * @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
+     * @param {Object} params the params from &#x60;navPage&#x60; or &#x60;pageBack&#x60;
      *&#x2F;
     reset: function(params){
         console.log(&#x27;[EasyTouch.Page] &#x27;+this.id+&#x27; reset&#x27;, arguments);
@@ -1121,7 +1303,7 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
     &#x2F;**
      * 页面每一次页面完全切换完成(初始化完成,动画完成)都会执行该方法
      * @method ready
-     * @param {Object} params the params from &lt;code&gt;navPage&lt;&#x2F;code&gt; or &lt;code&gt;pageBack&lt;&#x2F;code&gt;
+     * @param {Object} params the params from &#x60;navPage&#x60; or &#x60;pageBack&#x60;
      *&#x2F;
     ready: function(params){
         console.log(&#x27;[EasyTouch.Page] &#x27;+this.id+&#x27; ready&#x27;, arguments);
@@ -1135,7 +1317,7 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
     }
 },{
     &#x2F;**
-     * Page的id，用于&lt;code&gt;navPage&lt;&#x2F;code&gt;等操作时的索引
+     * Page的id，用于&#x60;navPage&#x60;等操作时的索引
      * @attribute id
      * @type String
      *&#x2F;
@@ -1154,7 +1336,7 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
     params: {}
 },{
     &#x2F;**
-    通过该方法来继承并扩展一个&lt;code&gt;$.EasyTouch.Page&lt;&#x2F;code&gt;：
+    通过该方法来继承并扩展一个&#x60;$.EasyTouch.Page&#x60;：
 
         var Page1 = $.EasyTouch.Page.extend({
             &#x2F;&#x2F;set html or tpl property, examples in $.EasyTouch example
@@ -1193,10 +1375,10 @@ $.EasyTouch.Page = $.Base.build(&#x27;$.EasyTouch.Page&#x27;, {
         });
 
     @method $.EasyTouch.Page.extend
-    @param {Object} property property or function add to &lt;code&gt;$.EasyTouch.Page&lt;&#x2F;code&gt;
-        @param {HTMLElement|Node|String} property.html &lt;code&gt;html&lt;&#x2F;code&gt;和&lt;code&gt;tpl&lt;&#x2F;code&gt;属性二选一，&lt;code&gt;html&lt;&#x2F;code&gt;将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http:&#x2F;&#x2F;xxx.com&#x2F;xxx.html）
-        @param {HTMLElement|Node|String} property.tpl 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl&#x2F;xxx.html），对于前三者，EasyTouch会将它们的&lt;code&gt;innerHTML&lt;&#x2F;code&gt;作为模板，可以在&lt;code&gt;render&lt;&#x2F;code&gt;方法中使用任意模板引擎渲染改模板
-    @return {Function} the new Class extended from &lt;code&gt;$.EasyTouch.Page&lt;&#x2F;code&gt;
+    @param {Object} property property or function add to &#x60;$.EasyTouch.Page&#x60;
+        @param {HTMLElement|Node|String} property.html &#x60;html&#x60;和&#x60;tpl&#x60;属性二选一，&#x60;html&#x60;将一个节点作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http:&#x2F;&#x2F;xxx.com&#x2F;xxx.html）
+        @param {HTMLElement|Node|String} property.tpl 将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl&#x2F;xxx.html），对于前三者，EasyTouch会将它们的&#x60;innerHTML&#x60;作为模板，可以在&#x60;render&#x60;方法中使用任意模板引擎渲染改模板
+    @return {Function} the new Class extended from &#x60;$.EasyTouch.Page&#x60;
     @static
      **&#x2F;
     extend: function(property){

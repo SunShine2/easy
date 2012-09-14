@@ -1,35 +1,49 @@
 /**
- * 用于组件的自定义事件系统
- * author: butian.wth
- * version : 0-0-1
- **/
+用于组件的自定义事件系统
+@author: butian.wth
+@version : 0.0.2
+@module : Custom-Event
+*/
 ;(function(){
 
     /**
-     * 事件对象格式
-     * @type {Object}
+    事件对象格式
+    @type {Object}
      *
-     *  {
-     *      'eventName' : [
-     *          {
-     *              'fn' : fn, //原函数
-     *              'proxy': proxyfn, //处理过后的回调函数
-     *              'i' : item.length, //eventName数组下对应的index位置
-     *              'agent' : agent, //回调函数执行的上下文
-     *              'type' : 'eventName' //事件名
-     *              }
-     *      ]
-     *  }
+     {
+         'eventName' : [
+             {
+                 'fn' : fn, //原函数
+                 'proxy': proxyfn, //处理过后的回调函数
+                 'i' : item.length, //eventName数组下对应的index位置
+                 'agent' : agent, //回调函数执行的上下文
+                 'type' : 'eventName' //事件名
+                 }
+         ]
+     }
      */
+   
     var handlers = {},
         BEFORE_EVENT = 'before',
         AFTER_EVENT = 'after',
-        CUSTOMEVENT = 'customEvents';
+        CUSTOMEVENT = 'customEvents',
+        zid = $.zid;
 
-    //可以在外部访问到事件对象集合
+    /**
+    用于在外部访问到所有绑定的事件
+    @property ceHandlers
+    @type object
+    @static
+    */
     $.ceHandlers = handlers;
-    $._zid = 1;
 
+    /**
+    查找事件的函数
+    @param event {String} 传入的事件名
+    @param fn {Function} 事件对应的回调函数
+    @param agent {Object} 事件所在的对象
+    @return {*}
+     */
     function findHandlers(event, fn, agent) {
         return (handlers[event] || []).filter(function (handler) {
             return handler
@@ -38,25 +52,30 @@
         })
     }
 
-    function zid(element) {
-        return element._zid || (element._zid = $._zid++)
-    }
-
-    $.zid = zid;
-
+    /**
+    重排函数，用于对数组进行重排
+    @param arr {Array} 需要重排的数组对象
+     */
+    
     function reIndex(arr) {
         arr.forEach(function (e, index) {
             e.i = index;
         });
     }
 
+    /**
+    对事件名进行包装
+    @param evt {String} 事件名
+    @param agent {Object} 事件所绑的对象
+    @return {String}
+     */
     function wrapName(evt, agent) {
         return agent.constructor.NAME ? agent.constructor.NAME + ':' + evt : evt;
     }
 
     /**
-     * 队列系统，用于控制多个回调函数的执行
-     * @flag 用于区分队列的形式
+    队列系统，用于控制多个回调函数的执行
+    @params flag {String} 用于区分队列的形式
      */
     $.Queue = function (flag) {
         var ret = [];
@@ -119,7 +138,7 @@
             return $.bind(evt, callback, option, agent, BEFORE_EVENT)
         },
         /**
-         * 用于对对象增加自定义事件的支持
+        用于对对象增加自定义事件的支持
          */
         addCustomEvent:function () {
             this.bind = function (evt, callback, option) {
@@ -148,6 +167,6 @@
 
 })();
 /**
- * change log
- * @20120827 增加name的处理，如果在模块内进行事件绑定，会有模块的前缀
+change log
+@20120827 增加name的处理，如果在模块内进行事件绑定，会有模块的前缀
  */

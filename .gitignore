@@ -21,3 +21,4 @@ lib/*
 tools
 tools/*
 .idea
+doc

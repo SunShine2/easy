@@ -1,7 +1,7 @@
 /**
  * 针对云应用部分工具模块
  * author : butian.wth@aliyun-inc.com
- * version : 0-0-2
+ * version : 0.0.2
  */
 (function ($) {
 

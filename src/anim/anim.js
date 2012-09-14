@@ -1,6 +1,6 @@
 /**
  * 动画模块，对zepto的动画模块进行补充
- * version: 0-0-1
+ * version: 0.0.1
  * TODO:调用zepto fx中的method完成动画
  * TODO:增加slideup,slidedown等基本的动画函数，和jQuery的基本动画函数保持一致
  * TODO:解决同一个元素上绑定多个动画时的冲突问题

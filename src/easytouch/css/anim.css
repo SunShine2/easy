@@ -1,5 +1,4 @@
 .et-slideLeftIn {
-  -webkit-transform: translatex(-100%);
   -webkit-animation: et-slideLeftIn 0.35s ease;
 }
 .et-slideRightOut {
@@ -22,7 +21,6 @@
   }
 }
 .et-slideRightIn {
-  -webkit-transform: translatex(100%);
   -webkit-animation: et-slideRightIn 0.35s ease;
 }
 .et-slideLeftOut {
@@ -366,7 +364,7 @@
 }
 .et-flowLeftIn {
   -webkit-animation: et-flowLeftIn 0.35s ease;
-  -webkit-animation-delay: 0.42s;
+  -webkit-animation-delay: 0.35s;
   -webkit-transform: translatex(-100%) scale(0.7);
 }
 .et-flowRightOut {
@@ -404,7 +402,7 @@
 }
 .et-flowRightIn {
   -webkit-animation: et-flowRightIn 0.35s ease;
-  -webkit-animation-delay: 0.42s;
+  -webkit-animation-delay: 0.35s;
   -webkit-transform: translatex(100%) scale(0.7);
 }
 .et-flowLeftOut {

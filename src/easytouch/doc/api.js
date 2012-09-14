@@ -4,7 +4,21 @@ YUI.add("yuidoc-meta", function(Y) {
         "$.EasyTouch",
         "$.EasyTouch.Page"
     ],
-    "modules": [],
-    "allModules": []
+    "modules": [
+        "EasyTouch",
+        "EasyTouch-Page"
+    ],
+    "allModules": [
+        {
+            "displayName": "EasyTouch",
+            "name": "EasyTouch",
+            "description": "EasyTouch"
+        },
+        {
+            "displayName": "EasyTouch-Page",
+            "name": "EasyTouch-Page",
+            "description": "EasyTouch的子模块Page"
+        }
+    ]
 } };
 });

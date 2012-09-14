@@ -6,17 +6,17 @@
     <title>EasyTouch</title>
     <link rel="stylesheet" href="http://wireless.aliyun-inc.com/easy/_assets/highlight.js/styles/default.css">
     <link rel="stylesheet" href="http://wireless.aliyun-inc.com/easy/src/css/reset.css">
-    <link rel="stylesheet" href="../css/core.css">
-    <link rel="stylesheet" href="../css/anim.css">
-    <link rel="stylesheet" href="docs.css">
-    <script src="../../../lib/iscroll/4.2/iscroll-lite.js"></script>
+    <link rel="stylesheet" href="css/core.css">
+    <link rel="stylesheet" href="css/anim.css">
+    <link rel="stylesheet" href="demo/docs.css">
+    <script src="http://wireless.aliyun-inc.com/easy/lib/iscroll/4.2/iscroll-lite.js"></script>
     <script src="http://wireless.aliyun-inc.com/easy/_assets/highlight.js/highlight.pack.js"></script>
-    <script src="../../core/core.js"></script>
+    <script src="http://wireless.aliyun-inc.com/easy/src/core/core.js"></script>
     <script src="http://wireless.aliyun-inc.com/easy/lib/zepto/ajax.js"></script>
     <script src="http://wireless.aliyun-inc.com/easy/src/core/event.js"></script>
     <script src="http://wireless.aliyun-inc.com/easy/src/base/base.js"></script>
     <script src="http://wireless.aliyun-inc.com/easy/src/custom-event/custom-event.js"></script>
-    <script src="../js/core.js"></script>
+    <script src="js/core.js"></script>
     <style type="text/css">
         header{
             background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#222), to(#111));
@@ -35,7 +35,7 @@
             top: 0;
             height: 100%;
             width: 3em;
-            background: url(../hongbao/img/back.png?datauri) no-repeat 50% 50%;
+            background: url(hongbao/img/back.png?datauri) no-repeat 50% 50%;
         }
         .et-page{
             background-color: #fff;
@@ -73,7 +73,7 @@
 <script>
     $(function(){
         var IndexPage = $.EasyTouch.Page.extend({
-            html: 'tpl/IndexPage.html',
+            html: 'demo/tpl/IndexPage.html',
             render: function(response){
                 console.log('IndexPage render', arguments);
                 return response;
@@ -108,20 +108,20 @@
             debug: true,
             defaultAnimation: 'slideRightIn',
             apps: {
-                'hongbao': '../hongbao/index.html'
-                //'childapp': 'childapp.html'
+                'hongbao': 'hongbao/index.html'
             },
             pages: {
                 "IndexPage": IndexPage,
                 "AboutPage": {
-                    html: 'tpl/AboutPage.html',
+                    html: 'demo/tpl/AboutPage.html',
                     init: function(params){
                         hljs.initHighlighting();
                     }
                 },
                 'TaobaoPage': {
-                    html: 'tpl/TaobaoPage.html',
+                    html: 'demo/tpl/TaobaoPage.html',
                     init: function(){
+                        alert(1);
                         this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
                             checkDOMChanges: true
                         });

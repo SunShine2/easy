@@ -1,0 +1,11 @@
+{
+    "appName":"红包",
+    "debug":true,   //当debug为false时,所有调试选项都失效
+
+    /*debug options*/
+    "inline-resource":true,    //是否将脚本和css写到页面中.当该选项为false时,下面选项都失效.
+    //"html-minify":false,    //已失效html内容压缩 压缩会导致属性中有双引号的挂掉
+    "jsCompress":false, //是否需要压缩脚本,只有在inline-js为true的时候才有效
+    "cssClean":false,
+    "datauri":false //选项为true,则将样式和html中中标记了datauri的图片压缩
+}

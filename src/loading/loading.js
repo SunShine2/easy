@@ -1,6 +1,6 @@
 /**
  * loading模块处理
- * version : 0-0-1
+ * version : 0.0.1
  * author : butian.wth@aliyun.com
  *
  * 使用方法$.loading.hide()/show()

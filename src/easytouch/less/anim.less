@@ -4,7 +4,6 @@
 //slider slideLeftIn
 .anim-slideLeftIn (@durationIn: .35s, @functionIn: ease, @durationOut: .35s, @functionOut: ease) {
     .et-slideLeftIn{
-        -webkit-transform: translateX(-100%);
         -webkit-animation: et-slideLeftIn @durationIn @functionIn;
     }
     .et-slideRightOut{
@@ -31,7 +30,6 @@
 //slider slideRightIn
 .anim-slideRightIn(@durationIn: .35s, @functionIn: ease, @durationOut: .35s, @functionOut: ease){
     .et-slideRightIn{
-        -webkit-transform: translateX(100%);
         -webkit-animation: et-slideRightIn @durationIn @functionIn;
     }
     .et-slideLeftOut{
@@ -58,7 +56,6 @@
 //slider slideUpIn
 .anim-slideUpIn(@durationIn: .35s, @functionIn: ease, @durationOut: .35s, @functionOut: ease){
     .et-slideUpIn{
-        -webkit-transform: translateY(-100%);
         -webkit-animation: et-slideUpIn @durationIn @functionIn;
     }
     .et-slideDownOut {
@@ -85,7 +82,6 @@
 //slider slideDownIn
 .anim-slideDownIn(@durationIn: .35s, @functionIn: ease, @durationOut: .35s, @functionOut: ease){
     .et-slideDownIn {
-        -webkit-transform: translateY(100%);
         -webkit-animation: et-slideDownIn @durationIn @functionIn;
     }
     .et-slideUpOut{
@@ -423,7 +419,7 @@
     }
     .et-flowLeftIn {
         -webkit-animation: et-flowLeftIn @durationIn @functionIn;
-        -webkit-animation-delay: @durationOut*1.2;
+        -webkit-animation-delay: @durationOut;
         -webkit-transform: translateX(-100%) scale(.7);
     }
     .et-flowRightOut {
@@ -465,7 +461,7 @@
     }
     .et-flowRightIn {
         -webkit-animation: et-flowRightIn @durationIn @functionIn;
-        -webkit-animation-delay: @durationOut*1.2;
+        -webkit-animation-delay: @durationOut;
         -webkit-transform: translateX(100%) scale(.7);
     }
     .et-flowLeftOut {

@@ -55,25 +55,11 @@
     </style>
 </head>
 <body class="easytouch">
-<!--<script seajs="main" src="http://wireless.aliyun-inc.com/easy/lib/seajs/1.2.1/sea-debug.js"></script>-->
-<!--<script seajs="seed" src="http://cloud/easy/lib/seajs/1.2.1/seed.js"></script>-->
-<!--<script seajs="config">-->
-<!--seajs.config({-->
-<!--base:'js',-->
-<!--alias: {-->
-<!--'easytouch': 'http://cloud/easy/src/easytouch/js/core.js'-->
-<!--//'easytouch': 'http://cloud/easy/src/easytouch/js/core.js'-->
-<!--}-->
-
-<!--});-->
-<!--</script>-->
 <div id="IndexPage" class="et-page">
     <ul id="welcome"></ul>
     <button id="exitApp">exit app</button>
 </div>
 <script>
-
-    //seajs.use(['easytouch'],function(){
     $(function(){
         var App = $.EasyTouch.extend({
             id: 'childapp',
@@ -85,6 +71,7 @@
                         $('#exitApp').bind('click',function(){
                             _this.app.exit();
                         });
+
                     }
                 }
             },
@@ -99,7 +86,6 @@
         });
         window.app = new App();
     });
-    //});
 </script>
 </body>
 </html>

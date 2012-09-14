@@ -1,67 +1,17 @@
 /**
- *  easy框架基类，用于创建easy组件，参考YUI3
- *  author : butian.wth
- *  version : 0-0-1
- *  <h2>使用方法</h2>
- *  <p>本模块依赖于custom-event和core模块，使用方法很简单
- *  $.Base.build(
- *      'moduleName',
- *      {
- *          method : function(){} //挂载在prototype上的方法
- *      },
- *      {
- *          property:{ //该属性可以在初始化的时候进行配置，也可以用set进行设置，get进行获取
- *              value : defaultValue,
- *              setter : function(){}, //用于判断是否符合匹配条件
- *              validator : Reg  //正则匹配
- *          }
- *      },
- *      {
- *          NAME : 'asdasd'  //挂载在模块上的静态方法，不会继承到实例中
- *      }
- *  );
- *  </p>
- *  在组件内部可以通过
- *  this.trigger(eventName, data);
- *  来开放一个事件
- *  这样在组件外部可以通过
- *  var module = new Module();
- *  module.bind(eventName, callback)
- *  来绑定事件，可以监听到内部的触发
- *
- *  base功能：
- *  1. 提供set和get方法，附带属性检查
- *  2. 提供自定义事件的支持
- *  3. 提供组件的生成函数
- *  4. 提供基础的初始化组件方法
- *
- *  @changeLog
- *  @20120820
- *  1. 新增extend方法，支持对Base产生的对象进行二次继承
- *  Base.extend(moduleName, superModule, prototypeMethod, attrMember, staticMember)
- *  @20120827
- *  1. 修改ATTRS不存在的时候，option过滤的策略，如果传入的参数在ATTRS中没有对应的值，则不做过滤
- *  2. 修改ATTRS.validator规范，validator只检查value为字符串或者数字的情况
- *  3. 修正进行两次属性写入的问题
- *  TODO:后续需要考虑这个策略是否完备
- *  @20120829
- *  1. 如果ATTRS中不含有value属性，则认为该属性为必须的属性，直接抛出一个错误
- *  2. 对setter方法进行扩充，可以在setter中对传入的参数进行处理，让模块内部接收到一个稳定的值
- *  @20120830
- *  1. 增加connect方法，支持对现有存在的构造函数进行继承关系处理
- *  2. 构造函数不指定option，使用arguments进行传递
- *  3. 对Base._build方法进行包装
- *  4. 对模块增加_instances属性，保存对所有实例的引用
- *  5. 增加_set和_get方法，用于直接操作模块属性，不触发ATTR_CHANGE事件
- *  6. 修复构造函数自带ATTRS时对应的处理方式，从直接赋值修改为合并
- */
+ easy框架基类，用于创建easy组件，参考YUI3
+ @author : butian.wth
+ @version : 0.0.1
+ @module Base
+*/
 ;(function(){
     /**
-     * Attribute集合
-     */
+    Attribute集合
+    */
     /**
-     * 用于对事件增加ATTR的支持，并提供一个ATT_CHANGE事件
-     */
+    用于对事件增加ATTR的支持，并提供一个ATT_CHANGE事件
+    @private
+    */
 
     function addAttr() {
         this.set = function (key, value) {
@@ -70,6 +20,11 @@
                 if (v === that.get(key)) {
                     return false;
                 } else {
+                    /**
+                    @event attrChange
+                    @description 通过set修改模块属性的时候触发的事件
+                    @param {Event} ev event对象
+                    */
                     that.trigger(ATTR_CHANGE, {
                         attrKey:key,
                         attrValue:value
@@ -100,11 +55,12 @@
         DESTROYED = 'destroyed';
 
     /**
-     * 增加filter系统，用于对初始化时传入的option进行处理
-     * @param option
-     * @param attrObj
-     * @return {Object}
-     */
+    增加filter系统，用于对初始化时传入的option进行处理
+    @param {Object} option 传入的参数对象
+    @param {Object} attrObj 模块本身的ATTRS对象
+    @return {Object} 处理过后的参数对象
+    @private
+    */
     function optionFilter(option, attrObj) {
         var ret = {};
         //如果option内的属性在attr中并没有对应的值，则直接将其传入
@@ -124,8 +80,12 @@
     }
 
     /**
-     * 判断item和value的匹配，给出正确的值
-     */
+    判断item和value的匹配，给出正确的值
+    @value {String|Number} value 参数中的值
+    @item {Object} item ATTRS中对应key的内容
+    @callback {Function} callback 过滤系统通过后的处理函数
+    @private
+    */
 
     function filterHandler(value, item, callback) {
         if (!item) {
@@ -156,11 +116,12 @@
     }
 
     /**
-     * 对单个属性进行filter，如果有setter则用setter过滤并处理，否则就用validator
-     * @param value
-     * @param item
-     * @return {*}
-     */
+    对单个属性进行filter，如果有setter则用setter过滤并处理，否则就用validator
+    @value {String|Number} value 参数中的值
+    @item {Object} item ATTRS中对应key的内容
+    @return {Boolean} 是否检查通过
+    @private
+    */
     function itemFilter(value, item) {
         if (item.setter) {
             return item.setter(value)
@@ -172,9 +133,67 @@
     }
 
     /**
-     * 基础base对象，用于扩展
-     * @constructor
-     */
+    #基础base对象#
+
+    ##base功能：##
+
+    1. 提供set和get方法，附带属性检查
+    2. 提供自定义事件的支持
+    3. 提供组件的生成函数
+    4. 提供基础的初始化组件方法
+
+    ##base模块的实例：##
+
+        $.Base.build(
+            moduleName,
+            {
+                method : function(){} //挂载在prototype上的方法
+            },
+            {
+                property:{ //该属性可以在初始化的时候进行配置，也可以用set进行设置，get进行获取
+                    value : defaultValue,
+                    setter : function(){}, //用于判断是否符合匹配条件
+                    validator : Reg  //正则匹配
+                }
+            },
+            {
+            NAME : 'asdasd'  //挂载在模块上的静态方法，不会继承到实例中
+            }
+        );
+
+    在组件内部可以通过
+
+        this.trigger(eventName, data);
+
+    来开放一个事件
+    这样在组件外部可以通过
+
+        var module = new Module();
+        module.bind(eventName, callback)
+
+    来绑定事件，可以监听到内部的触发
+
+    @class $.Base
+    @changeLog
+    @20120820
+    1. 新增extend方法，支持对Base产生的对象进行二次继承
+    Base.extend(moduleName, superModule, prototypeMethod, attrMember, staticMember)
+    @20120827
+    1. 修改ATTRS不存在的时候，option过滤的策略，如果传入的参数在ATTRS中没有对应的值，则不做过滤
+    2. 修改ATTRS.validator规范，validator只检查value为字符串或者数字的情况
+    3. 修正进行两次属性写入的问题
+    @TODO:后续需要考虑这个策略是否完备
+    @20120829
+    1. 如果ATTRS中不含有value属性，则认为该属性为必须的属性，直接抛出一个错误
+    2. 对setter方法进行扩充，可以在setter中对传入的参数进行处理，让模块内部接收到一个稳定的值
+    @20120830
+    1. 增加connect方法，支持对现有存在的构造函数进行继承关系处理
+    2. 构造函数不指定option，使用arguments进行传递
+    3. 对Base._build方法进行包装
+    4. 对模块增加_instances属性，保存对所有实例的引用
+    5. 增加_set和_get方法，用于直接操作模块属性，不触发ATTR_CHANGE事件
+    6. 修复构造函数自带ATTRS时对应的处理方式，从直接赋值修改为合并
+    */
     function Base() {
 
         $.addCustomEvent.call(this);
@@ -183,39 +202,98 @@
         this._init.apply(this, arguments);
     }
 
+    /**
+    识别该类的字符串，并且在事件绑定的时候作为事件的命名空间存在
+    @property NAME
+    @type String
+    @static
+    */
     Base.NAME = BASE;
+    /**
+    用于存储所有源自Base的模块
+    @property classList
+    @type Object
+    @static
+    */
     Base.classList = [];
+    /**
+    用于存储模块的ATTRS属性
+    @property ATTRS
+    @type Object
+    @static
+    */
+    Base.ATTRS = {};
 
     $.extend(Base.prototype, {
         /**
-         * 静态属性，用于记录数据
-         */
+        用于判断是否已经初始化过
+        @property initialized
+        @type Boolean
+        @public
+        */
         initialized:false,
+        /**
+        用于判断是否已经被析构
+        @property destroyed
+        @type Boolean
+        @public
+        */
         destroyed:false,
+        /**
+        ATTR的修改历史，用于记录所有的修改
+        @property attrChangeHistory
+        @type Array
+        @public
+        */
         attrChangeHistory:[],
         /**
-         * 生命周期内的方法
-         */
+        生命周期内的方法，默认的初始化操作
+        @method _init
+        @params {Object} option 用于对象初始化的参数
+        @private
+        */
         _init:function (option) {
             option = optionFilter(option || {}, this.constructor.ATTRS);
             $.extend(this, option);
             this.bind(INIT, this._defInitFn);
             this.initializer && this.initializer(option);
+            /**
+            @event init
+            @description 模块实例化初始化的时候触发的事件
+            @param {Event} ev event对象
+            */
             this.trigger(INIT);
             //绑定destroy对应的方法
+            /**
+            @event destroy
+            @description 模块析构的时候触发的事件
+            @param {Event} ev event对象
+            */
             this.bind(DESTROY, this._defDestroyFn);
         },
         /**
-         * 静态的默认属性，可以在子类中进行覆写
-         */
+        默认初始化时的处理方法
+        @method _defInitFn
+        @private
+        */
         _defInitFn:function () {
             this._set(INITIALIZED, true);
             this.bind(ATTR_CHANGE, this._defAttrChange);
         },
+        /**
+        析构时默认处理方法
+        @method _defInitFn
+        @private
+        */
         _defDestroyFn:function () {
             this._set(DESTROYED, true);
             this.destructor && this.destructor(arguments);
         },
+        /**
+        属性修改时的默认处理方法
+        @method _defInitFn
+        @private
+        */
         _defAttrChange:function (e, data) {
             this.attrChangeHistory.push({
                 event:e,
@@ -226,14 +304,16 @@
     });
 
     /**
-     * 用于构建新的模块，继承与base
-     * @param moduleName 模块的名字
-     * @param prototypeMethod 模块示例的方法
-     * @param attrMember 模块的可配置属性
-     * @param staticMember 模块的静态属性
-     * @return {*} 返回模块本身
-     * @private
-     */
+    用于构建新的模块的方法
+    @method _build
+    @param {String} moduleName 模块的名字
+    @param {Object} superModule 用于扩展的父模块
+    @param {Object} prototypeMethod 模块示例的方法
+    @param {Object} attrMember 模块的可配置属性
+    @param {Object} staticMember 模块的静态属性
+    @return {*} 返回模块本身
+    @private
+    */
 
     Base._build = function (moduleName, superModule, prototypeMethod, attrMember, staticMember, curConstructor) {
         //使用prototype方式继承
@@ -250,16 +330,17 @@
     };
 
     /**
-     * 对模块进行包装
-     * @param moduleName
-     * @param module
-     * @param superModule
-     * @param prototypeMethod
-     * @param attrMember
-     * @param staticMember
-     * @return {*}
-     * @private
-     */
+    对模块进行包装
+    @method _handlerClass
+    @param {String} moduleName 模块的名字
+    @param {Object} module 被包装的模块
+    @param {Object} superModule 用于扩展的父模块
+    @param {Object} prototypeMethod 模块示例的方法
+    @param {Object} attrMember 模块的可配置属性
+    @param {Object} staticMember 模块的静态属性
+    @return {*} 返回模块本身
+    @private
+    */
     Base._handlerClass = function (moduleName, module, superModule, prototypeMethod, attrMember, staticMember) {
         var tempFn = function () {
             },
@@ -311,42 +392,45 @@
     };
 
     /**
-     * build方法，用于创建一个继承与Base的模块
-     * @param {string} moduleName 模块的名字
-     * @param {object} prototypeMethod 挂载到模块原型上的方法
-     * @param {object} attrMember 模块参数的过滤系统
-     * @param {object} staticMember 挂载在模块本身上的静态数据
-     * @return {*} 返回新构建的模块
-     */
+    build方法，用于创建一个继承与Base的模块
+    @method build
+    @param {String} moduleName 模块的名字
+    @param {Object} prototypeMethod 挂载到模块原型上的方法
+    @param {Object} attrMember 模块参数的过滤系统
+    @param {Object} staticMember 挂载在模块本身上的静态数据
+    @return {*} 返回新构建的模块
+    */
     Base.build = function (moduleName, prototypeMethod, attrMember, staticMember) {
         return Base._build(moduleName, null, prototypeMethod, attrMember, staticMember)
     };
 
     /**
-     * extend方法，可以创建一个模块，该模块可以继承与build出来的模块，也可以继承与Base，第二个在参数中可以指定
-     * @param {string} moduleName 模块的名字
-     * @param {object} superModule 用于继承的超类
-     * @param {object} prototypeMethod 挂载到模块原型上的方法
-     * @param {object} attrMember 模块参数的过滤系统
-     * @param {object} staticMember 挂载在模块本身上的静态数据
-     * @return {*} 返回新构建的模块
-     */
+    extend方法，可以创建一个模块，该模块可以继承与build出来的模块，也可以继承与Base，第二个在参数中可以指定
+    @method extend
+    @param {String} moduleName 模块的名字
+    @param {Object} superModule 用于继承的超类
+    @param {Object} prototypeMethod 挂载到模块原型上的方法
+    @param {Object} attrMember 模块参数的过滤系统
+    @param {Object} staticMember 挂载在模块本身上的静态数据
+    @return {*} 返回新构建的模块
+    */
     Base.extend = function (moduleName, superModule, prototypeMethod, attrMember, staticMember) {
         return Base._build(moduleName, superModule, prototypeMethod, attrMember, staticMember)
     };
 
     /**
-     * connect方法，可以让一个给定的构造函数继承超类的方法
-     * @param {object} curConstructor 构造函数
-     * @param {object} superModule 用于继承的超类
-     * @param {object} prototypeMethod 挂载到模块原型上的方法，优先级最高，所以需要独立作为参数
-     * @param {object} staticMember 挂载在模块本身上的静态数据
-     * @return {*} 返回新构建的模块
-     */
+    connect方法，可以让一个给定的构造函数继承超类的方法
+    @method connect
+    @param {Object} curConstructor 构造函数
+    @param {Object} superModule 用于继承的超类
+    @param {Object} prototypeMethod 挂载到模块原型上的方法，优先级最高，所以需要独立作为参数
+    @param {Object} staticMember 挂载在模块本身上的静态数据
+    @return {*} 返回新构建的模块
+    */
 
     Base.connect = function (curConstructor, superModule, prototypeMethod, staticMember) {
         return Base._build(null, superModule, prototypeMethod, null, staticMember, curConstructor);
     };
 
-$.Base = Base;
+    $.Base = Base;
 })();
