@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta name="viewport" content="target-densityDpi=device-dpi,width=device-width,user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <meta charset="utf-8">
     <title>EasyTouch</title>
     <link rel="stylesheet" href="http://wireless.aliyun-inc.com/easy/_assets/highlight.js/styles/default.css">
@@ -64,7 +64,7 @@
         button{
             display: block;
             width: 95%;
-            margin: 0 auto;
+            margin: .8em auto 0;
             padding: 0.5em;
         }
     </style>
@@ -97,6 +97,10 @@
                     _this.app.navPage('TaobaoPage', {}, 'popIn');
                 });
 
+                $('#OneTimePage').tap(function(e){
+                    _this.app.navPage('OneTimePage', {}, 'slideBottomIn');
+                });
+
                 this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
                     checkDOMChanges: true
                 });
@@ -125,6 +129,12 @@
                         this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
                             checkDOMChanges: true
                         });
+                    }
+                },
+                'OneTimePage': {
+                    html: 'tpl/OneTimePage.html',
+                    leave: function(){
+                        this.destroy();
                     }
                 }
             },

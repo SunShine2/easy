@@ -9,7 +9,8 @@ $(function(){
             PersonPage: window.PersonPage,
             PersonEditPage: window.PersonEditPage,
             AddressPage: window.AddressPage,
-            AddressEditPage: window.AddressEditPage
+            AddressEditPage: window.AddressEditPage,
+            OrderListPage: window.OrderListPage
         },
         events: {
             'tap [data-action="navPage"]': 'nav',

@@ -1,0 +1,38 @@
+<div id="OrderListPage" class="et-page">
+    <header>
+        <i class="et-back" data-action="pageBack"></i>
+        <h1>我的订单</h1>
+    </header>
+    <section>
+        <ul class="et-tabs">
+            <li class="current" data-type="withoutpay">待收款<span id="order-withoutpay"></span></li>
+            <li data-type="withpay">待收货<span id="order-withpay"></span></li>
+            <li data-type="ok">已完成<span id="order-ok"></span></li>
+        </ul>
+        <div class="et-iScroll">
+            <div class="scroller">
+                <ul class="et-good-list"></ul>
+                <a class="et-load-more"></a>
+            </div>
+        </div>
+    </section>
+
+    <script type="text/template">
+        {{#list}}
+            <li>
+                <div class="easy-center">
+                    <img src="" alt="">
+                </div>
+                <div class="desc">
+                    <h1>现价19.9元包邮 原价27元</h1>
+                    <ul>
+                        <li>订单编号：{{trade_no}}</li>
+                        <li>订单日期：{{create_time}}</li>
+                        <li>价格：<b>{{real_price}}</b>元(<b class="et-hb-use">{{hongbao_price}}</b>红包)</li>
+                        <li>数量：{{buy_num}}件</li>
+                    </ul>
+                </div>
+            </li>
+        {{/list}}
+    </script>
+</div>

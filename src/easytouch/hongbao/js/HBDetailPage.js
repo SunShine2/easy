@@ -1,6 +1,6 @@
 ;(function(){
     window.HBDetailPage = $.EasyTouch.Page.extend({
-        html: '#HBDetailPage',
+        html: 'html/HBDetailPage.html',
         events: {
 
         }
