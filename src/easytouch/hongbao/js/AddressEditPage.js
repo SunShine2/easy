@@ -1,6 +1,6 @@
 ;(function(){
     window.AddressEditPage = $.EasyTouch.Page.extend({
-        html: '#AddressEditPage',
+        html: 'html/AddressEditPage.html',
         events: {
         }
     });

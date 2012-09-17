@@ -179,8 +179,8 @@ var
 var reverseAnimation = function(animation, regex){
     var _reverse = function(anim){
         var opposites={
-            'Up' : 'Down',
-            'Down' : 'Up',
+            'Top' : 'Bottom',
+            'Bottom' : 'Top',
             'Left' : 'Right',
             'Right' : 'Left',
             'In' : 'Out',
@@ -188,19 +188,19 @@ var reverseAnimation = function(animation, regex){
         };
         return opposites[anim] || anim;
     };
-    regex = regex || /Left|Right|Up|Down|In|Out/g;
+    regex = regex || /Left|Right|Top|Bottom|In|Out/g;
     return animation.replace(regex, _reverse);
 };
 
 var DelegateEvents = function(){};
 DelegateEvents.prototype.delegateEvents = function(events){
     if (!events){
-        return;
+        return this;
     }
     var _this = this;
     this.undelegateEvents();
     $.each(events, function(key, method){
-        if ($.type(method) !== 'function'){
+        if (typeof method !== 'function'){
             method = _this[method];
         }
         var match = key.match(REGEX_EVENT_SPLITTER);
@@ -215,9 +215,31 @@ DelegateEvents.prototype.delegateEvents = function(events){
             _this.$el.delegate(selector, eventName, proxyfn);
         }
     });
+    return this;
 };
 DelegateEvents.prototype.undelegateEvents = function() {
     this.$el.unbind('.delegateEvents' + this.id);
+    return this;
+};
+
+var Loading = function(){};
+Loading.prototype.showLoading = function(params){
+    params = params || {};
+    var msg = params.msg || '',
+        modal = !!params.modal,
+        className = CLASS_PREFIX+'load',
+        $load = this.$el.children('.'+className);
+    if($load.length){
+        $load.text(msg).data('modal', modal).show();
+    }else{
+        this.$el.append('<div class="'+className+'" data-modal="'+modal+'"></div>');
+    }
+
+    return this;
+};
+Loading.prototype.hideLoading = function(){
+    this.$el.children('.'+CLASS_PREFIX+'load').hide();
+    return this;
 };
 
 /**
@@ -369,6 +391,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
         if(this.debug){
             Function.apply.apply(console.log, [console, arguments]);
         }
+        return this;
     },
     initializer: function(options){
         //通过url上的标志判断是否时子应用
@@ -507,6 +530,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
      * 退出应用，当子应用调用该方法时，可是携带参数，宿主应用会在back方法中获得这些参数
      * @method exit
      * @param {Object} params the params for the parent app, the parent app can get the params from `back`
+     * @chainable
      */
     exit: function(params){
         this.log('[EasyTouch] exit', arguments);
@@ -520,19 +544,24 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
         }else{
             this.resetbutton();
         }
+
+        return this;
     },
     /**
      * 按云键，默认退出应用
      * @method resetbutton
+     * @chainable
      */
     resetbutton: function(){
         this.log('[EasyTouch] resetbutton', arguments);
         //TODO退出云应用
+        return this;
     },
     /**
      * @method navApp
      * @param {String} id the target app's id
      * @param {Object} params params for the target app
+     * @chainable
      */
     navApp: function(id, params){
         var _this = this,
@@ -581,6 +610,8 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
 
         this._active = false;
         this.trigger(EVN_APP_NAV, data);
+
+        return this;
     },
     /**
      通过ID获取某一个app
@@ -600,7 +631,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
         app.navPage('DetailPage', {
             title: 'MacBook Air',
             desc: '...'
-        }, 'sliderRightIn', -1);
+        }, 'sliderRightIn', false);
 
     @method navPage
     @param {String} id page id
@@ -609,8 +640,8 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
 
     *   slideRightIn
     *   slideLeftIn
-    *   slideUpIn
-    *   slideDownIn
+    *   slideTopIn
+    *   slideBottomIn
     *   fadeIn
     *   dissolveIn
     *   popIn <sup>4.0+</sup>
@@ -633,18 +664,25 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
     <span style="color:#30418C">.easytouch</span> > <span style="color:#30418C">.anim-slideRightIn</span>(<span class="lit">.6</span>s, <span class="str">ease-in</span>);
 </code></pre>
 
-    @param {Boolean} ifPushToHistory if push rhe page to history
+    @param {Boolean} ifPushToHistory if push the page to history, default: `true`
+    @chainable
     **/
     navPage: function(id, params, anim, ifPushToHistory){
+        if(!this.pages[id]){
+            this.log('[EasyTouch] navPage', id + ' is not exist.');
+            return this;
+        }
+
         this.log('[EasyTouch] navPage', arguments);
+
         anim = anim || this.defaultAnimation;
 
         var _this = this,
-            argus = [id, params, anim, ifPushToHistory !== false],
+            argus = arguments,
             currentPage = this.getCurrentPage(),
             _params = $.extend({}, params),
             pushHistory = function(id, params, anim, ifPushToHistory){
-                if(!ifPushToHistory){
+                if(ifPushToHistory === false){
                     return;
                 }
                 _this.history.push({
@@ -656,7 +694,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
         if(currentPage && currentPage.id === id){
             pushHistory.apply(_this, argus);
             currentPage.trigger(EVN_PAGE_RESET, _params);
-            return;
+            return this;
         }
 
         var eventArgus = {
@@ -667,19 +705,25 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             },
             trigger = function(){
                 pushHistory.apply(_this, argus);
-                _this.trigger(EVN_APP_PAGE_NAV, [eventArgus]);
-                _this.trigger(EVN_APP_PAGE_CHANGE, [eventArgus]);
+                currentPage && currentPage.trigger(EVN_PAGE_LEAVE);
+                _this._pages[id].trigger(EVN_PAGE_READY, params);
+                _this.trigger(EVN_APP_PAGE_NAV, eventArgus);
+                _this.trigger(EVN_APP_PAGE_CHANGE, eventArgus);
             };
-        this.trigger(EVN_APP_BEFORE_PAGE_NAV, [eventArgus]);
-        this.trigger(EVN_APP_BEFORE_PAGE_CHANGE, [eventArgus]);
+        this.trigger(EVN_APP_BEFORE_PAGE_NAV, eventArgus);
+        this.trigger(EVN_APP_BEFORE_PAGE_CHANGE, eventArgus);
         if(!this._pages[id]){
             _this._createPage(id, _params, function(){
                 _this._navPage(currentPage, _this._pages[id], params, anim, trigger);
             });
         }else{
-            this._pages[id].trigger(EVN_PAGE_RESET, _params);
-            _this._navPage(currentPage, this._pages[id], params, anim, trigger);
+            _this._navPage(currentPage, this._pages[id], params, anim, function(){
+                _this._pages[id].trigger(EVN_PAGE_RESET, _params);
+                trigger();
+            });
         }
+
+        return this;
     },
     /**
     返回到上一个页面
@@ -691,13 +735,13 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
     @method pageBack
     @param {Object} params params for next page
     @param {String} anim animation name, as same as `navPage`
+    @chainable
     **/
     pageBack: function(params, anim){
         this.log('[EasyTouch] pageBack', arguments);
-
         if(this._history.length <= 1){
             this.exit();
-            return;
+            return this;
         }
 
         var _this = this,
@@ -709,14 +753,16 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             eventArgus,
             trigger = function(){
                 _this.history.pop();
-                _this.trigger(EVN_APP_PAGE_BACK, [eventArgus]);
-                _this.trigger(EVN_APP_PAGE_CHANGE, [eventArgus]);
+                currentPage.trigger(EVN_PAGE_LEAVE);
+                _this._pages[id].trigger(EVN_PAGE_READY, params);
+                _this.trigger(EVN_APP_PAGE_BACK, eventArgus);
+                _this.trigger(EVN_APP_PAGE_CHANGE, eventArgus);
             };
 
         //如果没有初始化过该页面，说明来至单页面刷新，获取缓存中的params
         params = (this._pages[id] ? params : preRecord.params) || {};
         anim = anim || lastRecord.anim;
-        anim = anim?reverseAnimation(anim, /Left|Right|Up|Down/g):null;
+        anim = anim?reverseAnimation(anim, /Left|Right|Top|Bottom/g):null;
         eventArgus = {
             from: lastRecord.id,
             to: preRecord.id,
@@ -724,8 +770,8 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             anim: anim
         };
 
-        this.trigger(EVN_APP_BEFORE_PAGE_BACK, [eventArgus]);
-        this.trigger(EVN_APP_BEFORE_PAGE_CHANGE, [eventArgus]);
+        this.trigger(EVN_APP_BEFORE_PAGE_BACK, eventArgus);
+        this.trigger(EVN_APP_BEFORE_PAGE_CHANGE, eventArgus);
 
         _params = $.extend({}, params);
         if(!this._pages[id]){
@@ -733,9 +779,13 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
                 _this._navPage(currentPage, _this._pages[id], params, anim, trigger);
             });
         }else{
-            this._pages[id].trigger(EVN_PAGE_RESET, _params);
-            this._navPage(currentPage, this._pages[id], params, anim, trigger);
+            this._navPage(currentPage, this._pages[id], params, anim, function(){
+                _this._pages[id].trigger(EVN_PAGE_RESET, _params);
+                trigger();
+            });
         }
+
+        return this;
     },
     /**
      * 页面切换效果
@@ -745,41 +795,47 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
      * @param {String} anim animation name
      * @param {Function} callback
      * @private
+     * @chainable
      */
     _navPage: function(fromPage, toPage, params, anim, callback){
+        var _this = this;
+
         // Collapse the keyboard
-        $(':focus').trigger('blur');
+        if (document.activeElement && document.activeElement.nodeName.toLowerCase() !== 'body') {
+            $(document.activeElement).blur();
+        } else {
+            $( ":focus" ).blur();
+        }
 
         var $toPage = toPage.$el;
         if(!fromPage){
             this.$el.find('.' + CLASS_PREFIX + 'page').hide(); //TODO: 但页面刷新时，需要隐藏页面上写死的Page
             $toPage.show();
-            toPage.trigger(EVN_PAGE_READY, params);
             callback && callback();
-            return;
+            return this;
         }
         var $fromPage = fromPage.$el;
         if(anim){
             anim = CLASS_PREFIX + anim;
             var reverseClass = reverseAnimation(anim);
-            $fromPage.bind('webkitAnimationEnd', function(){
-                $fromPage.hide().removeClass(reverseClass).unbind('webkitAnimationEnd');
-                fromPage.trigger(EVN_PAGE_LEAVE);
-            });
             $toPage.bind('webkitAnimationEnd', function(){
-                $toPage.removeClass(anim).unbind('webkitAnimationEnd');
-                toPage.trigger(EVN_PAGE_READY, params);
+                $fromPage.hide().removeClass(reverseClass);
+                $toPage.unbind('webkitAnimationEnd').removeClass(anim);
                 callback && callback();
+                setTimeout(function(){
+                    _this.$el.removeClass('animating');
+                }, TIME_WAIT_FOR_RENDER)
             });
-            $fromPage.addClass(reverseClass);
+            this.$el.addClass('animating');
             $toPage.show().addClass(anim);
+            $fromPage.addClass(reverseClass);
         }else{
             $fromPage.hide();
             $toPage.show();
-            fromPage.trigger(EVN_PAGE_LEAVE);
-            toPage.trigger(EVN_PAGE_READY, params);
             callback && callback();
         }
+
+        return this;
     },
     /**
      * 初始化一个Page类
@@ -788,6 +844,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
      * @param {Object} params params for next page
      * @param {Function} callback
      * @private
+     * @chainable
      */
     _createPage: function(id, params, callback){
         if(typeof this.pages[id] !== 'function'){
@@ -800,13 +857,15 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
         });
 
         if(!callback){
-            return;
+            return this;
         }
         if(this._pages[id]._inited){
             callback()
         }else{
             this._pages[id].bind(EVN_PAGE_INIT, callback);
         }
+
+        return this;
     },
     /**
     向App添加一个页面
@@ -818,9 +877,39 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
     @method addPage
     @param id page id
     @param {String|Object} params 参数与调用`$.EasyTouch.Page.extend`时一致，内部会调用该方法扩展一个Page类
+    @chainable
     **/
     addPage: function(id, params){
         this.pages[id] = params;
+        return this;
+    },
+    /**
+     从App移除一个页面，该方法只会从app的实例中删除对该Page的引用
+
+        app.removePage('DetailPage');
+
+     @method removePage
+     @param id page id
+     @chainable
+     **/
+    removePage: function(id){
+        delete this.pages[id];
+        delete this._pages[id];
+        this.history.remove(id);
+        return this;
+    },
+    /**
+     销毁一个页面，该方法不但会从app的实例中删除对该Page的引用，也会调用该page的`destroy`方法，完全删除页面
+
+        app.destroyPage('DetailPage');
+
+     @method destroyPage
+     @param id page id
+     @chainable
+     **/
+    destroyPage: function(id){
+        this._pages[id] && this._pages[id].destroy();
+        return this;
     },
     /**
     通过页面ID获取某一个页面的引用
@@ -849,32 +938,6 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
      */
     getCurrentPID: function(){
         return this._history.length?this._history[this._history.length - 1].id:null;
-    },
-    /**
-     * 显示加载中提示
-     * @method showLoading
-     * @param {Object} params
-     *      @param {String} params.msg 需要显示的文案
-     *      @param {Boolean} params.modal 加载中提示是否覆盖住应用禁止操作
-     */
-    showLoading: function(params){
-        params = params || {};
-        var msg = params.msg || '',
-            modal = !!params.modal,
-            className = CLASS_PREFIX+'load',
-            $load = this.$el.find('.'+className);
-        if($load.length){
-            $load.text(msg).data('modal', modal).show();
-        }else{
-            this.$el.append('<div class="'+className+'" data-modal="'+modal+'"></div>');
-        }
-    },
-    /**
-     * 隐藏加载中提示
-     * @method hideLoading
-     */
-    hideLoading: function(){
-        $('.'+CLASS_PREFIX+'load').hide();
     },
     history: function(){
         var _this = this,
@@ -918,6 +981,17 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
                 _this.history.save();
             },
             /**
+             * 从历史记录中移除某一id的数据,并写入`sessionStorage`
+             * @method history.remove
+             * @private
+             */
+            remove: function(id){
+                _this._history = _this._history.filter(function(item){
+                    return item.id !== id;
+                });
+                _this.history.save();
+            },
+            /**
              * 增加一条历史记录,并写入`sessionStorage`
              * @method history.add
              * @param {Object} record
@@ -952,6 +1026,19 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
             }
         }
     }
+    /**
+     * 显示加载中提示
+     * @method showLoading
+     * @param {Object} params
+     *      @param {String} params.msg 需要显示的文案
+     *      @param {Boolean} params.modal 加载中提示是否覆盖住应用禁止操作
+     * @chainable
+     */
+    /**
+     * 隐藏加载中提示
+     * @method hideLoading
+     * @chainable
+     */
 },{
 },{
     /**
@@ -1003,6 +1090,7 @@ $.EasyTouch = $.Base.build('$.EasyTouch', {
     }
 });
 $.extend($.EasyTouch.prototype, DelegateEvents.prototype);
+$.extend($.EasyTouch.prototype, Loading.prototype);
 
 /**
  * EasyTouch的子模块Page
@@ -1256,7 +1344,29 @@ $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
      */
     leave: function(){
         this.app.log('[EasyTouch.Page] '+this.id+' leave');
+    },
+    /**
+     * 销毁该页面
+     * @method destroy
+     */
+    destroy: function(){
+        this.undelegateEvents();
+        this.app.removePage(this.id);
+        this.$el.remove();
     }
+    /**
+     * 显示加载中提示
+     * @method showLoading
+     * @param {Object} params
+     *      @param {String} params.msg 需要显示的文案
+     *      @param {Boolean} params.modal 加载中提示是否覆盖住应用禁止操作
+     * @chainable
+     */
+    /**
+     * 隐藏加载中提示
+     * @method hideLoading
+     * @chainable
+     */
 },{
     /**
      * Page的id，用于`navPage`等操作时的索引
@@ -1328,5 +1438,5 @@ $.EasyTouch.Page = $.Base.build('$.EasyTouch.Page', {
     }
 });
 $.extend($.EasyTouch.Page.prototype, DelegateEvents.prototype);
-
+$.extend($.EasyTouch.Page.prototype, Loading.prototype);
 })();

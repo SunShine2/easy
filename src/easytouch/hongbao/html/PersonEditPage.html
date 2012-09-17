@@ -1,0 +1,47 @@
+<div id="PersonEditPage" class="et-page">
+    <header>
+        <i class="et-back" data-action="pageBack"></i>
+        <h1>编辑基本信息</h1>
+    </header>
+    <section>
+        <ul class="et-maplist et-maplist-form">
+            <li>
+                <span class="k">云账号 :</span>
+                <div class="v"><input type="text" class="et-text"></div>
+            </li>
+            <li>
+                <span class="k">手机号码 :</span>
+                <div class="v"><input type="number" class="et-text"></div>
+            </li>
+            <li>
+                <span class="k">淘宝帐号 :</span>
+                <div class="v">zhouqicf
+                    <button class="et-btn et-btn-style-a" id="person-change-taobao">更换</button>
+                </div>
+            </li>
+            <li>
+                <span class="k">性别 :</span>
+                <div class="v">
+                    <label><input type="radio" class="et-radio" name="sex" value="male" checked="checked"> 男</label>
+                    <label><input type="radio" class="et-radio" name="sex" value="female"> 女</label>
+                    <label><input type="radio" class="et-radio" name="sex" value="secret"> 其他</label>
+                </div>
+            </li>
+            <li>
+                <span class="k">生日 :</span>
+                <div class="v">
+                    <select class="et-select">
+                        <option value="">1988</option>
+                    </select>
+                    <select class="et-select">
+                        <option value="">07</option>
+                    </select>
+                    <select class="et-select">
+                        <option value="">10</option>
+                    </select>
+                </div>
+            </li>
+        </ul>
+        <div class="et-btn-block-wrap"><button class="et-btn et-btn-style-a" id="person-complete">完成</button></div>
+    </section>
+</div>

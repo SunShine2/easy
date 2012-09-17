@@ -1,6 +1,6 @@
 ;(function(){
     window.PersonPage = $.EasyTouch.Page.extend({
-        html: '#PersonPage',
+        html: 'html/PersonPage.html',
         events: {
         }
     });
