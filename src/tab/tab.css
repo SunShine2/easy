@@ -1,0 +1,30 @@
+/**
+ * css for tab module
+ **/
+
+.tab-list{
+    overflow: hidden;
+}
+
+.tab-list li{
+    float:left;
+    border:1px solid #000;
+    padding: 10px 20px;
+    margin-right: 8px;
+}
+
+.tab-list li.current{
+    background: yellow;
+}
+
+.tab-bd{
+    position: relative;
+    height: 250px;
+}
+
+.tab-item{
+    border: 1px solid #000;
+    width:400px;
+    height: 200px;
+    position: absolute;
+}

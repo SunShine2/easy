@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link media="screen" type="text/css" href="../css/reset.css" rel="stylesheet">
+    <link media="screen" type="text/css" href="../css/common.css" rel="stylesheet">
+    <link media="screen" type="text/css" href="tab.css" rel="stylesheet">
+    <style>
+        .tab-cont{
+            margin: 50px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-cont">
+        <div class="tab-hd">
+            <ul class="tab-list">
+                <li class="current">tab1</li>
+                <li>tab1</li>
+                <li>tab1</li>
+            </ul>
+        </div>
+        <div class="tab-bd">
+            <div class="tab-item">
+                tab1 cont
+            </div>
+            <div class="tab-item">
+                tab2 cont
+            </div>
+            <div class="tab-item">
+                tab3 cont
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../core/core.js"></script>
+<script src="../effect/fx.js"></script>
+<script src="../effect/fx_methods.js"></script>
+<script src="../custom-event/custom-event.js"></script>
+<script src="../base/base.js"></script>
+<script src="../tab/tab-base.js"></script>
+<script src="../tab/tab-anim.js"></script>
+<script>
+    $(function(){
+        var tabObj = new $.AnimTab();
+    });
+</script>
+</html>
