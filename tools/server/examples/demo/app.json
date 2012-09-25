@@ -1,0 +1,11 @@
+{
+    "appName":"demo",
+    "debug":true,   //当debug为false时,所有调试选项都失效
+
+    /*debug options*/
+    "inline-resource":false,    //是否将脚本和css写到页面中.当该选项为false时,下面选项都失效.
+    //"html-minify":false,    //html内容压缩,有bug,不支持
+    "jsCompress":true, //是否需要压缩脚本,只有在inline-js为true的时候才有效
+    "cssClean":true,
+    "datauri":true //选项为true,则将样式和html中中标记了datauri的图片压缩
+}
