@@ -1,8 +1,8 @@
 /**
- easy框架基类，用于创建easy组件，参考YUI3
- @author : butian.wth
- @version : 0.0.1
- @module Base
+easy框架基类，用于创建easy组件，参考YUI3
+@author : butian.wth
+@version : 0.0.1
+@module Base
 */
 ;(function(){
     /**
@@ -13,7 +13,16 @@
     @private
     */
 
-    function addAttr() {
+    function _addAttrFn() {
+        /**
+         * 设置模块实例的属性
+         *
+         * @method set
+         * @chainable
+         * @param key {String} 属性的名字
+         * @param value {Any} 属性对应设置的值
+         * @return this
+         */
         this.set = function (key, value) {
             var that = this;
             filterHandler(value, this.constructor.ATTRS[key], function (v) {
@@ -31,15 +40,87 @@
                     });
                 }
             });
+            return this;
         };
+        /**
+         * 获取模块实例的属性
+         *
+         * @method get
+         * @param key {String} 属性的名字
+         * @return 属性的值
+         */
         this.get = function (key) {
             return this._get(key)
         };
+        /**
+         * 设置模块实例的属性，不会走attribute的处理
+         *
+         * @method _set
+         * @chainable
+         * @private
+         * @param key {String} 属性的名字
+         * @param value {Any} 属性对应设置的值
+         * @return this
+         */
         this._set = function(key, value){
             this[key] = value;
+            return this;
         };
+        /**
+         * 获取模块实例的属性
+         *
+         * @method _get
+         * @private
+         * @param key {String} 属性的名字
+         * @return 属性的值
+         */
         this._get = function (key) {
             return this[key]
+        };
+
+        //模块构建完成后，增加一些对模块ATTRS进行二次处理的方法
+        /**
+         * 增加模块的ATTR，如果已经存在则会覆盖
+         *
+         * @method addAttr
+         * @chainable
+         * @param name {String} ATTR的名字
+         * @param config {Object} 对应设置的ATTR值
+         */
+        this.addAttr = function(name, config){
+            this.ATTRS[name] = config;
+            return this;
+        };
+        /**
+         * 增加模块的ATTR，如果已经存在则会覆盖
+         *
+         * @method addAttrs
+         * @chainable
+         * @param config {Object} 对应设置的ATTR属性/值
+         */
+        this.addAttrs = function(config){
+            var that = this;
+            $.each(config, function(name, item){
+                that.ATTRS[name] = item;
+            });
+            return this;
+        };
+        /**
+         * 判断该ATTR属性是否已经存在
+         *
+         * @method attrAdded
+         * @chainable
+         * @param name {String} ATTR的名字
+         * @return {Boolean}
+         */
+        this.attrAdded = function(name){
+            var ret = false;
+            $.each(this.ATTRS, function(name, item){
+                if(name in item){
+                    ret = true
+                }
+            });
+            return ret
         };
     }
 
@@ -196,8 +277,8 @@
     */
     function Base() {
 
-        $.addCustomEvent.call(this);
-        addAttr.call(this);
+        $.CustomEvent.call(this);
+        _addAttrFn.call(this);
 
         this._init.apply(this, arguments);
     }
@@ -227,16 +308,16 @@
     $.extend(Base.prototype, {
         /**
         用于判断是否已经初始化过
-        @property initialized
+        @attribute initialized
         @type Boolean
-        @public
+        @default false
         */
         initialized:false,
         /**
         用于判断是否已经被析构
-        @property destroyed
+        @attribute destroyed
         @type Boolean
-        @public
+        @default false
         */
         destroyed:false,
         /**
