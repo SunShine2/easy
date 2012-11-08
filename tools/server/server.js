@@ -23,7 +23,9 @@ var http = require('http'),
     create = require('./src/create'),
     build = require('./src/build'),
     virtual = require('./src/virtual'),
-    empty = require('./src/empty');
+    empty = require('./src/empty'),
+    cfgManager = require('./src/config'),
+    commit = require('./src/commit');
 
 var app = express();
 var static_dir = config.root;
@@ -41,6 +43,8 @@ for(var appDir in appRoot){
 
 directory.setAppPath(appRoot);
 
+
+app.use(express.bodyParser());
 /*route*/
 //empty
 app.get('/favicon.ico',empty);
@@ -55,16 +59,20 @@ app.post(/^\/proxy\/(.*)/,proxy);
 app.get(/^(.*)\/index.html$/,index);
 //app.get('/:appName/index.html',index);
 
+//config
+
+app.get(/^\/__config\/([^\/]*)\/(.*)/,cfgManager);
+app.post(/^\/__config\/([^\/]*)\/(.*)/,cfgManager);
+
 app.get(/^\/__buildApp(.*)/,build);
-app.get(/^\/__createNewApp\/([^\/]*)\/(.*)/,create);
+app.get(/^\/__commitApp(.*)/,commit);
+app.post(/^\/__createNewApp(.*)/,create);
 
 app.use(virtual(virtualRouter));
 app.use(directory(static_dir));
 
 app.use(express.static(static_dir));
 //app.use(express.directory(static_dir));
-
-console.log()
 
 http.createServer(app).listen(config.port);
 

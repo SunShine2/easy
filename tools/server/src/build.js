@@ -2,10 +2,7 @@
 @module server
 @class server_global
 **/
-var serverConfig = require('../../config'),
-    path = require('path'),
-    virtual = require('./virtual'),
-    buildHelper = require('../../build/src/buildhelper.js');
+var build = require('../../build/build');
 
 /**
 在server上build应用
@@ -16,8 +13,17 @@ var serverConfig = require('../../config'),
 @param next {Function} 需要转向的下一个处理函数
 **/
 module.exports = function(request,response,next){
-    var fullPath = request.params[0];
-    buildHelper.build(fullPath,function(){
-        response.redirect(request.headers.referer);
+    var fullPath = request.params[0],
+        retObj = {};
+    build.build(fullPath,function(success){
+        if(success){
+            retObj.success = true;
+        } else {
+            retObj.success = false;
+            retObj.mgs = '应用打包失败!';
+        }
+
+        response.write(JSON.stringify(retObj));
+        response.end();
     });
 };

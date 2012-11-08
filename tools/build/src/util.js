@@ -1,7 +1,13 @@
 //从代码中获取依赖的信息
 var fs = require('fs'),
     http = require('http'),
-    path = require('path');
+    path = require('path'),
+    child_process = require("child_process"),
+
+    smushit = require('node-smushit'),
+
+    config = require('../../config');
+
 
 /**
 @module build
@@ -240,7 +246,35 @@ function getCssDatauriReplace(strCss,arrDataUri){
 @param {Function} callback 获取成功以后的回调函数,参数:base64以后的图片内容
 **/
 //TODO:base64前先把图片优化一下
-function getImageBase64(uri,callback){
+function getImageBase64(uri,callback,isSmushit){
+/*
+    if(isSmushit){
+        var tmp = path.join(__dirname,'../tmp'),
+            extname = path.extname(uri),
+            fileName = new Date().getTime() + extname,
+            fullFileName = path.join(tmp,fileName);
+
+        if(!fs.existsSync(tmp)){
+            fs.mkdirSync(tmp);
+        }
+        smushit.smushit(uri,{
+            output:fullFileName,
+            onItemComplete:function(error,item,response){
+                if(error){
+                    getImageBase64(uri,callback);
+                } else {
+                    getImageBase64(fullFileName,function(val){
+                        callback(val);
+                        fs.unlinkSync(fullFileName);
+                    });
+                }
+            },
+            service:config.smushitService||undefined
+        });
+        return;
+    }
+    */
+
     if(isHttp(uri)){
         http.get(uri,function(res){
             res.setEncoding('binary');
@@ -301,7 +335,7 @@ function getFileContent(uri,callback){
 
                 res.on('end',function(){
                     //console.log('获取文件完成:',uri);
-                    fs.writeFile();
+                    //fs.writeFile();
                     callback(resStr.toString());
                 });
             }
@@ -326,7 +360,53 @@ function getFileContent(uri,callback){
     }
 }
 
+/**
+提交应用
+@method commit
+@static
+@async
+@param {String} zip 应用压缩包文件路径
+@param {String} id 应用id
+@param {String} version 版本号
+@param {Function} callback 提交完成以后的回调
+**/
+function commit(zipPath,id,version,callback){
+    version = version || '';
+    var commitPath = path.join(__dirname,'../commit/commit.bat'),
+        cmd = commitPath + ' ' + zipPath + ' ' + id + ' ' + version;
+        //spawn = child_process.spawn,
+        //cmt = spawn(commitPath,[zipPath,id,version]);
 
+    callback = callback || function(){};
+
+    console.log('正在提交应用:' + zipPath,id,version);
+    console.log('提交命令:',cmd);
+    /*
+    cmt.stdout.on('data',function(data){
+        console.log(data.toString());
+    });
+    cmt.stderr.on('data',function(data){
+        console.log('commit error:',data.toString());
+    });
+
+    cmt.on('exit',function(code){
+        if(code !== 0){
+            callback(false);
+            console.log('commit error:',code);
+        } else{
+            callback(true);
+        }
+    });
+    */
+    child_process.exec(cmd, function(e){
+        if(e){
+            console.log(e);
+            callback(false);
+            return;
+        }
+        callback && callback(true);
+    });
+}
 
 exports.getCssDeps = getCssDeps;
 exports.removeCssDeps = removeCssDeps;
@@ -344,3 +424,4 @@ exports.isJs = isJs;
 exports.unique = unique;
 exports.getFileContent = getFileContent;
 exports.getImageBase64 = getImageBase64;
+exports.commit = commit;

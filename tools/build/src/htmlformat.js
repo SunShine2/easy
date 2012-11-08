@@ -6,9 +6,11 @@ var http = require('http'),
     pro = require("uglify-js").uglify,
     cleanCSS = require('clean-css'),
     html_minifier = require('html-minifier').minify,
-    less = require('less');
+    smushit = require('node-smushit'),
+    less = require('less'),
 
-var util = require('./util');
+    config = require('../../config'),
+    util = require('./util');
 
 exports = module.exports = HtmlFormat;
 
@@ -31,7 +33,11 @@ function HtmlFormat(appPath,strHtml,appCfg,info,onFinished){
     this._strHtml = strHtml;
     this._info = info;
     this._appCfg = appCfg;
-    this._replaceJobs = [];
+    //this._replaceJobs = [];
+
+    var pathArr = path.normalize(appPath).split(path.sep);
+    this._appName = pathArr[pathArr.length - 1];
+
 
     this._onFishied = onFinished;
     this._$ = cheerio.load(this._strHtml);
@@ -52,9 +58,10 @@ HtmlFormat.prototype._init = function(){
 
     //替换依赖中的样式
     this._insertCss(function(){
+        self._complete();
         //替换外联的脚本和样式
-        self._getReplaceJobs();
-        self._runReplaceJob();
+        //self._getReplaceJobs();
+        //self._runReplaceJob();
     });
 };
 
@@ -74,6 +81,9 @@ HtmlFormat.prototype._insertCss = function(finished){
         strDepCss += depCss[i].content + '\n';
     }
 
+    //去掉所有less和css标签,因为已经在依赖查询的时候找到了所有less的样式内容
+    this._$('link[rel=stylesheet\\/less]').remove();
+    this._$('link[rel=stylesheet]').remove();
     this._less(strDepCss,function(strCss){
         self._getCssBlock(strCss,function(cssBlock){
             self._$('head').append(cssBlock);
@@ -83,6 +93,8 @@ HtmlFormat.prototype._insertCss = function(finished){
             }
         });
     });
+
+
 
 };
 
@@ -120,10 +132,18 @@ HtmlFormat.prototype._replaceScripts = function(){
                 }
             }
         } else {
+            /*
             if(node.attr('loader') == 'true'){
                 content = this._getJsBlock($E.toString());
-            } else if(node.attr('exclude') == 'true'){
-                content = '';
+            } else
+            */
+            if(node.attr('exclude') == 'true'){
+                if(node.attr('include-deps') == 'true'){
+                    mGroup[i].modules.pop();
+                    content = this._getGroupJs(mGroup[i].modules);
+                } else {
+                    content = '';
+                }
             } else {
                 content = this._getGroupJs(mGroup[i].modules);
             }
@@ -138,6 +158,7 @@ HtmlFormat.prototype._replaceScripts = function(){
 @method _getReplaceJobs
 @private
 **/
+/*
 HtmlFormat.prototype._getReplaceJobs = function(){
     var self = this,
         css = this._$('link[rel=stylesheet]'),
@@ -150,12 +171,13 @@ HtmlFormat.prototype._getReplaceJobs = function(){
         }
     }
 };
-
+*/
 /**
 执行替换任务
 @method _runReplaceJob
 @private
 **/
+/*
 HtmlFormat.prototype._runReplaceJob = function(){
     var self = this,
         fCount = 0;
@@ -199,7 +221,7 @@ HtmlFormat.prototype._runReplaceJob = function(){
         }
     }
 };
-
+*/
 /**
 格式化页面完成,调用执行完成回调
 @method _complete
@@ -208,8 +230,8 @@ HtmlFormat.prototype._runReplaceJob = function(){
 HtmlFormat.prototype._complete = function(){
     if(this._onFishied){
         var strHtml = this._$.html();
-        
-        if(this._appCfg['html-minify']){
+
+        if(this._appCfg.debug['html-minify'] == 'true'){
             strHtml = html_minifier(strHtml, {
                 removeComments: true,
                 collapseWhitespace:true,
@@ -305,7 +327,7 @@ HtmlFormat.prototype._getCssBlock = function(code,callback,uri){
 @return 如appCfg配置中jsCompress为true,则返回压缩后的脚本,否则返回原来的脚本内容.
 **/
 HtmlFormat.prototype._jsCompress = function(code){
-    if(this._appCfg.jsCompress){
+    if(this._appCfg.debug.jsCompress == 'true'){
         var ast = jsp.parse(code);
         ast = pro.ast_mangle(ast);
         ast = pro.ast_squeeze(ast);
@@ -326,11 +348,13 @@ HtmlFormat.prototype._jsCompress = function(code){
 @return 如appCfg配置中cssClean为true,则返回压缩后的样式,否则返回原来的样式内容.
 **/
 HtmlFormat.prototype._cssClean = function(strCss){
-    if(this._appCfg.cssClean){
+    //console.log('this._appCfg.debug.cssClean:',this._appCfg.debug.cssClean,this._appCfg.debug.cssClean == 'true');
+    if(this._appCfg.debug.cssClean == 'true'){
         strCss = cleanCSS.process(strCss);
     }
     return strCss;
 };
+
 
 /**
 将样式中路径后面有?datauri的图片替换成base64的内容
@@ -342,12 +366,13 @@ HtmlFormat.prototype._cssClean = function(strCss){
 @param {String} uri 当前样式文件的uri
 **/
 HtmlFormat.prototype._cssDatauri = function(strCss,callback,uri){
-    if(!this._appCfg.datauri){
+    if(this._appCfg.debug.datauri != 'true'){
         callback(strCss);
         return;
     }
 
-    var cssImgs = util.getCssDatauriImgs(strCss,uri,this._appPath),
+    var isSmushit = this._appCfg.debug.smushit == 'true',
+        cssImgs = util.getCssDatauriImgs(strCss,uri,this._appPath),
         fCount = 0,i,
         dataUriJobs = [];
 
@@ -357,7 +382,7 @@ HtmlFormat.prototype._cssDatauri = function(strCss,callback,uri){
     }
 
     for(i = 0; i<dataUriJobs.length; i++){
-        util.getImageBase64(dataUriJobs[i].url,getCallbackFn(dataUriJobs[i]));
+        util.getImageBase64(dataUriJobs[i].url,getCallbackFn(dataUriJobs[i]),isSmushit);
     }
 
     function getCallbackFn(job){

@@ -6,7 +6,7 @@ var fs = require('fs'),
 
     virtual = require('./virtual'),
     config = require('../../config'),
-    buildHelper = require('../../build/src/buildhelper.js');
+    build = require('../../build/build');
 
 
 /**
@@ -44,7 +44,8 @@ module.exports = function(request,response,next){
             next(err);
         }).pipe(request);
     } else {
-        buildHelper.getBuildedContent(fullPath,function(buildedStr){
+        response.writeHead(200, {"Content-Type": "text/html;chartset:utf-8"});
+        build.getBuildedContent(fullPath,function(buildedStr){
             response.end(buildedStr);
         });
     }

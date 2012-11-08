@@ -276,10 +276,6 @@ easy框架基类，用于创建easy组件，参考YUI3
     6. 修复构造函数自带ATTRS时对应的处理方式，从直接赋值修改为合并
     */
     function Base() {
-
-        $.CustomEvent.call(this);
-        _addAttrFn.call(this);
-
         this._init.apply(this, arguments);
     }
 
@@ -304,6 +300,10 @@ easy框架基类，用于创建easy组件，参考YUI3
     @static
     */
     Base.ATTRS = {};
+
+    //给base的原型进行扩充基本方法
+    $.CustomEvent.call(Base.prototype);
+    _addAttrFn.call(Base.prototype);
 
     $.extend(Base.prototype, {
         /**

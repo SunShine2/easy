@@ -16,6 +16,15 @@
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(@start), to(@end));
 }
 
+.et-center{
+    .easy-center();
+
+    img{
+        max-height: 100%;
+        max-width: 100%;
+    }
+}
+
 .et-tabs {
   display: -webkit-box;
   text-align: center;
@@ -82,7 +91,7 @@
 .et-text {
   font-size: inherit;
   border: 1px solid lighten(@darkcolor, 39%);
-  padding: .5em;
+  padding: .6em .5em;
   border-radius: 3px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .08) inset;
 }
@@ -122,9 +131,14 @@
   .linear-gradient(#fff, #f5f7f7);
 }
 
-.et-btn.active {
+.et-btn-style-a.active {
   background: @darkcolor;
   color: #fff;
+}
+
+.et-btn-style-b{
+    color: #fff;
+    .linear-gradient(#FF6400, #F36000);
 }
 
 .et-btn-block-wrap {
@@ -142,7 +156,7 @@
 .et-select {
   border: 1px solid #D2D7DA;
   border-radius: 3px;
-  padding: .5em 2em .5em .5em;
+  padding: .5em 1.5em .5em .5em;
   -webkit-appearance: button;
   position: relative;
   background: #fff url(../img/arrow-down.png) no-repeat 85% 50%;
@@ -174,10 +188,6 @@
   left: 0;
   right: 0;
   top: 60px;
-}
-
-#OrderListPage .et-iScroll {
-  top: 118px;
 }
 
 .easytouch {
@@ -223,7 +233,7 @@ b {
   font-size: 1.8em;
 }
 
-header {
+.et-page>header {
   background-color: @darkcolor;
   height: 60px;
   line-height: 60px;
@@ -260,7 +270,7 @@ header {
 }
 
 #PersonPage {
-  section {
+  .container {
     position: relative;
 
     .et-edit {
@@ -282,7 +292,7 @@ header {
     margin-top: .5em;
   }
   .et-select {
-    width: 6em;
+    width: 5.35em;
   }
   label {
     margin-right: 1.5em;
@@ -339,4 +349,145 @@ header {
       }
     }
   }
+}
+
+#OrderListPage{
+    .et-iScroll{
+        top: 118px;
+    }
+    .order-list{
+        &>li{
+            overflow: hidden;
+            padding: 2em 1em;
+            .bottom-line();
+        }
+        &>.empty{
+            border: none;
+            -webkit-box-shadow: none;
+            padding: 1em;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .et-center{
+            float: left;
+            width: 130px;
+            height: 130px;
+            overflow: hidden;
+            border: 1px solid @darkcolor;
+            background-color: white;
+            margin-right: 1em;
+        }
+        .desc{
+            overflow: hidden;
+            font-size: 1.8em;
+
+            h1{
+                font-size: 1.22em;
+                margin-bottom: .5em;
+                .easy-text-overflow();
+            }
+            li{
+                color: lighten(@darkcolor, 10%);
+                .easy-text-overflow();
+            }
+        }
+    }
+}
+
+#OrderSubmitPage,
+#OrderDetailPage{
+    .mod{
+        header{
+            background-color: lighten(@darkcolor, 42%);
+            font-size: 1.6em;
+            padding: .5em 1em;
+            .bottom-line();
+        }
+        .content{
+            font-size: 1.8em;
+            padding: .8em;
+        }
+    }
+    .good-group{
+        .content{
+            padding: 0;
+        }
+
+        li{
+            padding: .8em;
+            .bottom-line();
+        }
+        li:last-child{
+            border: none;
+            -webkit-box-shadow: none;
+        }
+    }
+    .et-btn-block-wrap{
+        margin: .2em;
+
+        .et-btn{
+            margin: .4em;
+        }
+    }
+}
+
+#OrderSubmitPage{
+    .address{
+        .content{
+            position: relative;
+            padding-right: 7em;
+
+            button{
+                position: absolute;
+                top: 50%;
+                right: 1em;
+                margin-top: -1em;
+            }
+        }
+    }
+    textarea{
+        -webkit-box-sizing: border-box;
+        width: 100%;
+        height: 5em;
+    }
+    .hongbao{
+        padding-top: .8em;
+
+        label{
+            float: left;
+            padding-top: .5em;
+        }
+        .form{
+            overflow: hidden;
+
+            .et-text{
+                width: 5em;
+                vertical-align: middle;
+            }
+            .et-btn{
+                vertical-align: middle;
+                padding: 0 .5em .15em;
+                line-height: 1.2;
+                font-size: 2em;
+                font-weight: bold;
+            }
+            .et-btn:first-child{
+                padding-left: .65em;
+                padding-right: .65em;
+            }
+            .hongbao-last{
+                margin-top: .3em;
+            }
+        }
+    }
+    .option{
+        background-color: lighten(@darkcolor, 42%);
+        padding: 2em 0 6em;
+        text-align: center;
+        -webkit-box-shadow: inset 0 5px 5px rgba(0,0,0,.015);
+
+        .pay-info{
+            font-size: 2em;
+        }
+    }
 }

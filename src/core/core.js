@@ -1332,7 +1332,8 @@ window.Zepto = Zepto
      * 增加type方法，用于支持Base模块
      * @type {Object}
      */
-    var class2type = {};
+    var class2type = {},
+        toString = {}.toString;
     $.each("Boolean Number String Function Array Date RegExp Object".split(" "), function (i, name) {
         class2type[ "[object " + name + "]" ] = name.toLowerCase();
     });

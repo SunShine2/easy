@@ -13,10 +13,12 @@
     <script src="../../core/core.js"></script>
     <script src="../../../lib/zepto/ajax.js"></script>
     <script src="../../../src/core/event.js"></script>
-    <script src="../../../src/base/base.js"></script>
     <script src="../../../src/custom-event/custom-event.js"></script>
+    <script src="../../../src/base/base.js"></script>
     <script src="../js/core.js"></script>
     <script src="../js/model.js"></script>
+    <script src="js/Model.js"></script>
+    <script src="js/Page.js"></script>
     <script src="js/IndexPage.js"></script>
     <script src="js/HBDetailPage.js"></script>
     <script src="js/PersonPage.js"></script>
@@ -24,22 +26,85 @@
     <script src="js/AddressPage.js"></script>
     <script src="js/AddressEditPage.js"></script>
     <script src="js/OrderListPage.js"></script>
+    <script src="js/OrderDetailPage.js"></script>
+    <script src="js/OrderSubmitPage.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body class="easytouch">
-    <div id="IndexPage" class="et-page">
-        <header>
-            <i class="et-back" data-action="exit"></i>
-            <h1>我的红包</h1>
-        </header>
-        <section>
-            <ul class="et-list">
-                <li class="et-arrow" data-action="navPage" data-params='{"id":"HBDetailPage"}'>红包明细 <b>968.05</b></li>
-                <li class="et-arrow" data-action="navPage" data-params='{"id":"OrderListPage"}'>订单管理 <b>1</b></li>
-                <li class="et-arrow" data-action="navPage" data-params='{"id":"PersonPage"}'>基本信息</li>
-                <li class="et-arrow" data-action="navPage" data-params='{"id":"AddressPage"}'>收货地址 <b>3</b></li>
-            </ul>
-        </section>
+<section id="IndexPage" class="et-page">
+    <header>
+        <i class="et-back" data-action="exit"></i>
+        <h1>我的红包-v35</h1>
+    </header>
+    <div class="container">
+        <ul class="et-list">
+            <li class="et-arrow" data-action="navPage" data-params='{"id":"HBDetailPage"}'>红包明细 <b>968.05</b></li>
+            <li class="et-arrow" data-action="navPage" data-params='{"id":"OrderListPage"}'>订单管理 <b>1</b></li>
+            <li class="et-arrow" data-action="navPage" data-params='{"id":"PersonPage"}'>基本信息</li>
+            <li class="et-arrow" data-action="navPage" data-params='{"id":"AddressPage"}'>收货地址 <b>3</b></li>
+        </ul>
     </div>
+</section>
+<script>
+    //        applicationCache.onchecking = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('onchecking');
+    //            }, 1000);
+    //        };
+    //        applicationCache.ondownloading = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('ondownloading');
+    //            }, 1000);
+    //        };
+    //        applicationCache.onnoupdate = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('onnoupdate');
+    //            }, 1000);
+    //        };
+    //        applicationCache.onprogress = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('onprogress');
+    //            }, 1000);
+    //        };
+    //        applicationCache.oncached = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('oncached');
+    //            }, 1000);
+    //        };
+    //        applicationCache.onupdateready = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('onupdateready');
+    //            }, 1000);
+    //        };
+    //        applicationCache.onobsolete = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('onobsolete');
+    //            }, 1000);
+    //        };
+    //        applicationCache.onerror = function(){
+    //            setTimeout(function(){
+    //                $('header h1').html('onerror');
+    //            }, 1000);
+    //        };
+    // Check if a new cache is available on page load.
+    window.addEventListener('load', function(e) {
+        window.applicationCache.addEventListener('updateready', function(e) {
+            setTimeout(function(){
+                $('header h1').html('updateready');
+            }, 1000);
+            if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                // Browser downloaded a new app cache.
+                // Swap it in and reload the page to get the new hotness.
+                window.applicationCache.swapCache();
+//                    if (confirm('A new version of this site is available. Load it?')) {
+//                        window.location.reload();
+//                    }
+            } else {
+                // Manifest didn't changed. Nothing new to server.
+            }
+        }, false);
+
+    }, false);
+</script>
 </body>
 </html>

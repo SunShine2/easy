@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>promise</title>
+</head>
+<body>
+    
+</body>
+
+<script src="../core/core.js"></script>
+<script src="../callbacks/callbacks.js"></script>
+<script src="deferred.js"></script>
+<script src="deferred-ajax.js"></script>
+
+
+<!--<script src="jquery-1.8.2.js"></script>-->
+<script>
+    /*
+     $.ajax({
+        url:"test.html",
+        success:function(text){
+            console.log('ajax1 success!');
+            def.resolve(text);
+        },
+        error:function(){
+            console.log('ajax1 fail!');
+            def.reject(arguments);
+        }
+    },"text");
+    
+    $.ajax(url,"text").then(function(text){
+        console.log('ajax2 success!');
+        def.resolve(text);
+    },function(){
+        console.log('ajax2 fail!');
+        def.reject(arguments);
+    });
+    */
+    /*
+    function req(url){
+        var def = $.Deferred();
+        $.ajax({
+            url:"test.html",
+            success:function(text){
+                console.log('ajax success!');
+                def.resolve(text);
+            },
+            error:function(){
+                console.log('ajax fail!');
+                def.reject(arguments);
+            }
+        },"text");
+        return def.promise();
+    }
+    
+    $.when(req()).then(function(text){
+        console.log('then');
+    });
+    */
+    /*
+    $.ajax = function(opt){
+        var def = $.Deferred();
+        setTimeout(function(){
+            def.resolve(opt.url,2);
+        },200);
+        return def.promise();
+    };
+    */
+    
+
+    var ajax1 = $.ajax({url:'jsonp.php?callback=?&a=1',type:'jsonp',method:'POST'}),
+        ajax2 = $.ajax({url:'jsonp.php?callback=?&a=2',type:'jsonp'}), 
+        ajax3 = $.ajax({url:'jsonp.php?callback=?&a=3',type:'jsonp'}),
+        ajax4 = $.ajax({url:'jsonp.php?callback=?&a=4',type:'jsonp'}), 
+        ajax5 = $.ajax({url:'jsonp.php?callback=?&a=5',type:'jsonp'}),
+        ajax6 = $.ajax({url:'jsonp.php?callback=?&a=6',type:'jsonp'}), 
+        ajax7 = $.ajax({url:'jsonp.php?callback=?&a=7',type:'jsonp'}),
+        ajax8 = $.ajax({url:'jsonp.php?callback=?&a=8',type:'jsonp'}), 
+        ajax9 = $.ajax({url:'jsonp.php?callback=?&a=9',type:'jsonp'}),
+        ajax10 = $.ajax({url:'jsonp.php?callback=?&a=10',type:'jsonp'}),
+        print = function(){
+            console.log(arguments);
+        };
+    //ajax1.then(print);
+    //$.when(ajax2,ajax3).then(print);
+    //$.any(ajax4,ajax5,ajax6).then(print);
+    $.some(ajax7,ajax8,ajax9,ajax10,2).then(print);
+</script>
+</html>

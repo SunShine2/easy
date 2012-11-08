@@ -1,17 +1,28 @@
-<div id="HBDetailPage" class="et-page">
+<section id="HBDetailPage" class="et-page">
     <header>
         <i class="et-back" data-action="pageBack"></i>
         <h1>红包明细</h1>
     </header>
-    <section>
-        <div class="summary">
-            <span class="over">余额：<span class="et-hb-use">968.05</span> 红包</span>
-            <span class="freeze">冻结：<span class="et-hb-freeze">968</span> 红包</span>
+    <div class="container et-iScroll">
+        <div class="scroller">
+            <div class="summary">
+                <span class="over">余额：<span class="et-hb-use"></span> 红包</span>
+                <span class="freeze">冻结：<span class="et-hb-freeze"></span> 红包</span>
+            </div>
+            <ul class="et-list">
+                <!--<li>打卡获得 <span class="et-hb-get">+1</span> <time>2012.05.26 12:30:56</time></li>-->
+                <!--<li class="et-arrow">手机充值 <span class="et-hb-get">+1</span> <time>2012.05.26 12:30:56</time></li>-->
+                <!--<li class="et-arrow">购物消费 <span class="et-hb-use">-10</span> <time>2012.05.26 12:30:56</time></li>-->
+            </ul>
+            <a class="et-load-more"></a>
         </div>
-        <ul class="et-list">
-            <li>打卡获得 <span class="et-hb-get">+1</span> <time>2012.05.26 12:30:56</time></li>
-            <li class="et-arrow">手机充值 <span class="et-hb-get">+1</span> <time>2012.05.26 12:30:56</time></li>
-            <li class="et-arrow">购物消费 <span class="et-hb-use">-10</span> <time>2012.05.26 12:30:56</time></li>
-        </ul>
-    </section>
-</div>
+    </div>
+    <script type="text/template">
+        {{#list}}
+        <li class="et-arrow">{{type}} <span class="et-hb-get">+{{hongbao}}</span> <time>{{create_time}}</time></li>
+        {{/list}}
+        {{^list}}
+        <li class="empty">暂无内容</li>
+        {{/list}}
+    </script>
+</section>

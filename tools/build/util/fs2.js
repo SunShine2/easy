@@ -101,7 +101,30 @@ function rmdirSync(fullDir){
         }
     }
 
-    fs.rmdirSync(fullDir);
+    try{
+        fs.rmdirSync(fullDir);
+    } catch (e){
+        console.log('删除目录失败:',fullDir);
+    }
+}
+/**
+创建目录,父目录不存在,则会先创建父目录
+@method mkdirSync
+@static
+@param {String} path:需要创建的目录名称
+**/
+function mkdirSync(_p){
+    var s = [],
+        p = _p;
+
+    while(!fs.existsSync(p)){
+        s.push(p);
+        p = path.dirname(p);
+    }
+
+    while(s.length !== 0){
+        fs.mkdirSync(s.pop());
+    }
 }
 
 /**
@@ -145,11 +168,12 @@ function move(origin,target){
 @param {Function} cb 压缩完成后的回调函数
 **/
 function zip(origin,target,cb){
+    origin = path.normalize(origin);
     var arrDir = origin.split(path.sep),
         appName = arrDir[arrDir.length - 1],
         zipPath = path.join(__dirname,'../zip/zip.bat');
 
-    var cmd = zipPath + ' ' + appName;
+    var cmd = zipPath + ' ' + appName + ' ' + path.dirname(origin);
     child_process.exec(cmd, function(e){
         if(e){
             console.log(e);
@@ -171,5 +195,6 @@ function unZip(origin,target){
 exports.copy = copy;
 exports.cleanFolder = cleanFolder;
 exports.rmdirSync = rmdirSync;
+exports.mkdirSync = mkdirSync;
 exports.move = move;
 exports.zip = zip;

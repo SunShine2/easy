@@ -50,7 +50,7 @@ module.exports = function(request,response,next){
     //var req = http.get(proxyUrl,onResponse);
 
     if(method.toLowerCase() == "post"){
-        req.wirte(querystring.stringify(reqeust.body));
+        req.wirte(querystring.stringify(request.body));
     }
 
     req.on('error',function(e){
@@ -59,9 +59,6 @@ module.exports = function(request,response,next){
         
         response.end();
     });
-
-
     req.end();
-
 };
 

@@ -10,11 +10,25 @@ $(function(){
             PersonEditPage: window.PersonEditPage,
             AddressPage: window.AddressPage,
             AddressEditPage: window.AddressEditPage,
-            OrderListPage: window.OrderListPage
+            OrderListPage: window.OrderListPage,
+            OrderDetailPage: window.OrderDetailPage,
+            OrderSubmitPage: window.OrderSubmitPage
         },
         events: {
-            'tap [data-action="navPage"]': 'nav',
-            'tap [data-action="pageBack"]': 'back'
+            '[data-action="navPage"]': {
+                tap: 'nav'
+            },
+            '[data-action="pageBack"]': {
+                tap: 'back'
+            },
+            '.et-btn': {
+                touchstart: function(e, sender){
+                    $(sender).addClass('active');
+                },
+                touchend: function(e, sender){
+                    $(sender).removeClass('active');
+                }
+            }
         },
         init: function(params){
             this.history.start({
@@ -23,15 +37,15 @@ $(function(){
         },
         nav: function(e, sender){
             e.preventDefault();
-            var $target = $(sender);
-            var data = JSON.parse($target.data('params'));
-            this.navPage.apply(this, [data.id, data.params, data.anim, data.history]);
+            var $target = $(sender),
+                data = JSON.parse($target.data('params'));
+            this.navPage(data.id, data.params);
         },
         back: function(e, sender){
             e.preventDefault();
-            var $target = $(sender);
-            var data = $target.data('params')?JSON.parse($target.data('params')):{};
-            this.pageBack.apply(this, [data.params, data.anim]);
+            var $target = $(sender),
+                data = $target.data('params')?JSON.parse($target.data('params')):{};
+            this.pageBack(data.params, data.anim);
         },
         iScroll: function(el, params){
             var iscroll,
@@ -43,6 +57,7 @@ $(function(){
                     }
                 }
             };
+            el = typeof el === 'string'?document.querySelector(el):el;
             params = params || {};
             if(params.checkDOMChanges){
                 el.addEventListener('touchstart', function(e){

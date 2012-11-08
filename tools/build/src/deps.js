@@ -24,8 +24,9 @@ exports = module.exports = Deps;
 @param {String} codes 页面中内联的脚本和样式文件内容
 @param {Document} [optional] 页面的dom结构
 **/
-function Deps(appPath,codes,doc){
-    this._appPath = appPath;
+function Deps(cfg,codes,doc){
+    this._appPath = cfg.appPath;
+    this._appCfg = cfg.appCfg;
     this._codes = codes;
     this._rootModules = []; //根模块信息,一个script标签对应一个根模块
 
@@ -46,14 +47,16 @@ function Deps(appPath,codes,doc){
 **/
 Deps.prototype._getExluceHash = function(){
     var seaCfg = this._getLoaderCfg(),
-        exclude = seaCfg._exclude || {},
+        exclude = seaCfg._exclude || [],
+        exclude_onbuild = seaCfg._exclude_onbuild || [],
         hashExclude = {},
         i;
-
+    if(this._appCfg.debug.debug == 'false'){
+        exclude = exclude.concat(exclude_onbuild);
+    }
     for(i=0; i<exclude.length; i++){
         hashExclude[exclude[i]] = 1;
     }
-
     return hashExclude;
 };
 /**

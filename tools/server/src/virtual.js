@@ -38,7 +38,6 @@ exports = module.exports = function(virtuals){
     }
 
     fullName = pathInfo.fullPath;
-
     if(fs.existsSync(fullName) && fs.statSync(fullName).isDirectory()){
         directory(pathInfo.root,pathInfo.pathname)(req,res,next);
     } else {
@@ -55,9 +54,9 @@ exports = module.exports = function(virtuals){
 
 function parseVirtual(_pathname){
     for(var p in pathHash){
-        if(_pathname.indexOf(p) === 0){
-            var reg = new RegExp('^' + p + '($|/)'),
-                root = pathHash[p],
+        var reg = new RegExp('^' + p + '($|/)');
+        if(reg.test(_pathname)){
+            var root = pathHash[p],
                 pathname = _pathname.replace(reg,'');
 
             return {

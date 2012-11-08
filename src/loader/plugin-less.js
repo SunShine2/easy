@@ -1,4 +1,6 @@
-/*less插件*/
+/*less插件
+ *@version:0.0.1
+ */
 ;(function($){
     $.plugin.add({
         rule : /\.less([\?#].*|$)/ig,
@@ -19,9 +21,9 @@
         document.getElementsByTagName('head')[0].appendChild(elem);
 
         if (elem.styleSheet) { // IE
-            elem.styleSheet.cssText = cssText
+            elem.styleSheet.cssText = cssText;
         } else { // W3C
-            elem.appendChild(document.createTextNode(cssText))
+            elem.appendChild(document.createTextNode(cssText));
         }
     }
 

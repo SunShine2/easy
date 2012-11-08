@@ -80,6 +80,33 @@ $E.config = function(cfg){
     }
 };
 
+$E.app = function(appCfg){
+    var modules = appCfg.modules || [],
+        requires = appCfg.requires || [],
+        appRequires = [],
+        appPath = appCfg.path,
+        _alias = {},
+        p,i;
+
+    for(i = 0; i< modules.length; i++){
+        p = modules[i];
+        _alias[p] = {
+            path: p,
+            requires: requires
+        };
+        appRequires.push(p);
+    }
+
+    _alias['app'] = {
+        path: appPath,
+        requires:appRequires
+    };
+
+    $.config({
+        alias:_alias
+    });
+};
+
 exports.$E = $E;
 exports.console = console;
 

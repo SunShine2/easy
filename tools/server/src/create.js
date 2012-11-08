@@ -6,7 +6,8 @@
 var path = require('path'),
     fs = require('fs'),
     virtual = require('./virtual'),
-    fs2 = require('../../build/util/fs2');
+    config = require('../../config.js'),
+    fs2 = require('../util/fs2');
 
 /**
 在serevr上创建一个应用(express请求处理函数)
@@ -17,22 +18,35 @@ var path = require('path'),
 @param next {Function} 需要转向的下一个处理函数
 **/
 module.exports = function(request,response,next){
-    var pathname = request.params[0],
-        name = request.params[1],
-        pathInfo = virtual.parseVirtual('/' + pathname + '/' + name),
-        origin = path.join(__dirname,'../','examples/demo'),
-        target = pathInfo.fullPath,
+    var fullPath = request.params[0],
+        cfg = request.body,
+        appDir = cfg.dir,
+        origin = config.appTpl,
+        target = path.join(fullPath,appDir),
+        appJsonPath = path.join(target,'app.json'),
         objRet = {};
 
-    if(!name){
+    origin = origin?origin:path.join(__dirname,'../../examples/demo');
+
+    if(!cfg.dir){
         objRet.success = false;
         objRet.msg = '请输入应用名称';
     } else if(fs.existsSync(target)){
         objRet.success = false;
-        objRet.msg = '应用名已存在!';
+        objRet.msg = '应用目录' + appDir + '已存在!';
+    } else if(!fs.existsSync(origin)) {
+        objRet.success = false;
+        objRet.msg = '模板文件目录' + origin + '不存在!';
     } else {
         fs2.copy(origin,target);
         objRet.success = true;
+
+        delete request.body.dir;
+        var strJson = JSON.stringify(request.body)
+            .replace(/\{/g,'{\n  ')
+            .replace(/\}/g,'\n}')
+            .replace(/,/g,',\n  ');
+        fs.writeFileSync(appJsonPath,strJson,'utf8');
     }
     response.write(JSON.stringify(objRet));
     response.end();

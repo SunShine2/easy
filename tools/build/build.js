@@ -3,9 +3,10 @@
 @module build
 @main
 **/
-var serverConfig = require('../config'),
-    path = require('path'),
-    BuildHelper = require('./src/buildhelper.js');
+var BuildHelper = require('./src/buildhelper'),
+    commit = require('./src/util').commit;
 
-var appName = process.argv[2];
-BuildHelper.build(path.join(serverConfig.appRoot, appName));
+
+exports.getBuildedContent = BuildHelper.getBuildedContent;
+exports.build = BuildHelper.build;
+exports.commit = commit;

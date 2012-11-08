@@ -38,11 +38,13 @@ exports = module.exports = function(root,realPath){
         var url = parse(request.url),
             pathname = url.pathname,
             dir = decodeURIComponent(path.normalize(path.join(root,realPath === undefined?pathname:realPath)));
-            
+        
         if(!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()){
+            //console.log('目录不存在!',dir);
             next();
             return;
         }
+
 
         if(!/\/$/.test(pathname)){
             response.redirect(pathname + '/');
@@ -73,6 +75,8 @@ exports.setAppPath = function(_ah){
 
 function getDirecotryInfo(fullPath,pathname){
     var dir = fullPath,
+        parent_dirs = [],
+        vPath,
         files,fileInfo = [],dirInfo = [],
         appInfo = [],
         paths = pathname.split('/'),pathInfo = [],
@@ -90,6 +94,17 @@ function getDirecotryInfo(fullPath,pathname){
             currentDir += paths[i] + '/';
         }
     }
+
+    parent_dirs.push({name:'root',path:'/'});
+    for(vPath in appHash){
+        var name = vPath;
+        if(name[0] === '/'){
+            name = name.substr(1);
+        }
+        parent_dirs.push({name:name,path:vPath});
+    }
+
+
 
     files = fs.readdirSync(dir);
     files.sort();
@@ -147,7 +162,9 @@ function getDirecotryInfo(fullPath,pathname){
         fileInfo : dirInfo.concat(fileInfo),
         pathInfo : pathInfo,
         appInfo : appInfo,
-        pathname : pathname
+        pathname : pathname,
+        fullPath:fullPath,
+        parent_dirs:parent_dirs
     };
     return info;
 }

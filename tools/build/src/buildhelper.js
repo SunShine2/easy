@@ -5,7 +5,7 @@ var fs = require('fs'),
 
     cheerio = require ('cheerio'),
     mustache = require('mustache'),
-
+    smushit = require('node-smushit'),
 
     fs2 = require('../util/fs2'),
     config = require('../../config'),
@@ -62,10 +62,13 @@ function getAppInfo(appPath,isDebug){
     } else {
         strCfg = fs.readFileSync(appJsonPath).toString(),
         appCfg = eval('(' + strCfg + ')');  //appCfg = require(appJsonPath);
+        //如果debug为false或者为空,则都设置为false
+
+        appCfg.debug = (!!appCfg.debug) ? appCfg.debug:'false';
     }
 
     if(isDebug === false){
-        appCfg.debug = false;
+        appCfg.debug = 'false';
     }
 
     appCfg = processAppCfg(appCfg);
@@ -85,15 +88,20 @@ function getAppInfo(appPath,isDebug){
 @return {Object} 处理以后的配置信息
 **/
 function processAppCfg(appCfg){
-    if(!appCfg.debug){
-        appCfg['inline-resource'] = true;
-        appCfg['html-minify'] = true;
-        appCfg['jsCompress'] = true;
-        appCfg['cssClean'] = true;
-        appCfg['datauri'] = true;
-
+    var debug;
+    if(appCfg.debug == 'false'){
+        debug = appCfg.debug = {};
+        //debug['weinre'] = 'false';
+        debug['inline-resource'] = 'true';
+        debug['html-minify'] = 'true';
+        debug['jsCompress'] = 'true';
+        debug['cssClean'] = 'true';
+        debug['datauri'] = 'true';
+        debug['smushit'] = 'true';
+        debug['debug'] = 'false';
     }
-    appCfg['html-minify'] = false;
+
+    appCfg.debug['html-minify'] = 'false';
     return appCfg;
 }
 
@@ -111,8 +119,7 @@ function getBuildedContent(appPath,callback,isDebug){
         callback(false);
         return;
     }
-
-    if(appInfo.appCfg['inline-resource'] !== true){
+    if(appInfo.appCfg.debug != 'false' && appInfo.appCfg.debug['inline-resource'] == 'false'){
         callback(appInfo.strHtml);
         return;
     }
@@ -122,11 +129,13 @@ function getBuildedContent(appPath,callback,isDebug){
         $ = cheerio.load(strHtml),
         scripts = $('script'),
         less = $('link[rel=stylesheet\\/less]'),
+        css = $('link[rel=stylesheet]'),
         strContent = '',
         i,strJs,
         uuid,
-        task = new Task(appPath,$);   //创建一个依赖查找任务
-        
+        taskCfg= {appPath:appPath,appCfg:appCfg},
+        task = new Task(taskCfg,$);   //创建一个依赖查找任务
+
     for(i=0; i<scripts.length; i++){
         uuid = '__script__' + i;
         if(scripts.eq(i).attr('src')){
@@ -140,10 +149,13 @@ function getBuildedContent(appPath,callback,isDebug){
     for(i = 0; i <less.length;i++){
         uuid = '__less__' + i;
         less.eq(i).attr('uuid',uuid);
-        var href = less.eq(i).attr('href');
-        if(href){
-            task.appendLess(href,uuid);
-        }
+        task.appendCss(less.eq(i).attr('href'),uuid);
+    }
+
+    for(i = 0; i <css.length;i++){
+        uuid = '__css__' + i;
+        css.eq(i).attr('uuid',uuid);
+        task.appendCss(css.eq(i).attr('href'),uuid);
     }
     
     task.finished(function(info){
@@ -178,35 +190,62 @@ function getBuildedContent(appPath,callback,isDebug){
 **/
 function build(appPath,callback){
     appPath = path.normalize(appPath);
-    var appName = appPath.split(path.sep).pop();
-        tmpPath = path.join(__dirname,'../target',appName);   //临时目录
 
-    console.log('buld paths',appPath,tmpPath);
+    var zipDir = config.zipDir,
+        appName = appPath.split(path.sep).pop(),
+        tmpDir = zipDir?zipDir:path.join(__dirname,'../../target'), //临时目录
+        tmpAppPath = path.join(tmpDir,appName),//应用所在的目录
+        zipPath = tmpAppPath + '.zip';  //打包完成以后的路径
+
+    if(!fs.existsSync(tmpDir)){
+        fs2.mkdirSync(tmpDir);
+    }
     getBuildedContent(appPath,function(buildedStr,info){
         if(!info){
             console.log('build 失败');
+            callback && callback(false);
             return;
         }
 
-        var strIndex = buildedStr,
-            exclude = info.getExclude();
+        //只有在build时候才会添加weinre脚本
+        var $ = cheerio.load(buildedStr),
+            appJsonPath = path.join(appPath,'app.json'),
+            strCfg = fs.readFileSync(appJsonPath).toString(),
+            appCfg = eval('(' + strCfg + ')');
 
-        if(fs.existsSync(tmpPath)){
-            fs2.rmdirSync(tmpPath);
+        if(appCfg.debug.weinre == 'true'){
+            console.log('weinre');
+            var weinre = '\n<script src="' + config.weinreService + '#' + appName + '"></script>\n';
+            if($('script').length !== 0){
+                $('script').eq(0).before(weinre);
+            }
+            $('head').children().first().before(weinre);
         }
 
-        fs2.copy(appPath,tmpPath,exclude);
-        fs2.cleanFolder(tmpPath);
+        var strIndex = $.html(),
+            exclude = info.getExclude();
 
-        fs.writeFileSync(path.join(tmpPath,'index.html'),strIndex);
+        if(fs.existsSync(tmpAppPath)){
+            fs2.rmdirSync(tmpAppPath);
+        }
 
-        fs2.zip(tmpPath,path.join(__dirname,'../','target'),function(){
-            fs2.rmdirSync(tmpPath);
-            console.log('build 完成');
-
-            callback && callback();
+        fs2.copy(appPath,tmpAppPath,exclude);
+        fs2.cleanFolder(tmpAppPath);
+        fs.writeFileSync(path.join(tmpAppPath,'index.html'),strIndex);
+        smushit.smushit(tmpAppPath,{
+            onComplete:function(){
+                if(fs.existsSync(zipPath)){
+                    fs.unlinkSync(zipPath);
+                }
+                fs2.zip(tmpAppPath,tmpDir,function(){
+                    fs2.rmdirSync(tmpAppPath);
+                    console.log('build 完成');
+                    callback && callback(true,zipPath);
+                });
+            },
+            recursive:true,
+            service:config.smushitService||undefined
         });
-        
     },false);
 }
 

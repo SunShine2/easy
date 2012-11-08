@@ -3,9 +3,6 @@
  * author : zhengle.zl@alibaba-inc.com
  * version : 0-0-1
  */
-/*
- *
- */
  
 ;(function(win,doc){
 
@@ -39,8 +36,9 @@ function shallowCopy(obj1,obj2){
 }
 
 //根据id(别名)从配置项中获取模块信息
+//如果配置项中没有对应的模块,尝试将依赖的id转化成url
 function getModule(id){
-    return _config.alias[id];
+    return _config.alias[id] || id;
 }
 
 //获取(设置)模块加载缓存
@@ -73,6 +71,7 @@ function load(id,callback){
         fetch(id,function(){
             c.cached = 2;
             c.cb.forEach(function(fn){
+                console.log('加载完成:',id);
                 fn();
             });
         });
@@ -87,7 +86,6 @@ function fetch(id,callback){
         n = doc.createElement(type === 'css'?'link':'script'),
         charset = mod.charset,
         plugin = $.plugin.get(url);
-        
     if(plugin){
         plugin.exec(mod);
         callback();
@@ -132,36 +130,53 @@ function assetOnload(node,callback){
 }
 
 //加载模块
-function loadModules(arrId,callback){
-    var ids,count;
+function loadModules(arrId,callback,async){
+    var ids,count,length;
+    
     ids = typeof arrId === 'string'?[arrId]:arrId;
-    count = ids.length;
+    length = count = ids.length;
     if(ids.length === 0){
         callback();
         return;
     }
-
-    ids.forEach(function(id,index){
-        var mod = getModule(id),
-            loadCurrent =  function(){
-                load(id,function(){
-                    count--;
-                    if(count === 0){
-                        callback();
-                    }
-                });
-            };
-            
+    function _load(id,cb){
+        var mod = getModule(id);
         if(!mod){
             if(DEBUG){ console.log('模块未定义:',id); }
+            cb();
             return;
         }
         if(mod.requires){
-            loadModules(mod.requires,loadCurrent);
+            loadModules(mod.requires,function(){
+                load(id,cb);
+            },mod.async);
         } else {
-            loadCurrent();
+            load(id,cb);
         }
-    });
+    };
+    if(async !== false){    //异步加载
+        //console.log('异步加载');
+        ids.forEach(function(id,index){
+            _load(id,function(){
+                 if(--count === 0){
+                    callback();
+                }
+            });
+        });
+    } else {    //同步加载
+        //console.log('同步加载');
+        var index = 0;
+        (function _l(){
+            if(index < length){
+                _load(ids[index],function(){
+                    index++;
+                    _l();
+                });
+            } else {
+                callback();
+            }
+        })();
+    }
 }
 
 $ = function(deps,fn){
@@ -190,7 +205,6 @@ $.config = function(cfg){
             shallowCopy(_config[p],cfg[p]);
         }
     }
-    console.log(_config);
 };
 
 win[_loaderId] = $;
@@ -212,6 +226,11 @@ win[_loaderId] = $;
                     return _plugin[i];
                 }
             }
+        }
+    };
+    $.extend = function(obj){
+        for(var p in obj){
+            $[p] = obj[p];
         }
     };
 })($E);

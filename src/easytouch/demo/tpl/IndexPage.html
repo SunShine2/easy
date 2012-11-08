@@ -25,24 +25,6 @@
                 <li data-anim="flowRightIn"><a href="#"><i class="et-icon"></i>flowRightIn</a></li>
                 <li data-anim="turnIn"><a href="#"><i class="et-icon"></i>turnIn</a></li>
             </ul>
-
-            <pre><code class="javascript">
-                var IndexPage = $.EasyTouch.Page.extend({
-                    el: 'tpl/IndexPage.html',
-                    render: function(response){
-                        console.log('IndexPage render', arguments);
-                        return response;
-                    },
-                    init: function(params){
-                        hljs.initHighlighting();
-
-                        var _this = this;
-                        $('#animation-examples li').tap(function(e){
-                            _this.app.navPage('AboutPage', {}, this.getAttribute('data-anim'));
-                        });
-                    }
-                });
-            </code></pre>
         </div>
     </div>
 </div>

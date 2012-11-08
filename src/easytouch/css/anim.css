@@ -1,8 +1,8 @@
 .et-slideLeftIn {
-  -webkit-animation: et-slideLeftIn 0.35s ease;
+  -webkit-animation: et-slideLeftIn 0.25s ease;
 }
 .et-slideRightOut {
-  -webkit-animation: et-slideRightOut 0.35s ease;
+  -webkit-animation: et-slideRightOut 0.25s ease;
 }
 @-webkit-keyframes et-slideLeftIn {
   0% {
@@ -21,10 +21,10 @@
   }
 }
 .et-slideRightIn {
-  -webkit-animation: et-slideRightIn 0.35s ease;
+  -webkit-animation: et-slideRightIn 0.25s ease;
 }
 .et-slideLeftOut {
-  -webkit-animation: et-slideLeftOut 0.35s ease;
+  -webkit-animation: et-slideLeftOut 0.25s ease;
 }
 @-webkit-keyframes et-slideRightIn {
   0% {

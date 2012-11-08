@@ -28,6 +28,7 @@ function Task(cfg,$){
     this._codes = [];   //存放读取到的代码
     this._onfihisned = null;
     this._$ = $;
+    this._appCfg = null;
 
     this._init(cfg);
     this._id = 0;
@@ -52,7 +53,14 @@ Task.prototype = {
             if(cfg.codes){
                 cfg.appendCode(cfg.codes);
             }
+            if(cfg.appCfg){
+                this._appCfg = cfg.appCfg;
+            }
         }
+    },
+
+    setAppCfg: function(appCfg){
+        this._appCfg = appCfg;
     },
 /**
 设置应用的目录
@@ -96,11 +104,11 @@ Task.prototype = {
 @param {String|Array} href 需要增加的脚本
 @param {String} 脚本的id
 **/
-    appendLess:function(href,uuid){
+    appendCss:function(href,uuid){
         var i,
             vals = typeof href === 'string'?[href]:href;
         for(i = 0; i < vals.length; i++){
-            this._codes.push({uri:href,type:'less',uuid:uuid,content:null});
+            this._codes.push({uri:href,type:'css',uuid:uuid,content:null});
         }
     },
 
@@ -141,7 +149,7 @@ Task.prototype = {
 
         function _start(){
             console.log('任务初始化完成');
-            var deps = new Deps(self._appPath,self._codes,self._$);
+            var deps = new Deps({appPath:self._appPath,appCfg:self._appCfg},self._codes,self._$);
             /*
             deps.onFinished(function(info){
                 if(self._onfihisned){

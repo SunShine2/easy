@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8">
+    <title>{{appName}}</title>
+</head>
+<body>
+    <div id="pages">
+        <div class="et-page current page" id="home">
+            <header>empty App</header>
+            <p class="desc">这是一个空的app</p>
+            <ul id="animation-examples" class="et-listview et-corner et-shadow">
+                <li data-action="nav" data-params='{"id":"page2"}'>页面跳转</li>
+                <li data-action="exit" >退出应用</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script exclude="true" src="http://wireless.aliyun-inc.com/easy/src/loader/loader.js"></script>
+<script exclude="true" src="http://wireless.aliyun-inc.com/easy/src/loader/seed.js"></script>
+<script exclude="true" include-deps="true">
+    $E.config({
+        alias:{
+            'app':{
+                path:'app.js',
+                requires:['easytouch',
+                    'css/anim.less', 'css/demo.css',
+                    'src/page/HomePage.js','src/page/Page2.js'],
+                async:false
+            }
+        }
+    });
+    $E('app');
+</script>
+</html>
