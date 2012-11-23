@@ -1,55 +1,81 @@
 ;(function(){
     window.Page = $.EasyTouch.Page.extend({
-        initializer: function(){
-            this._super = this.__proto__.__proto__.__proto__;
-            this._super.initializer.apply(this, arguments);
+        initializer: function(options){
+            this.super.initializer.apply(this, arguments);
 
+            this.bind('pagebeforeinit', function(){
+                this.initAutos();
+            });
+        },
+        autos: {},
+        initAutos: function(){
             var _this = this;
-            this.bind('pageinit', function(){
-                if(_this.model){
-                    _this.model.bind('beforeSend', function(e, params){
-                        _this.showLoading({
-                            msg: '数据加载中...',
-                            modal: true
-                        });
-                    });
-                    _this.model.bind('complete', function(){
-                        _this.hideLoading();
-                    });
+            $.each(this.autos, function(action, params){
+                switch(action){
+                    case 'iScroll':
+                        _this.initiScroll(params);
+                        break;
+                    case 'loading':
+                        _this.initLoading(params);
+                        break;
+                    case 'loadMoreBtn':
+                        _this.initLoadMoreBtn(params);
+                        break;
+                    default:
+                        break;
                 }
-
-                var iScrollWrap = _this.el.querySelector('.et-iScroll');
-                if(iScrollWrap){
-                    _this.iScroll = _this.app.iScroll(iScrollWrap, {
-                        checkDOMChanges: true
+            });
+        },
+        initiScroll: function(params){
+            var _this = this,
+                iScrollWrap = this.el.querySelector(params.selector || '.et-iScroll'),
+                model = params.model || this.model;
+            this.iScroll = this.app.iScroll(iScrollWrap, {
+                checkDOMChanges: true
+            });
+            model && model.bind('reset', function(){
+                setTimeout(function(){
+                    _this.iScroll.scrollTo(0,0,0);
+                }, 100);
+            });
+        },
+        initLoading: function(params){
+            var _this = this,
+                models = params.model || this.model;
+            models = $.type(models) !== 'array'?[models]:models;
+            models.forEach(function(model){
+                model.bind('beforeSend', function(){
+                    _this.showLoading({
+                        msg: i18n.loadding,
+                        modal: true
                     });
-                }
-                if(_this.model && iScrollWrap){
-                    _this.model.bind('reset', function(){
-                        _this.iScroll.refresh();
-                    });
-                }
-
-                var loadMoreBtn = _this.$el.find('.et-load-more');
-                if(loadMoreBtn){
-                    _this.model.bind('success', function(){
-                        console.log(arguments);
-                        loadMoreBtn.text('加载更多');
-                    });
-                    _this.model.bind('error', function(){
-                        loadMoreBtn.text('再试一次');
-                    });
-                    _this.model.bind('dataerror', function(){
-                        loadMoreBtn.text('再试一次');
-                    });
-                    _this.model.bind('change', function(){
-                        if(!_this.model.attrs.hasnext){
-                            loadMoreBtn.hide();
-                        }else{
-                            loadMoreBtn.show();
-                        }
-                    });
-                }
+                });
+                model.bind('complete', function(){
+                    _this.hideLoading();
+                });
+            });
+        },
+        initLoadMoreBtn: function(params){
+            var models = params.model || this.model;
+            models = $.type(models) !== 'array'?[models]:models;
+            var loadMoreBtn = this.$el.find(params.selector || '.et-load-more');
+            models.forEach(function(model){
+                model.bind('success', function(){
+                    loadMoreBtn.text('加载更多');
+                });
+                model.bind('error', function(){
+                    loadMoreBtn.text('再试一次');
+                });
+                model.bind('dataerror', function(){
+                    loadMoreBtn.text('再试一次');
+                });
+                model.bind('change', function(){
+                    if(!model.attrs.hasnext){
+                        loadMoreBtn.hide();
+                    }else{
+                        loadMoreBtn.show();
+                    }
+                });
             });
         }
     });

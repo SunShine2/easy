@@ -2,11 +2,17 @@ YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
         "$.EasyTouch",
-        "$.EasyTouch.Page"
+        "$.EasyTouch.Model",
+        "$.EasyTouch.ModelList",
+        "$.EasyTouch.Page",
+        "$.EasyTouch.View"
     ],
     "modules": [
         "EasyTouch",
-        "EasyTouch-Page"
+        "EasyTouch-Model",
+        "EasyTouch-ModelList",
+        "EasyTouch-Page",
+        "EasyTouch-View"
     ],
     "allModules": [
         {
@@ -15,9 +21,24 @@ YUI.add("yuidoc-meta", function(Y) {
             "description": "EasyTouch"
         },
         {
+            "displayName": "EasyTouch-Model",
+            "name": "EasyTouch-Model",
+            "description": "EasyTouch Model"
+        },
+        {
+            "displayName": "EasyTouch-ModelList",
+            "name": "EasyTouch-ModelList",
+            "description": "EasyTouch ModeList"
+        },
+        {
             "displayName": "EasyTouch-Page",
             "name": "EasyTouch-Page",
             "description": "EasyTouch的子模块Page"
+        },
+        {
+            "displayName": "EasyTouch-View",
+            "name": "EasyTouch-View",
+            "description": "EasyTouch"
         }
     ]
 } };

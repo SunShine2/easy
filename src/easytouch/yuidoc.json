@@ -1,0 +1,10 @@
+{
+    "name": "EasyTouch",
+    "description": "The UI library for Easy.",
+    "version": "0.0.1",
+    "options": {
+        "ignorePaths": [ "build", "hongbao", "demo" ],
+        "paths": "js",
+        "outdir": "doc"
+    }
+}

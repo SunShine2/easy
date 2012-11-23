@@ -135,7 +135,7 @@ $.Logger = $.Base.build('$.Logger', {
     **/
     compareLevel: function(l1, l2){
         var arr = ['log', 'info', 'debug', 'warn', 'error'];
-        arr.indexOf(l1) - arr.indexOf(l2);
+        return arr.indexOf(l1) - arr.indexOf(l2);
     },
 
     /**
@@ -155,7 +155,7 @@ $.Logger = $.Base.build('$.Logger', {
             return category === filters;
         }else if($.type(filters) === 'array'){
             return filters.indexOf(category) !== -1;
-        }else if($.type(filters.test) === 'function'){
+        }else if($.type(filters.test) === 'object'){
             return filters.test(category + " " + message);
         }
         return false;
@@ -227,10 +227,12 @@ $.Logger = $.Base.build('$.Logger', {
         if(!this.enabled || !window.console){
             return;
         }
+       
         if(this.compareLevel(level, this.level) < 0){
             return;
         }
         message = this.formatMessage(level, category, message);
+       
         if(!this.validateFilters(category, message)){
             return;
         }

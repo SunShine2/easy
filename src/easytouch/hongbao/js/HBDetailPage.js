@@ -8,7 +8,7 @@
         }
     });
 
-    var HBDetailList = window.Model.extend({
+    var HBDetailList = window.ModelList.extend({
         server: {
             url: 'center/hongbao/list/',
             data: {
@@ -16,8 +16,8 @@
             }
         },
         watch: {
-            curpage: 'data curpage',
-            hasnext: 'data hasnext'
+            curpage: 'data.curpage',
+            hasnext: 'data.hasnext'
         },
         parse: function(data){
             return data.data.list;
@@ -28,6 +28,11 @@
         html: 'html/HBDetailPage.html',
         balance: new Balance,
         model: new HBDetailList,
+        autos: {
+            loadMoreBtn: {},
+            loading: {},
+            iScroll: {}
+        },
         events: {
             '.et-load-more': {
                 tap: 'getNext'
@@ -35,28 +40,37 @@
         },
         init: function(){
             var _this = this;
-            this.balance.bind('reset', function(e, params){
+            this.balance.bind('reset', function(e, model){
                 var $summary = _this.$el.find('.summary');
-                $summary.find('.et-hb-use').text(params.data.hongbao);
-                $summary.find('.et-hb-freeze').text(params.data.unable_hongbao);
+                $summary.find('.et-hb-use').text(model.hongbao);
+                $summary.find('.et-hb-freeze').text(model.unable_hongbao);
             });
 
-            var tpl = _this.$el.find('script').html();
-            this.model.bind('add', function(e, params){
-                console.log(params);
-                var html = Mustache.to_html(tpl, {
-                    list: params.data
-                });
-                _this.$el.find('.et-list').append(html);
+            this.model.bind('reset', function(e, models){
+                _this.renderOrder(models, true);
+            });
+            this.model.bind('add', function(e, models){
+                _this.renderOrder(models);
             });
 
             this.balance.fetch();
             this.model.fetch();
         },
+        renderOrder: function(models, fromReset){
+            var tpl = this.$el.find('script').html(),
+                html = Mustache.to_html(tpl, {
+                    list: this.model.toJSON(models)
+                }),
+                $list = this.$el.find('.et-list');
+            if(fromReset){
+                $list.html(html);
+            }else{
+                $list.append(html);
+            }
+        },
         getNext: function(){
-            this.model.getNext({
-                page: this.model.attrs.curpage + 1
-            });
+            this.model.server.data.page = this.model.attrs.curpage + 1;
+            this.model.next();
         }
     });
 })();

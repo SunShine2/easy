@@ -5,8 +5,8 @@
         "version": "0.0.1"
     },
     "files": {
-        "js/core.js": {
-            "name": "js/core.js",
+        "js\\core.js": {
+            "name": "js\\core.js",
             "modules": {
                 "EasyTouch": 1,
                 "EasyTouch-Page": 1
@@ -14,6 +14,39 @@
             "classes": {
                 "$.EasyTouch": 1,
                 "$.EasyTouch.Page": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\model.js": {
+            "name": "js\\model.js",
+            "modules": {
+                "EasyTouch-Model": 1
+            },
+            "classes": {
+                "$.EasyTouch.Model": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\modellist.js": {
+            "name": "js\\modellist.js",
+            "modules": {
+                "EasyTouch-ModelList": 1
+            },
+            "classes": {
+                "$.EasyTouch.ModelList": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\view.js": {
+            "name": "js\\view.js",
+            "modules": {
+                "EasyTouch-View": 1
+            },
+            "classes": {
+                "$.EasyTouch.View": 1
             },
             "fors": {},
             "namespaces": {}
@@ -32,14 +65,15 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "js/core.js",
-            "line": 978,
+            "file": "js\\core.js",
+            "line": 1158,
             "description": "EasyTouch",
             "author": ": youxiao@alibaba-inc.com",
             "version": ": 0.0.1",
             "uses": [
                 "EasyTouch-Page"
-            ]
+            ],
+            "review": "1. 建立一个Logger机制\n 2. 监听backbutton事件，如果是在子应用可以回到父应用"
         },
         "EasyTouch-Page": {
             "name": "EasyTouch-Page",
@@ -53,9 +87,54 @@
             "namespaces": {},
             "module": "EasyTouch",
             "namespace": "",
-            "file": "js/core.js",
-            "line": 978,
+            "file": "js\\core.js",
+            "line": 1158,
             "description": "EasyTouch的子模块Page"
+        },
+        "EasyTouch-Model": {
+            "name": "EasyTouch-Model",
+            "submodules": {},
+            "classes": {
+                "$.EasyTouch.Model": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js\\model.js",
+            "line": 77,
+            "description": "EasyTouch Model",
+            "author": ": youxiao@alibaba-inc.com",
+            "version": ": 0.0.1"
+        },
+        "EasyTouch-ModelList": {
+            "name": "EasyTouch-ModelList",
+            "submodules": {},
+            "classes": {
+                "$.EasyTouch.ModelList": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js\\modellist.js",
+            "line": 86,
+            "description": "EasyTouch ModeList",
+            "author": ": youxiao@alibaba-inc.com",
+            "version": ": 0.0.1"
+        },
+        "EasyTouch-View": {
+            "name": "EasyTouch-View",
+            "submodules": {},
+            "classes": {
+                "$.EasyTouch.View": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js\\view.js",
+            "line": 8,
+            "description": "EasyTouch",
+            "author": ": youxiao@alibaba-inc.com",
+            "version": ": 0.0.1"
         }
     },
     "classes": {
@@ -69,9 +148,9 @@
             "extension_for": [],
             "module": "EasyTouch",
             "namespace": "",
-            "file": "js/core.js",
-            "line": 218,
-            "description": "EasyTouch，为移动设备设计的UI框架。使用方法：用`$.EasyTouch.extend`方法扩展一个App类，然后初始化。`extend`的具体说明，请看`$.EasyTouch.extend`；参数`pages`的说明请看`$.EasyTouch.Page`：\n\n    var App = $.EasyTouch.extend({\n        id: xxx,\n        container: xxx,\n        pages: {\n            ...\n        },\n        apps: {\n            ...\n        },\n        events: {\n            ...\n        }\n    });\n\n    new App();",
+            "file": "js\\core.js",
+            "line": 260,
+            "description": "EasyTouch，为移动设备设计的UI框架。使用方法：用`$.EasyTouch.extend`方法扩展一个App类，然后初始化。`extend`的具体说明，请看`$.EasyTouch.extend`；参数`pages`的说明请看`$.EasyTouch.Page`：\n\n    var App = $.EasyTouch.extend({\n        id: xxx,\n        container: xxx,\n        pages: {\n           ...\n        },\n        apps: {\n           ...\n        },\n        events: {\n           ...\n        }\n    });\n\n    new App();",
             "extends": "$.Base",
             "is_constructor": 1,
             "submodule": "EasyTouch-Page"
@@ -87,9 +166,9 @@
             "module": "EasyTouch",
             "submodule": "EasyTouch-Page",
             "namespace": "",
-            "file": "js/core.js",
-            "line": 978,
-            "description": "页面类，该类不需要应用自己实例化，EasyTouch会在`navPage`时判断是否实例化了该页面，如果没有会自动实例化，你需要做的就是用`$.EasyTouch.Page.extend`方法扩展一个Page类，然后配置到APP中：\n\n    var Page1 = $.EasyTouch.Page.extend({\n        html: '#xxx .xxx',\n        //tpl: '',\n        events: {\n            ...\n        },\n        init: function(){},\n        reset: function(){}\n        ...\n    });\n    var App = $.EasyTouch.extend({\n        pages: {\n            'Page1': Page1\n        }\n        ...\n    });\n    new App();",
+            "file": "js\\core.js",
+            "line": 1158,
+            "description": "页面类，该类不需要应用自己实例化，EasyTouch会在`app.navPage`时判断是否实例化了该页面，如果没有会自动实例化，你需要做的就是用`$.EasyTouch.Page.extend`方法扩展一个Page类，然后配置到APP中：\n\n    var Page1 = $.EasyTouch.Page.extend({\n        html: '#xxx .xxx',\n        //tpl: '',\n        events: {\n           ...\n        },\n        init: function(){},\n        reset: function(){}\n           ...\n    });\n    var App = $.EasyTouch.extend({\n        pages: {\n           'Page1': Page1\n        }\n        ...\n    });\n    new App();",
             "extends": "$.Base",
             "params": [
                 {
@@ -103,7 +182,7 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
+                            "name": "data",
                             "description": "property add to `$.EasyTouch.Page`",
                             "type": "Object"
                         },
@@ -116,13 +195,61 @@
                 }
             ],
             "is_constructor": 1
+        },
+        "$.EasyTouch.Model": {
+            "name": "$.EasyTouch.Model",
+            "shortname": "$.EasyTouch.Model",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "EasyTouch-Model",
+            "namespace": "",
+            "file": "js\\model.js",
+            "line": 77,
+            "description": "$.EasyTouch.Model，MVC中的Model模块，可以独立于EasyTouch运行\n\n    var Address = $.EasyTouch.Model.extend({\n       server: {\n           url: 'center/address/info/'\n       },\n       watch: {\n           page: 'data.currentPage'\n       },\n       init: function(){\n\n       },\n       parse: function(json){\n           return json.data;\n       },\n       validate: function(json){\n           return json.code === 200;\n       }\n   });",
+            "extends": "$.Base",
+            "is_constructor": 1
+        },
+        "$.EasyTouch.ModelList": {
+            "name": "$.EasyTouch.ModelList",
+            "shortname": "$.EasyTouch.ModelList",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "EasyTouch-ModelList",
+            "namespace": "",
+            "file": "js\\modellist.js",
+            "line": 86,
+            "description": "$.EasyTouch.ModelList，MVC中的ModelList模块，可以独立于EasyTouch运行，但依赖于$.EasyTouch.Model\n\n       var Address = $.EasyTouch.Model.extend({\n           ...\n       });\n       var AddressList = $.EasyTouch.Model.extend({\n           model: Address,\n           server: {\n               url: 'center/address/list/'\n           },\n           watch: {\n               page: 'data.currentPage'\n           },\n           init: function(){\n\n           },\n           parse: function(json){\n               return json.data;\n           },\n           validate: function(json){\n               return json.code === 200;\n           }\n       });\n       new AddressList().fetch();",
+            "extends": "$.Base",
+            "is_constructor": 1
+        },
+        "$.EasyTouch.View": {
+            "name": "$.EasyTouch.View",
+            "shortname": "$.EasyTouch.View",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "EasyTouch-View",
+            "namespace": "",
+            "file": "js\\view.js",
+            "line": 8,
+            "description": "$.EasyTouch.View，MVC中的View模块，可以独立于EasyTouch运行\n\n       var View = $.EasyTouch.View.extend({\n           container: '<li></li>',\n           events: {\n               '.et-del': {\n                   tap: 'del'\n               }\n           },\n           init: function(){\n           },\n           del: function(e){\n           }\n       });\n       new View();",
+            "extends": "$.Base",
+            "is_constructor": 1
         }
     },
     "classitems": [
         {
-            "file": "js/core.js",
-            "line": 10,
-            "description": "`navPage`或者`pageBack`开始前促发",
+            "file": "js\\core.js",
+            "line": 14,
+            "description": "`app.navPage`或者`app.pageBack`开始前促发",
             "itemtype": "event",
             "name": "pagebeforechange",
             "params": [
@@ -147,8 +274,8 @@
                             "type": "String|Undefined"
                         },
                         {
-                            "name": "params",
-                            "description": "the params when you call `navPage` or `pageBack`",
+                            "name": "data",
+                            "description": "the data when you call `app.navPage` or `app.pageBack`",
                             "type": "Object|Undefined"
                         },
                         {
@@ -163,9 +290,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 21,
-            "description": "页面切换完成时促发，包括`navPage`和`pageBack`\n\n    var app = new EasyTouch({...});\n    app.bind('pagechange', function(e, params){\n        var fromPage = this.getPage(params.from);\n    }, app);",
+            "file": "js\\core.js",
+            "line": 25,
+            "description": "页面切换完成时促发，包括`app.navPage`和`app.pageBack`\n\n    var app = new EasyTouch({...});\n        app.bind('pagechange', function(e, params){\n        var fromPage = this.getPage(params.from);\n    }, app);",
             "itemtype": "event",
             "name": "pagechange",
             "params": [
@@ -190,8 +317,8 @@
                             "type": "String|Undefined"
                         },
                         {
-                            "name": "params",
-                            "description": "the params when you call `navPage` or `pageBack`",
+                            "name": "data",
+                            "description": "the data when you call `app.navPage` or `app.pageBack`",
                             "type": "Object|Undefined"
                         },
                         {
@@ -206,11 +333,11 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 38,
-            "description": "`pageBack`开始前促发",
+            "file": "js\\core.js",
+            "line": 42,
+            "description": "`app.pageBack`开始前促发",
             "itemtype": "event",
-            "name": "beforepageback",
+            "name": "pagebeforeback",
             "params": [
                 {
                     "name": "e",
@@ -233,8 +360,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params when you call `navPage` or `pageBack`",
+                            "name": "data",
+                            "description": "the data when you call `app.pageBack`",
                             "type": "Object|Undefined"
                         },
                         {
@@ -249,9 +376,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 49,
-            "description": "`pageBack`完成时促发",
+            "file": "js\\core.js",
+            "line": 53,
+            "description": "`app.pageBack`完成时促发",
             "itemtype": "event",
             "name": "pageback",
             "params": [
@@ -276,8 +403,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params when you call `navPage` or `pageBack`",
+                            "name": "data",
+                            "description": "the data when you call `app.pageBack`",
                             "type": "Object|Undefined"
                         },
                         {
@@ -292,9 +419,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 60,
-            "description": "`navPage`完成时促发",
+            "file": "js\\core.js",
+            "line": 64,
+            "description": "`app.navPage`完成时促发",
             "itemtype": "event",
             "name": "pagenav",
             "params": [
@@ -319,8 +446,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params when you call `navPage` or `pageBack`",
+                            "name": "data",
+                            "description": "the data when you call `app.navPage`",
                             "type": "Object|Undefined"
                         },
                         {
@@ -335,11 +462,11 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 71,
-            "description": "`navPage`开始前促发",
+            "file": "js\\core.js",
+            "line": 75,
+            "description": "`app.navPage`开始前促发",
             "itemtype": "event",
-            "name": "beforepagenav",
+            "name": "pagebeforenav",
             "params": [
                 {
                     "name": "e",
@@ -362,8 +489,8 @@
                             "type": "String|Undefined"
                         },
                         {
-                            "name": "params",
-                            "description": "the params when you call `navPage` or `pageBack`",
+                            "name": "data",
+                            "description": "the data when you call `app.navPage`",
                             "type": "Object|Undefined"
                         },
                         {
@@ -378,11 +505,11 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 82,
+            "file": "js\\core.js",
+            "line": 86,
             "description": "异步获取页面前促发",
             "itemtype": "event",
-            "name": "beforepageload",
+            "name": "pagebeforeload",
             "params": [
                 {
                     "name": "e",
@@ -400,8 +527,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "page params for the target page",
+                            "name": "data",
+                            "description": "page data for the target page",
                             "type": "Object"
                         }
                     ]
@@ -411,8 +538,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 91,
+            "file": "js\\core.js",
+            "line": 95,
             "description": "异步获取页面完成后促发",
             "itemtype": "event",
             "name": "pageload",
@@ -433,8 +560,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "page params for the target page",
+                            "name": "data",
+                            "description": "page data for the target page",
                             "type": "Object"
                         }
                     ]
@@ -444,8 +571,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 100,
+            "file": "js\\core.js",
+            "line": 104,
             "description": "异步获取页面失败时促发",
             "itemtype": "event",
             "name": "pageloadfailed",
@@ -466,8 +593,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "page params for the target page",
+                            "name": "data",
+                            "description": "page data for the target page",
                             "type": "Object"
                         }
                     ]
@@ -477,31 +604,108 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 109,
-            "description": "退出应用时促发",
+            "file": "js\\core.js",
+            "line": 113,
+            "description": "退出应用时，子应用促发",
             "itemtype": "event",
             "name": "exit",
-            "access": "private",
-            "tagname": "",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "the child app's id",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "data",
+                    "description": "data for the parent app",
+                    "type": "Object"
+                }
+            ],
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 115,
-            "description": "用`navApp`第二次进入应用时促发",
+            "file": "js\\core.js",
+            "line": 122,
+            "description": "第二次`app.navApp`到子应用时，子应用促发",
             "itemtype": "event",
             "name": "reset",
-            "access": "private",
-            "tagname": "",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "the target app's id",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "data",
+                    "description": "data for the target app",
+                    "type": "Object"
+                }
+            ],
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 121,
-            "description": "`navApp`后促发",
+            "file": "js\\core.js",
+            "line": 131,
+            "description": "从子应用回到宿主应用时，宿主应用促发",
+            "itemtype": "event",
+            "name": "appback",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "id",
+                            "description": "the child app's id",
+                            "type": "String"
+                        }
+                    ]
+                },
+                {
+                    "name": "data",
+                    "description": "when the child app call `app.exit`",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 140,
+            "description": "`app.navApp`后促发",
             "itemtype": "event",
             "name": "appnav",
             "params": [
@@ -521,8 +725,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params for the target app",
+                            "name": "data",
+                            "description": "the data for the target app",
                             "type": "Object"
                         }
                     ]
@@ -532,11 +736,11 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 130,
-            "description": "`navApp`前促发",
+            "file": "js\\core.js",
+            "line": 149,
+            "description": "`app.navApp`前促发",
             "itemtype": "event",
-            "name": "beforeappnav",
+            "name": "appbeforenav",
             "params": [
                 {
                     "name": "e",
@@ -554,8 +758,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params for the target app",
+                            "name": "data",
+                            "description": "the data for the target app",
                             "type": "Object"
                         }
                     ]
@@ -565,11 +769,11 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 139,
+            "file": "js\\core.js",
+            "line": 158,
             "description": "第一次加载子应用时促发",
             "itemtype": "event",
-            "name": "beforeappload",
+            "name": "appbeforeload",
             "params": [
                 {
                     "name": "e",
@@ -587,8 +791,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params for the target app",
+                            "name": "data",
+                            "description": "the data for the target app",
                             "type": "Object"
                         }
                     ]
@@ -598,8 +802,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 148,
+            "file": "js\\core.js",
+            "line": 167,
             "description": "第一次加载子应用完成时促发",
             "itemtype": "event",
             "name": "appload",
@@ -620,8 +824,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params for the target app",
+                            "name": "data",
+                            "description": "the data for the target app",
                             "type": "Object"
                         }
                     ]
@@ -631,8 +835,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 157,
+            "file": "js\\core.js",
+            "line": 176,
             "description": "加载子应用失败时促发",
             "itemtype": "event",
             "name": "apploadfailed",
@@ -653,8 +857,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "the params for the target app",
+                            "name": "data",
+                            "description": "the data for the target app",
                             "type": "Object"
                         }
                     ]
@@ -664,9 +868,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 242,
-            "description": "应用id",
+            "file": "js\\core.js",
+            "line": 284,
+            "description": "[需要重写]应用id",
             "itemtype": "property",
             "name": "id",
             "type": "String",
@@ -676,9 +880,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 250,
-            "description": "容器",
+            "file": "js\\core.js",
+            "line": 292,
+            "description": "[需要重写]容器",
             "itemtype": "property",
             "name": "container",
             "type": "HTMLElement|Node|String",
@@ -688,9 +892,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 258,
-            "description": "加载页面和应用时是否显示加载中提示",
+            "file": "js\\core.js",
+            "line": 300,
+            "description": "[需要重写]加载页面和应用时是否显示加载中提示",
             "itemtype": "property",
             "name": "ifShowLoading",
             "type": "Boolean",
@@ -700,9 +904,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 266,
-            "description": "页面切换时的默认动画",
+            "file": "js\\core.js",
+            "line": 308,
+            "description": "[需要重写]页面切换时的默认动画",
             "itemtype": "property",
             "name": "defaultAnimation",
             "type": "String",
@@ -712,9 +916,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 274,
-            "description": "代理的事件列表，`handler`可是一个字符串也可以是一个`function`，当是字符串时，将访问`this['nav']`\n\n     {\n         'tap #contariner header': 'nav',\n         'tap #contariner': function(){}\n     }",
+            "file": "js\\core.js",
+            "line": 316,
+            "description": "[需要重写]代理的事件列表，`handler`可是一个字符串也可以是一个`function`，当是字符串时，将访问`this['nav']`\n\n     {\n         '#contariner header': {\n             tap: 'nav\n         },\n         '#contariner': {\n             tap: function(){},\n         },\n         //当选择器是空的时，为本身\n         '': function(){\n             tap: function(){}\n         }\n     }",
             "itemtype": "property",
             "name": "events",
             "type": "Object",
@@ -723,9 +927,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 287,
-            "description": "Page原型",
+            "file": "js\\core.js",
+            "line": 337,
+            "description": "[需要重写]Page原型",
             "itemtype": "property",
             "name": "pages",
             "type": "Object",
@@ -734,9 +938,9 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 294,
-            "description": "子应用的配置\n\n     {\n         'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'\n     }",
+            "file": "js\\core.js",
+            "line": 344,
+            "description": "[需要重写]子应用的配置\n\n     {\n         'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'\n     }",
             "itemtype": "property",
             "name": "apps",
             "type": "Object",
@@ -745,8 +949,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 306,
+            "file": "js\\core.js",
+            "line": 356,
             "description": "容器（原生dom）",
             "itemtype": "property",
             "name": "el",
@@ -756,8 +960,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 313,
+            "file": "js\\core.js",
+            "line": 363,
             "description": "容器（Zepto对象）",
             "itemtype": "property",
             "name": "$el",
@@ -767,8 +971,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 320,
+            "file": "js\\core.js",
+            "line": 370,
             "description": "Page实例",
             "itemtype": "property",
             "name": "_pages",
@@ -779,8 +983,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 327,
+            "file": "js\\core.js",
+            "line": 377,
             "description": "子应用",
             "itemtype": "property",
             "name": "_apps",
@@ -791,8 +995,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 334,
+            "file": "js\\core.js",
+            "line": 384,
             "description": "页面跳转的历史记录",
             "itemtype": "property",
             "name": "_history",
@@ -803,8 +1007,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 341,
+            "file": "js\\core.js",
+            "line": 391,
             "description": "宿主应用",
             "itemtype": "property",
             "name": "host",
@@ -815,8 +1019,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 348,
+            "file": "js\\core.js",
+            "line": 398,
             "description": "宿主应用是否处于可视状态",
             "itemtype": "property",
             "name": "_active",
@@ -827,9 +1031,26 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 443,
-            "description": "Init lifecycle method, invoked during construction. Fires the init event prior to setting up attributes and invoking initializers for the class hierarchy.",
+            "file": "js\\core.js",
+            "line": 405,
+            "description": "构造函数",
+            "itemtype": "method",
+            "name": "initializer",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "应用启动参数"
+                }
+            ],
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 531,
+            "description": "[需要重写]Init lifecycle method, invoked during construction. Fires the init event prior to setting up attributes and invoking initializers for the class hierarchy.",
             "itemtype": "method",
             "name": "init",
             "params": [
@@ -843,83 +1064,69 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 451,
-            "description": "YunOS的resume事件监听",
+            "file": "js\\core.js",
+            "line": 539,
+            "description": "[需要重写]作为子应用第二次访问被访问时执行",
+            "itemtype": "method",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 547,
+            "description": "[需要重写]YunOS的resume事件监听，halo会在`document`上促发该事件",
             "itemtype": "method",
             "name": "resume",
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 458,
-            "description": "YunOS的pause事件监听",
+            "file": "js\\core.js",
+            "line": 554,
+            "description": "[需要重写]YunOS的pause事件监听，halo会在`document`上促发该事件",
             "itemtype": "method",
             "name": "pause",
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 465,
-            "description": "［子应用］第二次`navApp`到子应用时，调用子应用的reset方法",
+            "file": "js\\core.js",
+            "line": 561,
+            "description": "按云键，默认退出应用，halo会在`document`上促发该事件",
             "itemtype": "method",
-            "name": "reset",
-            "params": [
-                {
-                    "name": "params",
-                    "description": "params for the target app",
-                    "type": "Object"
-                }
-            ],
+            "name": "resetbutton",
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 473,
-            "description": "［宿主应用］从子应用回到宿主应用时调用宿主应用的back方法",
-            "itemtype": "method",
-            "name": "back",
-            "params": [
-                {
-                    "name": "params",
-                    "description": "when the child app call `exit`",
-                    "type": "Object"
-                }
-            ],
-            "class": "$.EasyTouch",
-            "module": "EasyTouch"
-        },
-        {
-            "file": "js/core.js",
-            "line": 481,
-            "description": "退出应用，当子应用调用该方法时，可是携带参数，宿主应用会在back方法中获得这些参数",
+            "file": "js\\core.js",
+            "line": 571,
+            "description": "退出应用，当子应用调用该方法时，可是携带参数，宿主应用会在`back`事件中获得这些参数",
             "itemtype": "method",
             "name": "exit",
             "params": [
                 {
-                    "name": "params",
-                    "description": "the params for the parent app, the parent app can get the params from `back`",
+                    "name": "data",
+                    "description": "the data for the parent app",
                     "type": "Object"
                 }
             ],
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 499,
-            "description": "按云键，默认退出应用",
-            "itemtype": "method",
-            "name": "resetbutton",
-            "class": "$.EasyTouch",
-            "module": "EasyTouch"
-        },
-        {
-            "file": "js/core.js",
-            "line": 507,
+            "file": "js\\core.js",
+            "line": 594,
             "itemtype": "method",
             "name": "navApp",
             "params": [
@@ -929,17 +1136,18 @@
                     "type": "String"
                 },
                 {
-                    "name": "params",
-                    "description": "params for the target app",
+                    "name": "data",
+                    "description": "data for the target app",
                     "type": "Object"
                 }
             ],
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 559,
+            "file": "js\\core.js",
+            "line": 651,
             "description": "通过ID获取某一个app\n\n   app.getApp('hongbao');",
             "itemtype": "method",
             "name": "getApp",
@@ -951,16 +1159,16 @@
                 }
             ],
             "return": {
-                "description": "`app`: {HTMLElement} app.el the iframe of app; {Node} app.$el the iframe of app; {HTMLElement} app.window the contentWindow of iframe",
+                "description": "app: {HTMLElement} app.el the iframe of app; {Node} app.$el the iframe of app; {HTMLElement} app.window the contentWindow of iframe",
                 "type": "Object"
             },
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 571,
-            "description": "页面跳转\n\n    app.navPage('DetailPage', {\n        title: 'MacBook Air',\n        desc: '...'\n    }, 'sliderRightIn', -1);",
+            "file": "js\\core.js",
+            "line": 663,
+            "description": "页面跳转\n\n    app.navPage('DetailPage', {\n        title: 'MacBook Air',\n        desc: '...'\n    }, 'sliderRightIn', false);",
             "itemtype": "method",
             "name": "navPage",
             "params": [
@@ -970,51 +1178,53 @@
                     "type": "String"
                 },
                 {
-                    "name": "params",
-                    "description": "params for next page",
+                    "name": "data",
+                    "description": "data for next page",
                     "type": "Object"
                 },
                 {
                     "name": "anim",
-                    "description": "animation name, contain:\n\n*   slideRightIn\n*   slideLeftIn\n*   slideUpIn\n*   slideDownIn\n*   fadeIn\n*   dissolveIn\n*   popIn <sup>4.0+</sup>\n*   flipLeftIn <sup>4.0+</sup>\n*   flipRightIn <sup>4.0+</sup>\n*   swapLeftIn <sup>4.0+</sup>\n*   swapRightIn <sup>4.0+</sup>\n*   cubeLeftIn <sup>4.0+</sup>\n*   cubeRightIn <sup>4.0+</sup>\n*   flowLeftIn <sup>4.0+</sup>\n*   flowRightIn <sup>4.0+</sup>\n*   turnIn <sup>4.0+</sup>\n\ninclude the animation css in your less file like this:\n<pre class=\"code\"><code>@import <span class=\"str\">\"easytouch/less/anim.less\"</span>;\n <span class=\"com\">\n//Notice: When the slideRightIn included, the slideLeftOut is also ready.\n//The same, when you include slideLeftOut, slideRightIn is ready too.\n//All the animation function has two params: \"duration\" and \"function\".</span>\n<span style=\"color:#30418C\">.easytouch</span> > <span style=\"color:#30418C\">.anim-slideRightIn</span>(<span class=\"lit\">.6</span>s, <span class=\"str\">ease-in</span>);\n</code></pre>",
+                    "description": "animation name, contain:\n\n*   slideRightIn\n*   slideLeftIn\n*   slideTopIn\n*   slideBottomIn\n*   fadeIn\n*   dissolveIn\n*   popIn <sup>4.0+</sup>\n*   flipLeftIn <sup>4.0+</sup>\n*   flipRightIn <sup>4.0+</sup>\n*   swapLeftIn <sup>4.0+</sup>\n*   swapRightIn <sup>4.0+</sup>\n*   cubeLeftIn <sup>4.0+</sup>\n*   cubeRightIn <sup>4.0+</sup>\n*   flowLeftIn <sup>4.0+</sup>\n*   flowRightIn <sup>4.0+</sup>\n*   turnIn <sup>4.0+</sup>\n\ninclude the animation css in your less file like this:\n<pre class=\"code\"><code>@import <span class=\"str\">\"easytouch/less/anim.less\"</span>;\n<span class=\"com\">\n//Notice: When the slideRightIn included, the slideLeftOut is also ready.\n//The same, when you include slideLeftOut, slideRightIn is ready too.\n//All the animation function has two options: \"duration\" and \"function\".</span>\n<span style=\"color:#30418C\">.easytouch</span> > <span style=\"color:#30418C\">.anim-slideRightIn</span>(<span class=\"lit\">.6</span>s, <span class=\"str\">ease-in</span>);\n</code></pre>",
                     "type": "String"
                 },
                 {
                     "name": "ifPushToHistory",
-                    "description": "if push rhe page to history",
+                    "description": "if push the page to history, default: `true`",
                     "type": "Boolean"
                 }
             ],
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 659,
-            "description": "返回到上一个页面\n\n    app.pageBack({\n        id: xxx\n    }, 'popIn');",
+            "file": "js\\core.js",
+            "line": 763,
+            "description": "返回到上一个页面\n\n    app.pageBack({\n       id: xxx\n    }, 'popIn');",
             "itemtype": "method",
             "name": "pageBack",
             "params": [
                 {
-                    "name": "params",
-                    "description": "params for next page",
+                    "name": "data",
+                    "description": "data for next page",
                     "type": "Object"
                 },
                 {
                     "name": "anim",
-                    "description": "animation name, as same as `navPage`",
+                    "description": "animation name, as same as `app.navPage`",
                     "type": "String"
                 }
             ],
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 714,
+            "file": "js\\core.js",
+            "line": 825,
             "description": "页面切换效果",
             "itemtype": "method",
-            "name": "_navPage",
+            "name": "_transitionPages",
             "params": [
                 {
                     "name": "fromPage",
@@ -1039,12 +1249,13 @@
             ],
             "access": "private",
             "tagname": "",
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 752,
+            "file": "js\\core.js",
+            "line": 877,
             "description": "初始化一个Page类",
             "itemtype": "method",
             "name": "_createPage",
@@ -1055,8 +1266,8 @@
                     "type": "String"
                 },
                 {
-                    "name": "params",
-                    "description": "params for next page",
+                    "name": "data",
+                    "description": "data for next page",
                     "type": "Object"
                 },
                 {
@@ -1067,13 +1278,14 @@
             ],
             "access": "private",
             "tagname": "",
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 779,
-            "description": "向App添加一个页面\n\n    app.addPage('DetailPage', {\n        html: '#DetailPage'\n    });",
+            "file": "js\\core.js",
+            "line": 909,
+            "description": "向App添加一个页面\n\n    app.addPage('DetailPage', {\n       html: '#DetailPage'\n    });",
             "itemtype": "method",
             "name": "addPage",
             "params": [
@@ -1082,18 +1294,51 @@
                     "description": "page id"
                 },
                 {
-                    "name": "params",
-                    "description": "",
+                    "name": "options",
+                    "description": "参数与调用`$.EasyTouch.Page.extend`时一致，内部会调用该方法扩展一个Page类",
                     "type": "String|Object"
                 }
             ],
+            "chainable": 1,
             "class": "$.EasyTouch",
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 793,
-            "description": "通过页面ID获取某一个页面的引用\n\n    app.getPage('DetailPage');",
+            "file": "js\\core.js",
+            "line": 925,
+            "description": "从App移除一个页面，该方法只会从app的实例中删除对该Page的引用\n\n   app.removePage('DetailPage');",
+            "itemtype": "method",
+            "name": "removePage",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "page id"
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 940,
+            "description": "销毁一个页面，该方法不但会从app的实例中删除对该Page的引用，也会调用该page的`destroy`方法，完全删除页面\n\n   app.destroyPage('DetailPage');",
+            "itemtype": "method",
+            "name": "destroyPage",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "page id"
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 953,
+            "description": "通过页面ID获取某一个页面的引用\n\n   app.getPage('DetailPage');",
             "itemtype": "method",
             "name": "getPage",
             "params": [
@@ -1111,8 +1356,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 805,
+            "file": "js\\core.js",
+            "line": 965,
             "description": "获取当前页面的引用",
             "itemtype": "method",
             "name": "getCurrentPage",
@@ -1124,8 +1369,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 813,
+            "file": "js\\core.js",
+            "line": 973,
             "description": "获取当前页面的ID",
             "itemtype": "method",
             "name": "getCurrentPID",
@@ -1137,51 +1382,14 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 821,
-            "description": "显示加载中提示",
-            "itemtype": "method",
-            "name": "showLoading",
-            "params": [
-                {
-                    "name": "params",
-                    "description": "",
-                    "type": "Object",
-                    "props": [
-                        {
-                            "name": "msg",
-                            "description": "需要显示的文案",
-                            "type": "String"
-                        },
-                        {
-                            "name": "modal",
-                            "description": "加载中提示是否覆盖住应用禁止操作",
-                            "type": "Boolean"
-                        }
-                    ]
-                }
-            ],
-            "class": "$.EasyTouch",
-            "module": "EasyTouch"
-        },
-        {
-            "file": "js/core.js",
-            "line": 840,
-            "description": "隐藏加载中提示",
-            "itemtype": "method",
-            "name": "hideLoading",
-            "class": "$.EasyTouch",
-            "module": "EasyTouch"
-        },
-        {
-            "file": "js/core.js",
-            "line": 853,
-            "description": "启用单页面刷新功能, 并开始记录页面跳转, 如果存在历史记录, 则跳转至最后一条历史记录, 反之跳转至params中指定的页面\n\n    app.history.start({\n        id: 'IndexPage',\n        params: {\n            name: 'YouXiao'\n        }\n    })",
+            "file": "js\\core.js",
+            "line": 989,
+            "description": "启用单页面刷新功能, 并开始记录页面跳转, 如果存在历史记录, 则跳转至最后一条历史记录, 反之跳转至options中指定的页面\n\n    app.history.start({\n        id: 'IndexPage',\n        data: {\n           name: 'YouXiao'\n        }\n    })",
             "itemtype": "method",
             "name": "history.start",
             "params": [
                 {
-                    "name": "params",
+                    "name": "options",
                     "description": "data to call navPage when the history is empty",
                     "type": "Object",
                     "props": [
@@ -1191,8 +1399,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "params for the default page",
+                            "name": "data",
+                            "description": "data for the default page",
                             "type": "Object"
                         }
                     ]
@@ -1202,8 +1410,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 877,
+            "file": "js\\core.js",
+            "line": 1013,
             "description": "从尾部删除一条历史记录,并写入`sessionStorage`",
             "itemtype": "method",
             "name": "history.pop",
@@ -1213,8 +1421,19 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 886,
+            "file": "js\\core.js",
+            "line": 1022,
+            "description": "从历史记录中移除某一id的数据,并写入`sessionStorage`",
+            "itemtype": "method",
+            "name": "history.remove",
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1033,
             "description": "增加一条历史记录,并写入`sessionStorage`",
             "itemtype": "method",
             "name": "history.add",
@@ -1230,8 +1449,8 @@
                             "type": "String"
                         },
                         {
-                            "name": "params",
-                            "description": "params for navPage",
+                            "name": "data",
+                            "description": "data for navPage",
                             "type": "Object"
                         },
                         {
@@ -1248,8 +1467,8 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 908,
+            "file": "js\\core.js",
+            "line": 1055,
             "description": "将内存中的历史记录写入`sessionStorage`",
             "itemtype": "method",
             "name": "history.save",
@@ -1259,14 +1478,80 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 923,
-            "description": "通过该方法来继承并扩展一个`$.EasyTouch`\n\n    var App = $.EasyTouch.extend({\n        id: 'market',\n        container: '#app',\n        ifShowLoading: false,\n        defaultAnimation: 'slideRightIn',\n        pages: {},\n        apps: {\n            'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'\n        },\n        events: {\n            'tap header': 'tapHeader',\n            'tap .back': this.app.back\n        },\n        //this function will run when creating instance\n        init: function(params){},\n        //for YunOS resume event\n        resume: function(){},\n        //for YunOS suspend event\n        pause: function(){},\n        //［子应用］第二次`navApp`到子应用时，调用子应用的reset方法\n        reset: function(params){},\n        //［宿主应用］从子应用回到宿主应用时调用宿主应用的back方法\n        back: function(params){}\n    });\n    new App();",
+            "file": "js\\core.js",
+            "line": 1068,
+            "description": "在APP容器中显示加载中提示",
             "itemtype": "method",
-            "name": "$.EasyTouch.extend",
+            "name": "showLoading",
             "params": [
                 {
                     "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "msg",
+                            "description": "需要显示的文案",
+                            "type": "String"
+                        },
+                        {
+                            "name": "modal",
+                            "description": "加载中提示是否覆盖住应用禁止操作",
+                            "type": "Boolean"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1076,
+            "description": "隐藏APP容器中的加载中提示",
+            "itemtype": "method",
+            "name": "hideLoading",
+            "chainable": 1,
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1081,
+            "description": "绑定事件，建议使用更方便的配置`events`属性的方式\n\n     view.delegateEvents({\n         '#contariner': {\n             tap: function(){}\n         }\n     });",
+            "itemtype": "method",
+            "name": "delegateEvents",
+            "params": [
+                {
+                    "name": "events",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1094,
+            "description": "解绑所有事件",
+            "itemtype": "method",
+            "name": "undelegateEvents",
+            "chainable": 1,
+            "class": "$.EasyTouch",
+            "module": "EasyTouch"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1101,
+            "description": "通过该方法来继承并扩展一个`$.EasyTouch`\n\n    var App = $.EasyTouch.extend({\n        id: 'market',\n        container: '#app',\n        ifShowLoading: false,\n        defaultAnimation: 'slideRightIn',\n        debug: true,\n        pages: {},\n        apps: {\n           'hongbao': 'http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/'\n        },\n        events: {\n            'tap header': 'tapHeader',\n            'tap .back': this.app.pageBack\n        },\n        //this function will run when creating instance\n        init: function(data){},\n        //for YunOS resume event\n        resume: function(){},\n        //for YunOS suspend event\n        pause: function(){}\n    });\n    new App();",
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "property",
                     "description": "需要扩展的属性列表",
                     "type": "Object",
                     "props": [
@@ -1291,8 +1576,13 @@
                             "type": "String"
                         },
                         {
+                            "name": "debug",
+                            "description": "debug模式开关，默认为`false`",
+                            "type": "Boolean"
+                        },
+                        {
                             "name": "pages",
-                            "description": "页面配置：\n    如果是一个Object，EasyTouch会调用`$.EasyTouch.Page.extend`，将这个Object作为prototype属性扩展出一个Page，具体请看`$.EasyTouch.Page.extend`；\n    如果是一个`$.EasyTouch.Page.extend`产生的Class，则将直接使用该类作为一个Page；",
+                            "description": "页面配置：\n如果是一个Object，EasyTouch会调用`$.EasyTouch.Page.extend`，将这个Object作为prototype属性扩展出一个Page，具体请看`$.EasyTouch.Page.extend`；\n如果是一个`$.EasyTouch.Page.extend`产生的Class，则将直接使用该类作为一个Page；",
                             "type": "Object"
                         },
                         {
@@ -1312,11 +1602,11 @@
             "module": "EasyTouch"
         },
         {
-            "file": "js/core.js",
-            "line": 1008,
-            "description": "页面第一次被访问时会促发该事件",
+            "file": "js\\core.js",
+            "line": 1188,
+            "description": "页面第一次被访问前会促发该事件，`page.init`执行前",
             "itemtype": "event",
-            "name": "init",
+            "name": "pagebeforeinit",
             "params": [
                 {
                     "name": "e",
@@ -1324,8 +1614,8 @@
                     "type": "Object"
                 },
                 {
-                    "name": "params",
-                    "description": "the params from `navPage`",
+                    "name": "data",
+                    "description": "the data from `app.navPage`",
                     "type": "Object"
                 }
             ],
@@ -1336,11 +1626,35 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1016,
+            "file": "js\\core.js",
+            "line": 1196,
+            "description": "页面第一次被访问时会促发该事件，`page.init`执行后",
+            "itemtype": "event",
+            "name": "pageinit",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "the data from `app.navPage`",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch.Page",
+            "module": "EasyTouch",
+            "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1204,
             "description": "除了第一次初始化时,页面每一次被访问时都会促发该事件",
             "itemtype": "event",
-            "name": "reset",
+            "name": "pagereset",
             "params": [
                 {
                     "name": "e",
@@ -1348,8 +1662,8 @@
                     "type": "Object"
                 },
                 {
-                    "name": "params",
-                    "description": "the params from `navPage`",
+                    "name": "data",
+                    "description": "the data from `app.navPage`",
                     "type": "Object"
                 }
             ],
@@ -1358,21 +1672,21 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1023,
+            "file": "js\\core.js",
+            "line": 1211,
             "description": "每一次离开页面后促发该事件",
             "itemtype": "event",
-            "name": "leave",
+            "name": "pageleave",
             "class": "$.EasyTouch.Page",
             "module": "EasyTouch",
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1028,
+            "file": "js\\core.js",
+            "line": 1216,
             "description": "页面每一次页面完全切换完成(初始化完成,动画完成)都会执行该方法",
             "itemtype": "event",
-            "name": "ready",
+            "name": "pageready",
             "params": [
                 {
                     "name": "e",
@@ -1380,8 +1694,8 @@
                     "type": "Object"
                 },
                 {
-                    "name": "params",
-                    "description": "the params from `navPage` or `pageBack`",
+                    "name": "data",
+                    "description": "the data from `app.navPage` or `app.pageBack`",
                     "type": "Object"
                 }
             ],
@@ -1390,9 +1704,9 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1036,
-            "description": "`html`和`tpl`属性二选一，`html`将一段HTML作为一个页面，它可以来至：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）",
+            "file": "js\\core.js",
+            "line": 1224,
+            "description": "[需要重写]`html`和`tpl`属性二选一，`html`将一段HTML作为一个页面，它可以来至：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如http://xxx.com/xxx.html）",
             "itemtype": "property",
             "name": "html",
             "type": "HTMLElement|Node|String",
@@ -1402,9 +1716,9 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1043,
-            "description": "将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的`innerHTML`作为模板，可以在`render`方法中使用任意模板引擎渲染改模板",
+            "file": "js\\core.js",
+            "line": 1231,
+            "description": "[需要重写]将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的`innerHTML`作为模板，可以在`page.render`方法中使用任意模板引擎渲染改模板",
             "itemtype": "property",
             "name": "tpl",
             "type": "HTMLElement|Node|String",
@@ -1414,9 +1728,9 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1050,
-            "description": "Page的id，用于`navPage`等操作时的索引",
+            "file": "js\\core.js",
+            "line": 1238,
+            "description": "Page的id，用于`app.navPage`等操作时的索引",
             "itemtype": "property",
             "name": "id",
             "type": "String",
@@ -1425,9 +1739,9 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1056,
-            "description": "代理的事件列表，`handler`可是一个字符串也可以是一个`function`，当是字符串时，将访问`this['nav']`\n\n     {\n         'tap #contariner header': 'nav',\n         'tap #contariner': function(){}\n     }",
+            "file": "js\\core.js",
+            "line": 1244,
+            "description": "[需要重写]代理的事件列表，`handler`可是一个字符串也可以是一个`function`，当是字符串时，将访问`this['nav']`\n\n     {\n         '#contariner header': {\n             tap: 'nav\n         },\n         '#contariner': {\n             tap: function(){},\n         },\n         //当选择器是空的时，为本身\n         '': function(){\n             tap: function(){}\n         }\n     }",
             "itemtype": "property",
             "name": "events",
             "type": "Object",
@@ -1437,8 +1751,8 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1069,
+            "file": "js\\core.js",
+            "line": 1265,
             "description": "EasyTouch实例，该page所属app的引用",
             "itemtype": "property",
             "name": "app",
@@ -1448,8 +1762,8 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1075,
+            "file": "js\\core.js",
+            "line": 1271,
             "description": "Page的dom容器",
             "itemtype": "property",
             "name": "el",
@@ -1459,8 +1773,8 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1081,
+            "file": "js\\core.js",
+            "line": 1277,
             "description": "Page的$dom容器",
             "itemtype": "property",
             "name": "$el",
@@ -1470,8 +1784,8 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1087,
+            "file": "js\\core.js",
+            "line": 1283,
             "description": "标识该page是否已经初始化完成",
             "itemtype": "property",
             "name": "_inited",
@@ -1484,8 +1798,19 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1181,
+            "file": "js\\core.js",
+            "line": 1291,
+            "description": "对`$.EasyTouch.Page.prototype`的引用",
+            "itemtype": "property",
+            "name": "super",
+            "type": "Object",
+            "class": "$.EasyTouch.Page",
+            "module": "EasyTouch",
+            "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1383,
             "description": "当页面作为一个模板被加入App前,可以通过该方法渲染模板,默认原样返回",
             "itemtype": "method",
             "name": "render",
@@ -1496,8 +1821,8 @@
                     "type": "String"
                 },
                 {
-                    "name": "params",
-                    "description": "the params from `navPage`",
+                    "name": "data",
+                    "description": "the data from `app.navPage`",
                     "type": "Object"
                 }
             ],
@@ -1510,15 +1835,15 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1192,
+            "file": "js\\core.js",
+            "line": 1394,
             "description": "页面第一次被访问时会执行该方法",
             "itemtype": "method",
             "name": "init",
             "params": [
                 {
-                    "name": "params",
-                    "description": "the params from `navPage`",
+                    "name": "data",
+                    "description": "the data from `app.navPage`",
                     "type": "Object"
                 }
             ],
@@ -1527,15 +1852,15 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1200,
+            "file": "js\\core.js",
+            "line": 1402,
             "description": "除了第一次初始化时,页面每一次被访问时都会执行该方法,\n初始化时如果需要执行reset方法,请自行在init方法中调用",
             "itemtype": "method",
             "name": "reset",
             "params": [
                 {
-                    "name": "params",
-                    "description": "the params from `navPage` or `pageBack`",
+                    "name": "data",
+                    "description": "the data from `app.navPage` or `app.pageBack`",
                     "type": "Object"
                 }
             ],
@@ -1544,15 +1869,15 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1209,
-            "description": "页面每一次页面完全切换完成(初始化完成,动画完成)都会执行该方法",
+            "file": "js\\core.js",
+            "line": 1411,
+            "description": "页面每一次页面完全切换完成都会执行该方法",
             "itemtype": "method",
             "name": "ready",
             "params": [
                 {
-                    "name": "params",
-                    "description": "the params from `navPage` or `pageBack`",
+                    "name": "data",
+                    "description": "the data from `app.navPage` or `app.pageBack`",
                     "type": "Object"
                 }
             ],
@@ -1561,8 +1886,8 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1217,
+            "file": "js\\core.js",
+            "line": 1419,
             "description": "每一次离开页面后执行该方法",
             "itemtype": "method",
             "name": "leave",
@@ -1571,9 +1896,89 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1225,
-            "description": "Page的id，用于`navPage`等操作时的索引",
+            "file": "js\\core.js",
+            "line": 1426,
+            "description": "销毁该页面",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "$.EasyTouch.Page",
+            "module": "EasyTouch",
+            "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1435,
+            "description": "在当前页面显示加载中提示",
+            "itemtype": "method",
+            "name": "showLoading",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "msg",
+                            "description": "需要显示的文案",
+                            "type": "String"
+                        },
+                        {
+                            "name": "modal",
+                            "description": "加载中提示是否覆盖住应用禁止操作",
+                            "type": "Boolean"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Page",
+            "module": "EasyTouch",
+            "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1443,
+            "description": "隐藏当前页面中的加载中提示",
+            "itemtype": "method",
+            "name": "hideLoading",
+            "chainable": 1,
+            "class": "$.EasyTouch.Page",
+            "module": "EasyTouch",
+            "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1448,
+            "description": "绑定事件，建议使用更方便的配置`events`属性的方式\n\n     view.delegateEvents({\n         '#contariner': {\n             tap: function(){}\n         }\n     });",
+            "itemtype": "method",
+            "name": "delegateEvents",
+            "params": [
+                {
+                    "name": "events",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Page",
+            "module": "EasyTouch",
+            "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1461,
+            "description": "解绑所有事件",
+            "itemtype": "method",
+            "name": "undelegateEvents",
+            "chainable": 1,
+            "class": "$.EasyTouch.Page",
+            "module": "EasyTouch",
+            "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\core.js",
+            "line": 1467,
+            "description": "Page的id，用于`app.navPage`等操作时的索引",
             "itemtype": "attribute",
             "name": "id",
             "type": "String",
@@ -1582,8 +1987,8 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1231,
+            "file": "js\\core.js",
+            "line": 1473,
             "description": "EasyTouch实例，该page所属app的引用",
             "itemtype": "attribute",
             "name": "app",
@@ -1593,22 +1998,22 @@
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1237,
+            "file": "js\\core.js",
+            "line": 1479,
             "description": "传递给page的参数",
             "itemtype": "attribute",
-            "name": "params",
+            "name": "data",
             "type": "Object",
             "class": "$.EasyTouch.Page",
             "module": "EasyTouch",
             "submodule": "EasyTouch-Page"
         },
         {
-            "file": "js/core.js",
-            "line": 1244,
-            "description": "通过该方法来继承并扩展一个`$.EasyTouch.Page`：\n\n    var Page1 = $.EasyTouch.Page.extend({\n        //set html or tpl property, examples in $.EasyTouch example\n        html: '#Page1',\n        //html: document.getElementById('#Page1'),\n        //html: $('#Page1'),\n        //html: 'pages/Page1.html',\n\n        //tpl: '#Page1',\n        //tpl: document.getElementById('#Page1'),\n        //tpl: $('#Page1'),\n        //tpl: 'pages/Page1.html',\n\n        events: {\n            'tap header': 'tapHeader',\n            'tap .back': this.app.back\n        },\n        render: function(template, params){\n            return Mustache.to_html(template, params);\n        },\n        init: function(){\n\n        },\n        reset: function(){\n\n        },\n        ready： function(){\n\n        },\n        leave： function(){\n\n        },\n        tapHeader: function(){\n\n        }\n    });",
+            "file": "js\\core.js",
+            "line": 1486,
+            "description": "通过该方法来继承并扩展一个`$.EasyTouch.Page`：\n\n    var Page1 = $.EasyTouch.Page.extend({\n        //set html or tpl property, examples in $.EasyTouch example\n        html: '#Page1',\n        //html: document.getElementById('#Page1'),\n        //html: $('#Page1'),\n        //html: 'pages/Page1.html',\n\n        //tpl: '#Page1',\n        //tpl: document.getElementById('#Page1'),\n        //tpl: $('#Page1'),\n        //tpl: 'pages/Page1.html',\n\n        events: {\n            'header': {\n               tap: 'tapHeader',\n            }\n            '.back': {\n               tap: this.app.pageBack\n            }\n        },\n        render: function(template, data){\n            return Mustache.to_html(template, data);\n        },\n        init: function(){\n\n        },\n        reset: function(){\n\n        },\n        ready： function(){\n\n        },\n        leave： function(){\n\n        },\n        tapHeader: function(e, sender){\n\n        }\n    });",
             "itemtype": "method",
-            "name": "$.EasyTouch.Page.extend",
+            "name": "extend",
             "params": [
                 {
                     "name": "property",
@@ -1622,7 +2027,7 @@
                         },
                         {
                             "name": "tpl",
-                            "description": "将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的`innerHTML`作为模板，可以在`render`方法中使用任意模板引擎渲染改模板",
+                            "description": "将一个模板作为一个页面，它可以是：原生的dom节点、Zepto对象、选择器、一个本地或远程的html文件（如tpl/xxx.html），对于前三者，EasyTouch会将它们的`innerHTML`作为模板，可以在`page.render`方法中使用任意模板引擎渲染改模板",
                             "type": "HTMLElement|Node|String"
                         }
                     ]
@@ -1636,6 +2041,1516 @@
             "class": "$.EasyTouch.Page",
             "module": "EasyTouch",
             "submodule": "EasyTouch-Page"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 9,
+            "description": "数据请求返回数据没有通过`validate`方法时",
+            "itemtype": "event",
+            "name": "dataerror",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 15,
+            "description": "数据保存后促发",
+            "itemtype": "event",
+            "name": "save",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "the data after save",
+                    "type": "Any"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 22,
+            "description": "数据变化后促发，调用`set`方法后",
+            "itemtype": "event",
+            "name": "change",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "the data after change",
+                    "type": "Any"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 29,
+            "description": "数据重置后促发",
+            "itemtype": "event",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "the data after reset",
+                    "type": "Any"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 36,
+            "description": "数据删除后促发",
+            "itemtype": "event",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 42,
+            "description": "数据请求前促发，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "beforeSend",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 50,
+            "description": "数据请求成功时促发，与Zepto、jQuery的success的区别在于这里不光请求成功了，而且通过了`validate`的检验，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "success",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 59,
+            "description": "数据请求完成时促发，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "complete",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 67,
+            "description": "数据请求失败时促发，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "error",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "errorThrown",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 103,
+            "description": "EasyTouch.ModelList的集合，当前model所属ModelList的集合",
+            "itemtype": "property",
+            "name": "lists",
+            "type": "Array",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 109,
+            "description": "[需要重写]默认的model数据",
+            "itemtype": "property",
+            "name": "defaults",
+            "type": "Any",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 115,
+            "description": "[需要重写]用于异步请求的参数，和`$.ajax`(http://zeptojs.com/#$.ajax)的参数一致，在扩展一个`Model`时可以事先定义一份基础的请求参数\n\n     {\n         url: xxx,\n         type: 'POST',\n         data: xxx\n         ...\n     }",
+            "itemtype": "property",
+            "name": "server",
+            "type": "Object",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 129,
+            "description": "[需要重写]监听指定数据的变化，在异步请求返回后执行，用于记录当前`page`等数据，当数据返回后，以下面的设置为例：将从数据中的`data.data.currentPage`下查询该参数，并记录到`attrs`属性中\n\n     $.EasyTouch.Model.extend({\n         watch: {\n             page: 'data.currentPage'\n         }\n     });\n\n     var page = this.attrs.page;",
+            "itemtype": "property",
+            "name": "watch",
+            "type": "Object",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 144,
+            "description": "存储的各类属性",
+            "itemtype": "property",
+            "name": "attrs",
+            "type": "Object",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 150,
+            "description": "存储的数据",
+            "itemtype": "property",
+            "name": "data",
+            "type": "Any",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 156,
+            "description": "对`$.EasyTouch.Model.prototype`的引用",
+            "itemtype": "property",
+            "name": "super",
+            "type": "Object",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 162,
+            "description": "Base模块的构造函数",
+            "itemtype": "method",
+            "name": "initializer",
+            "params": [
+                {
+                    "name": "data",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 173,
+            "description": "[需要重写]作为model实例化时的构造函数",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "实例化时的参数",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 179,
+            "description": "修改model中某一个属性\n\n     this.set('name', 'youxiao');\n\n     this.set({\n         name: 'youxiao',\n         age: 26\n     });",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "属性名",
+                    "type": "Object|String"
+                },
+                {
+                    "name": "value",
+                    "description": "属性值",
+                    "type": "Any"
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 206,
+            "description": "获取model中的某一个属性\n\n     //model: {name: {firstName: 'Qi', lastName: 'Zhou'}, age: 26}\n     this.get('name');            //{firstName: 'Qi', lastName: 'Zhou'}\n     this.get('name.firstName');  //Qi",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "属性名",
+                    "type": "String"
+                }
+            ],
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 223,
+            "description": "[需要重写]处理异步返回的数据，默认原样返回\n\n     $.EasyTouch.Model.extend({\n         parse: function(data){\n             return data.items\n         }\n     });",
+            "itemtype": "method",
+            "name": "parse",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Any"
+            },
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 239,
+            "description": "[需要重写]检查异步返回的数据，默认返回`true`\n\n     $.EasyTouch.Model.extend({\n         validate: function(data){\n             return !!data.success\n         }\n     });",
+            "itemtype": "method",
+            "name": "parse",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 255,
+            "description": "监听指定数据的变化，在异步请求返回后执行，用于记录当前`page`等数据，需要监听的数据设置在`watchs`属性上",
+            "itemtype": "method",
+            "name": "_watch",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "chainable": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 274,
+            "description": "复制一个对象或者数组，默认复制`model.data`",
+            "itemtype": "method",
+            "name": "clone",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "需要被复制的目标",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "数据的拷贝",
+                "type": "Any"
+            },
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 291,
+            "description": "返回model中保存的数据",
+            "itemtype": "method",
+            "name": "toJSON",
+            "return": {
+                "description": "数据的拷贝",
+                "type": "Any"
+            },
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 299,
+            "description": "把model保存到服务端\n\n     this.save({\n         url: xxx,\n         data: {},\n         ...\n     }, {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "save",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致，该参数将和`model.server`参数进行`extend`作为最终的请求参数",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 329,
+            "description": "删除model，并同步到server\n\n     this.remove({\n         url: xxx,\n         data: {},\n         ...\n     }, {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致，该参数将和`model.server`参数进行`extend`作为最终的请求参数",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 360,
+            "description": "从服务端获取数据，重置本地数据\n\n     this.fetch({\n         url: xxx,\n         data: {},\n         ...\n     }, {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "fetch",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致，该参数将和`model.server`参数进行`extend`作为最终的请求参数",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 391,
+            "description": "用已有的数据重置本地数据\n\n     this.reset({\n         name: 'youxiao',\n         age: 25\n     }, {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 416,
+            "description": "调用`$.ajax'前，处理`$.ajax'的`options`参数，可以用来给url添加域名，给`options.data`增加通用参数等\n\n     parseAjaxOptions: function(options){\n         options.url = 'http://taobao.windcache.com/' + options.url;\n         return options;\n     }",
+            "itemtype": "method",
+            "name": "parseAjaxOptions",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "处理完后的`options`参数",
+                "type": "Object"
+            },
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 431,
+            "description": "封装过的`$.ajax`\n\n     this.clear({\n         silent: true\n     })",
+            "itemtype": "method",
+            "name": "ajax",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 506,
+            "description": "销毁当前model，并从它的容器modellist中移除该项",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\model.js",
+            "line": 521,
+            "description": "通过该方法扩展一个`$.EasyTouch.Model`\n\n     var Model = $.EasyTouch.Model.extend({\n         server: {\n             url: 'xxx',\n             type: 'POST',\n             data: {\n                 id: 1,\n                 sort: 'hongbao',\n                 ...\n             }\n             ...\n         },\n         watch: {\n             page: 'currentPage'\n         },\n         parse: function(){},\n         validate: function(){}\n     });",
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "需要扩展到`$.EasyTouch.Page`上的方法和属性",
+                    "type": "Property"
+                }
+            ],
+            "return": {
+                "description": "扩展出来的类",
+                "type": "Function"
+            },
+            "static": 1,
+            "class": "$.EasyTouch.Model",
+            "module": "EasyTouch-Model"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 10,
+            "description": "数据请求返回数据没有通过`validate`方法时",
+            "itemtype": "event",
+            "name": "dataerror",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 16,
+            "description": "Model被创建时促发",
+            "itemtype": "event",
+            "name": "create",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "model",
+                    "description": "the created model",
+                    "type": "Any"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 23,
+            "description": "数据添加后促发",
+            "itemtype": "event",
+            "name": "add",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "models",
+                    "description": "the added models",
+                    "type": "Array"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 30,
+            "description": "数据移除后促发",
+            "itemtype": "event",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "models",
+                    "description": "the models be removed",
+                    "type": "Array"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 37,
+            "description": "数据变化后促发",
+            "itemtype": "event",
+            "name": "change",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "the models after change",
+                    "type": "Array"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 44,
+            "description": "数据重置后促发，调用`fetch`和`reset`方法",
+            "itemtype": "event",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "the models after reset",
+                    "type": "Array"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 51,
+            "description": "数据请求前促发，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "beforeSend",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 59,
+            "description": "数据请求成功时促发，与Zepto、jQuery的success的区别在于这里不光请求成功了，而且通过了`validate`的检验，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "success",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 68,
+            "description": "数据请求完成时促发，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "complete",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 76,
+            "description": "数据请求失败时促发，参数说明：http://api.jquery.com/jQuery.ajax/",
+            "itemtype": "event",
+            "name": "error",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "event object from custom-event",
+                    "type": "Object"
+                },
+                {
+                    "name": "jqXHR",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "textStatus",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "errorThrown",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 117,
+            "description": "[需要重写]ModelList对应的Model实例",
+            "itemtype": "property",
+            "name": "model",
+            "type": "Object",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 123,
+            "description": "[需要重写]用于异步请求的参数，和`$.ajax`(http://zeptojs.com/#$.ajax)的参数一致，在扩展一个`Model`时可以事先定义一份基础的请求参数\n\n     {\n         url: xxx,\n         type: 'POST',\n         data: xxx\n         ...\n     }",
+            "itemtype": "property",
+            "name": "server",
+            "type": "Object",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 137,
+            "description": "[需要重写]监听指定数据的变化，在异步请求返回后执行，用于记录当前`page`等数据，当数据返回后，以下面的设置为例：将从数据中的`data.data.currentPage`下查询该参数，并记录到`attrs`属性中\n\n     $.EasyTouch.Model.extend({\n         watch: {\n             page: 'data.currentPage'\n         }\n     });\n\n     var page = this.attrs.page;",
+            "itemtype": "property",
+            "name": "watch",
+            "type": "Object",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 152,
+            "description": "存储的各类属性",
+            "itemtype": "property",
+            "name": "attrs",
+            "type": "Object",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 158,
+            "description": "存储的数据",
+            "itemtype": "property",
+            "name": "data",
+            "type": "any",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 164,
+            "description": "对`$.EasyTouch.Model.prototype`的引用",
+            "itemtype": "property",
+            "name": "super",
+            "type": "Object",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 169,
+            "description": "[需要重写]处理异步返回的数据，默认原样返回\n\n     $.EasyTouch.Model.extend({\n         parse: function(data){\n             return data.items\n         }\n     });",
+            "itemtype": "method",
+            "name": "parse",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Any"
+            },
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 185,
+            "description": "[需要重写]检查异步返回的数据，默认返回`true`\n\n     $.EasyTouch.Model.extend({\n         validate: function(data){\n             return !!data.success\n         }\n     });",
+            "itemtype": "method",
+            "name": "parse",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 201,
+            "description": "Base模块的构造函数",
+            "itemtype": "method",
+            "name": "initializer",
+            "params": [
+                {
+                    "name": "data",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 214,
+            "description": "[需要重写]作为ModelList实例化时的构造函数",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "实例化时的参数",
+                    "type": "Object"
+                }
+            ],
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 220,
+            "description": "监听指定数据的变化，在异步请求返回后执行，用于记录当前`page`等数据，需要监听的数据设置在`watchs`属性上",
+            "itemtype": "method",
+            "name": "_watch",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 237,
+            "description": "类似数组的`every`方法\n\n     var youxiao = {\n         name: 'youxiao',\n         age: 25,\n         sex: male\n     };\n\n     var isYouxiao = this.every({\n         name: 'youxiao',\n         age: 25\n     }, function(k, v){\n         return youxiao[k] === v;\n     });",
+            "itemtype": "method",
+            "name": "every",
+            "params": [
+                {
+                    "name": "attrs",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 268,
+            "description": "查询`model.data`中符合条件的数据，查询对象必须是一个对象组成的数组\n\n     this.where({name: 'youxiao'});",
+            "itemtype": "method",
+            "name": "where",
+            "params": [
+                {
+                    "name": "attrs",
+                    "description": "条件列表"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 291,
+            "description": "获取modellist的数据",
+            "itemtype": "method",
+            "name": "toJSON",
+            "params": [
+                {
+                    "name": "models",
+                    "description": "默认为当前的modellist，可以传递一个model组成的数组",
+                    "type": "Array",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "ModelList",
+                "type": "Array"
+            },
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 305,
+            "description": "获取下一页数据\n\n     this.next({\n         data: {\n             page: 2\n         }\n     },{\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "next",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致，该参数将和`model.server`参数进行`extend`作为最终的请求参数",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 336,
+            "description": "添加数据\n\n     this.add([\n         {\n             name: 'youxiao',\n             age: 25\n         }\n     ], {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "ModelList|Model|Array|Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 378,
+            "description": "从服务端获取数据，重置本地数据\n\n     this.fetch({\n\n     }, {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "fetch",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致，该参数将和`model.server`参数进行`extend`作为最终的请求参数",
+                    "type": "Array"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 407,
+            "description": "用已有的数据重置本地数据\n\n     this.reset([\n         {\n             name: 'youxiao',\n             age: 25\n         }\n     ], {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 446,
+            "description": "调用`$.ajax'前，处理`$.ajax'的`options`参数，可以用来给url添加域名，给`options.data`增加通用参数等\n\n     parseAjaxOptions: function(options){\n         options.url = 'http://taobao.windcache.com/' + options.url;\n         return options;\n     }",
+            "itemtype": "method",
+            "name": "parseAjaxOptions",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "处理完后的`options`参数",
+                "type": "Object"
+            },
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 461,
+            "description": "封装过的`$.ajax`\n\n     this.ajax({\n\n     }, {\n         success: function(){},\n         error: function(){}\n     })",
+            "itemtype": "method",
+            "name": "ajax",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "和`$.ajax`的`options`参数一致",
+                    "type": "Object"
+                },
+                {
+                    "name": "settings",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "success",
+                            "description": "成功的回调",
+                            "type": "Function"
+                        },
+                        {
+                            "name": "error",
+                            "description": "失败的回调",
+                            "type": "Function"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 538,
+            "description": "移除`modellist.data`中的一项或多项\n\n     this.remove()      //remove all models\n     this.remove(model) //remove one model\n     this.remove([model1, model2]) //remove some model",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "targets",
+                    "description": "",
+                    "type": "Array|Object",
+                    "optional": true
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\modellist.js",
+            "line": 574,
+            "description": "通过该方法扩展一个`$.EasyTouch.ModelList`\n\n     var ModelList = $.EasyTouch.ModelList.extend({\n         model: Model,\n         server: {\n             url: 'xxx',\n             type: 'POST',\n             data: {\n                 id: 1,\n                 sort: 'hongbao',\n                 ...\n             }\n             ...\n         },\n         watch: {\n             page: 'currentPage'\n         },\n         parse: function(){},\n         validate: function(){}\n     });",
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "需要扩展到`$.EasyTouch.ModelList`上的方法和属性",
+                    "type": "Property"
+                }
+            ],
+            "return": {
+                "description": "扩展出来的类",
+                "type": "Function"
+            },
+            "static": 1,
+            "class": "$.EasyTouch.ModelList",
+            "module": "EasyTouch-ModelList"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 30,
+            "description": "[需要重写]View的id",
+            "itemtype": "property",
+            "name": "id",
+            "type": "String",
+            "optional": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 37,
+            "description": "[需要重写]View的容器",
+            "itemtype": "property",
+            "name": "container",
+            "type": "String|Node|HTMLElement",
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 43,
+            "description": "[需要重写]EasyTouch.Model的实例，`render`方法默认使用这个model获取数据",
+            "itemtype": "property",
+            "name": "model",
+            "type": "Object",
+            "optional": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 50,
+            "description": "[需要重写]View的模版，`render`方法默认使用这个作为模版",
+            "itemtype": "property",
+            "name": "tpl",
+            "type": "String",
+            "optional": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 57,
+            "description": "[需要重写]代理的事件列表，`handler`可是一个字符串也可以是一个`function`，当是字符串时，将访问`this['nav']`\n\n     {\n         '#contariner header': {\n             tap: 'nav',\n         },\n         '#contariner': {\n             tap: function(){}\n         },\n         //当选择器是空的时，为本身\n         '': function(){\n             tap: function(){}\n         }\n     }",
+            "itemtype": "property",
+            "name": "events",
+            "type": "Object",
+            "optional": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 78,
+            "description": "View的dom容器",
+            "itemtype": "property",
+            "name": "el",
+            "type": "HTMLElement",
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 84,
+            "description": "View的$dom容器",
+            "itemtype": "property",
+            "name": "$el",
+            "type": "Node",
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 90,
+            "description": "对`$.EasyTouch.View.prototype`的引用",
+            "itemtype": "property",
+            "name": "super",
+            "type": "Object",
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 115,
+            "description": "初始化时自动执行",
+            "itemtype": "method",
+            "name": "init",
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 122,
+            "description": "模版渲染，默认使用mustache",
+            "itemtype": "method",
+            "name": "render",
+            "chainable": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 133,
+            "description": "绑定事件，建议使用更方便的配置`events`属性的方式\n\n     view.delegateEvents({\n         '#contariner': {\n             tap: function(){}\n         }\n     });",
+            "itemtype": "method",
+            "name": "delegateEvents",
+            "params": [
+                {
+                    "name": "events",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "chainable": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 170,
+            "description": "解绑所有事件",
+            "itemtype": "method",
+            "name": "undelegateEvents",
+            "chainable": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 179,
+            "description": "销毁该页面",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
+        },
+        {
+            "file": "js\\view.js",
+            "line": 189,
+            "description": "通过该方法来继承并扩展一个`$.EasyTouch.View`：\n\n   var View = $.EasyTouch.View.extend({\n        tpl: xxx,\n        model: xxx,\n        events: {\n            '.back': {\n               tap: function(){}\n            }\n        },\n        init: function(){\n\n        }\n        ...\n   });",
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "property",
+                    "description": "property or function add to `$.EasyTouch.View`",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the new Class extended from `$.EasyTouch.View`",
+                "type": "Function"
+            },
+            "static": 1,
+            "class": "$.EasyTouch.View",
+            "module": "EasyTouch-View"
         }
     ]
 }

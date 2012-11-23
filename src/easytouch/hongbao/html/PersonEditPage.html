@@ -7,29 +7,29 @@
         <ul class="et-maplist et-maplist-form">
             <li>
                 <span class="k">云账号 :</span>
-                <div class="v"><input type="text" class="et-text"></div>
+                <div class="v"><input type="text" class="et-text" id="person-username" readonly></div>
             </li>
             <li>
                 <span class="k">手机号码 :</span>
-                <div class="v"><input type="number" class="et-text"></div>
+                <div class="v"><input type="number" class="et-text" id="person-mobile"></div>
             </li>
             <li>
                 <span class="k">淘宝帐号 :</span>
                 <div class="v">
                     <input type="hidden" id="person-taobao">
-                    <div id="person-taobao-ready">
+                    <div id="person-taobao-ready" style="display: none;">
                         <span id="person-taobao-nick">zhouqicf</span>
-                        <button class="et-btn et-btn-style-a" id="person-change-taobao">更换</button>
+                        <button class="et-btn et-btn-style-a person-bind-taobao">更换</button>
                     </div>
-                    <div id="person-taobao-unready">
-                        <button class="et-btn et-btn-style-a" id="person-bind-taobao">绑定</button>
+                    <div id="person-taobao-unready" style="display: none;">
+                        <button class="et-btn et-btn-style-a person-bind-taobao">绑定</button>
                     </div>
                 </div>
             </li>
-            <li>
+            <li class="gender">
                 <span class="k">性别 :</span>
                 <div class="v">
-                    <label><input type="radio" class="et-radio" name="sex" value="male" checked="checked"> 男</label>
+                    <label><input type="radio" class="et-radio" name="sex" value="male"> 男</label>
                     <label><input type="radio" class="et-radio" name="sex" value="female"> 女</label>
                     <label><input type="radio" class="et-radio" name="sex" value="secret"> 其他</label>
                 </div>

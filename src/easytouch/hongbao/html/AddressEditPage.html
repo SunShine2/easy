@@ -7,31 +7,38 @@
         <ul class="et-maplist et-maplist-form">
             <li>
                 <span class="k">收货人 :</span>
-                <div class="v"><input type="text" class="et-text"></div>
+                <div class="v"><input type="text" class="et-text" id="address-name"></div>
             </li>
             <li>
                 <span class="k">手机号码 :</span>
-                <div class="v"><input type="number" class="et-text"></div>
+                <div class="v"><input type="number" class="et-text" id="address-mobile" maxlength="11"></div>
             </li>
             <li>
                 <span class="k">所在地址 :</span>
                 <div class="v">
-                    <select class="et-select">
-                        <option value="">浙江省</option>
+                    <select class="et-select" id="address-area-p">
+                        <option value="">请选择</option>
                     </select>
-                    <select class="et-select">
-                        <option value="">杭州市</option>
+                    <select class="et-select" id="address-area-c">
+                        <option value="">请选择</option>
                     </select>
-                    <select class="et-select">
-                        <option value="">西湖区</option>
+                    <select class="et-select" id="address-area-a">
+                        <option value="">请选择</option>
                     </select>
                 </div>
             </li>
             <li>
                 <span class="k">详细地址 :</span>
-                <div class="v"><input type="text" class="et-text"></div>
+                <div class="v"><input type="text" class="et-text" id="address-detail"></div>
             </li>
         </ul>
         <div class="et-btn-block-wrap"><button class="et-btn et-btn-style-a" id="address-complete">完成</button></div>
     </div>
+
+    <script type="text/template">
+        <option value="">请选择</option>
+        {{#list}}
+        <option value="{{divisionCode}}" data-leaf="{{isLeaf}}"{{#post}} data-post="{{post}}"{{/post}}>{{divisionName}}</option>
+        {{/list}}
+    </script>
 </section>

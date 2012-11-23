@@ -1,0 +1,78 @@
+/**
+ * @author youxiao@alibaba-inc.com
+ * @version 0.0.1
+ */
+.easy-dialog{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,.2);
+    color: #222;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    font: 20px/1.231 '微软雅黑';
+    font-size: 20px;
+}
+.easy-dialog .main{
+    max-height: 50%;
+    width: 80%;
+    -webkit-border-radius: 4px;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    padding: .2em;
+    overflow: hidden;
+}
+.easy-dialog .head{
+    -webkit-border-radius: 4px;
+    border: 1px solid #aaa;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e0e0e0), to(#ccc));
+    background-color: #ccc;
+    padding: .4em .2em .4em .5em;
+    font-weight: bold;
+    position: relative;
+}
+.easy-dialog .close{
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTA3RjZFODUyQTM2MTFFMkI0QTY4RjU0QjQ2NUI5N0EiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTA3RjZFODYyQTM2MTFFMkI0QTY4RjU0QjQ2NUI5N0EiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBMDdGNkU4MzJBMzYxMUUyQjRBNjhGNTRCNDY1Qjk3QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBMDdGNkU4NDJBMzYxMUUyQjRBNjhGNTRCNDY1Qjk3QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pm6OEtYAAACuSURBVHjahJCxDsIwDESdiP9iysLagQ2hsvIxlSp1o63YmDqVqd/CpxB86ILcKBUnPSW5nhvHLoQg1EE5KidZ6648lCcOnuZVmQthoTczIzv+uZX/QuaFGypjXhRnzo5eUuX0DTELQDXXnusv47NrI8M9qW24VAC9N/aSHi2Fls5cR7JqqTMFqfeBWA/qUDAZ45b1HOklTShYstFtCZnFm/HtlaYQbPjtO+KPAAMA0wQj6K8YUS8AAAAASUVORK5CYII=) no-repeat 50% 50%;
+    float: right;
+    height: 1.231em;
+    width: 1.231em;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    border: none;
+    padding: 0;
+}
+.easy-dialog button{
+    border: 1px solid lightGrey;
+    background-color: #e6e6e6;
+    color: #555;
+    padding: .4em 1em;
+    border-radius: 4px;
+}
+.easy-dialog button.active{
+    border: 1px solid #999;
+    background-color: #dadada;
+}
+.easy-dialog .body{
+    min-height: 80px;
+    max-height: 200px;
+    overflow: hidden;
+    padding: .5em;
+}
+.easy-dialog .foot{
+    text-align: right;
+    padding: .5em 0;
+    margin-top: .5em;
+    border-top: 1px solid #aaa;
+}
+.easy-dialog .foot button{
+    margin-right: .5em;
+}
+
+@media all and (max-width: 320px) {
+    .easy-dialog{
+        font-size: 16px;
+    }
+}

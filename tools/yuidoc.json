@@ -4,8 +4,8 @@
     "version": "0.0.1",
     "url": "http://",
     "options": {
-        "paths":["./build","./server"],
-        "ignorePaths": ["./build/node_modules","./server/node_modules"],
+        "paths":["./server"],
+        "ignorePaths": ["./server/node_modules"],
         "outdir": "./doc"
     }
 }

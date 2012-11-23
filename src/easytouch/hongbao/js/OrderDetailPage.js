@@ -1,8 +1,10 @@
 ;(function(){
     var OrderDetail = window.Model.extend({
         server: {
-            url: 'center/order/detail/',
-            data: {}
+            url: '',
+            data: {
+                method: 'center.order.detail'
+            }
         },
         parse: function(data){
             data = data.data;
@@ -12,24 +14,23 @@
         }
     });
 
-    window.OrderDetailPage = $.EasyTouch.Page.extend({
+    window.OrderDetailPage = window.Page.extend({
         html: 'html/OrderDetailPage.html',
         model: new OrderDetail,
+        autos: {
+            loadMoreBtn: {},
+            loading: {},
+            iScroll: {}
+        },
         events: {
-            'order-logistics': {
-                tap: function(){
-
-                }
+            '#order-logistics': {
+                tap: 'logistics'
             },
-            'order-complete': {
-                tap: function(){
-
-                }
+            '#order-complete': {
+                tap: 'complete'
             },
-            'order-payment': {
-                tap: function(){
-
-                }
+            '#order-payment': {
+                tap: 'pay'
             }
         },
         init: function(data){
@@ -39,63 +40,61 @@
                 checkDOMChanges: true
             });
 
-            this.model.bind('beforeSend', function(e, params){
-                _this.showLoading({
-                    msg: '数据加载中...',
-                    modal: true
-                });
-            });
-            this.model.bind('error', function(){
-                //TODO
-                _this.app.pageBack();
-            });
-            this.model.bind('complete', function(){
-                _this.hideLoading();
-            });
-            this.model.bind('dataerror', function(){
-                //TODO
-                console.log('数据错误');
-            });
-            var tpl = _this.$el.find('script').html();
-            this.model.bind('reset', function(e, params){
+            var tpl = _this.$el.find('script').html(),
+                map = {
+                    '0': '等待付款的订单',
+                    '1': '等待发货的订单',
+                    '2': '已关闭的订单',
+                    '3': '成功的订单',
+                    '4': '等待确认收货的订单',
+                    '5': '已付款的订单',
+                    '9': '已废弃的订单'
+                };
+            this.model.bind('reset', function(e, model){
                 var $title = _this.$el.find('h1'),
-                    status = params.data.order.status;
-                switch(status){
-                    case '0':
-                        $title.text('等待付款的订单');
-                        break;
-                    case '1':
-                        $title.text('等待发货的订单');
-                        break;
-                    case '2':
-                        $title.text('已关闭的订单');
-                        break;
-                    case '3':
-                        $title.text('成功的订单');
-                        break;
-                    case '4':
-                        $title.text('等待确认收货的订单');
-                        break;
-                    case '5':
-                        $title.text('已付款的订单');
-                        break;
-                    case '9':
-                        $title.text('已废弃的订单');
-                        break;
-                    default:
-                        $title.text('订单详情');
-                }
-                _this.$el.find('.scroller').html(Mustache.to_html(tpl, params.data));
-                _this.iScroll.refresh();
+                    status = model.order.status;
+                $title.text(map[status]?map[status]:'订单详情');
+                _this.$el.find('.scroller').html(Mustache.to_html(tpl, model));
             });
-
-            this.reset(data);
         },
-        reset: function(data){
+        ready: function(data){
             if(!data){
                 return;
             }
-            this.model.fetch(data);
+            this.model.fetch({
+                data: $.extend(this.model.server.data, data)
+            });
+        },
+        pay: function(){
+            this.app.pay($.extend({
+                token: '8f417536ba8912d201188f27e83db1b8'
+            }, this.model.get('order')));
+        },
+        logistics: function(){
+            var _this = this;
+            if(!this.dialog){
+                var buttons = {};
+                buttons[i18n.dialog_ok] = function(){
+                    this.close();
+                };
+                this.dialog = new $.EasyDialog({
+                    title: i18n.order_logistics_title,
+                    buttons: buttons
+                });
+            }
+            this.model.ajax({
+                url: '',
+                data: {
+                    method: 'center.order.logistics',
+                    out_trade_no: this.model.get('order.trade_no')
+                }
+            }, {
+                success: function(data){
+                    //TODO
+                    _this.dialog.setContent(data.content);
+                    _this.dialog.open();
+                }
+            });
         }
     });
 })();

@@ -1,0 +1,9 @@
+{
+    "name": "EasyDialog",
+    "description": "The Dialog for Easy.",
+    "version": "0.0.1",
+    "options": {
+        "paths": "",
+        "outdir": "doc"
+    }
+}

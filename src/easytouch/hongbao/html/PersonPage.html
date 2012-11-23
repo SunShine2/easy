@@ -3,29 +3,30 @@
         <i class="et-back" data-action="pageBack"></i>
         <h1>基本信息</h1>
     </header>
-    <div class="container">
+    <div class="container"></div>
+    <script type="text/template">
         <ul class="et-maplist">
             <li>
                 <span class="k">云账号 :</span>
-                <div class="v">由校</div>
+                <div class="v">{{username}}</div>
             </li>
             <li>
                 <span class="k">淘宝帐号 :</span>
-                <div class="v">zhouqicf</div>
+                <div class="v">{{taobao_nick}}</div>
             </li>
             <li>
                 <span class="k">手机号码 :</span>
-                <div class="v">18658826075</div>
+                <div class="v">{{mobile}}</div>
             </li>
             <li>
                 <span class="k">性别 :</span>
-                <div class="v">男</div>
+                <div class="v">{{gender}}</div>
             </li>
             <li>
                 <span class="k">生日 :</span>
-                <div class="v">1987.07.19</div>
+                <div class="v">{{birthday}}</div>
             </li>
         </ul>
         <a class="et-edit" data-action="navPage" data-params='{"id":"PersonEditPage"}'></a>
-    </div>
+    </script>
 </section>

@@ -4,63 +4,64 @@
         <h1>订单创建</h1>
     </header>
     <div class="container et-iScroll">
-        <div class="scroller">
-            <section class="mod good-group">
-                <header>商品信息</header>
-                <div class="content">
-                    <ul>
-                        <li>
-                            <h3>2012秋装新品男装 韩版纯棉修身立领长袖polo衫</h3>
-                            <p>价格：<b>120</b>元 (<b>20</b>红包)</p>
-                            <p>数量：1件</p>
-                        </li>
-                        <li>
-                            <h3>2012秋装新品男装 韩版纯棉修身立领长袖polo衫</h3>
-                            <p>价格：<b>120</b>元 (<b>20</b>红包)</p>
-                            <p>数量：1件</p>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-            <section class="mod address">
-                <header>收货地址</header>
-                <div class="content">
-                    <p>正影 15268193180</p>
-                    <p>浙江省杭州市西湖区  312000</p>
-                    <p>紫荆花路2号联合大厦B座5楼口碑网</p>
-                    <button class="et-btn et-btn-style-a" data-action="navPage" data-params='{"id":"AddressPage"}'>更换</button>
-                </div>
-            </section>
-            <section class="mod">
-                <header>给卖家留言</header>
-                <div class="content">
-                    <textarea class="et-text"></textarea>
-                </div>
-            </section>
-            <section class="mod">
-                <header>配送及优惠</header>
-                <div class="content">
-                    <div class="post">配送方式：卖家包邮</div>
-                    <div class="hongbao">
-                        <label for="hongbao">使用红包：</label>
-                        <div class="form">
-                            <button class="et-btn et-btn-style-a" id="hongbao-reduce">-</button>
-                            <input type="number" class="et-text" id="hongbao">
-                            <button class="et-btn et-btn-style-a" id="hongbao-add">+</button>
-                            <div class="hongbao-last">你还剩余<b>950</b>红包</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="option">
-                <div class="pay-info">
-                    <span>实付款<b class="real-price">1.00</b>元</span>
-                    <span>消耗<b class="hongbao-use">10</b>红包</span>
-                </div>
-                <div class="et-btn-block-wrap">
-                    <button class="et-btn et-btn-style-b" id="submit-order">确认无误，购买</button>
-                </div>
-            </section>
-        </div>
+        <div class="scroller"></div>
     </div>
+    <script type="text/template">
+        <section class="mod good-group">
+            <header>商品信息</header>
+            <div class="content">
+                <ul>
+                    {{#product}}
+                    <li>
+                        <h3>{{title}}</h3>
+                        <p>价格：<b>{{price}}</b>元 {{#hongbao}}(<b>{{hongbao}}</b>红包)</p>{{/hongbao}}
+                        <p>数量：{{num}}件</p>
+                        {{#sku}}
+                            {{#arr}}
+                                <p>{{p}}：{{v}}</p>
+                            {{/arr}}
+                        {{/sku}}
+                    </li>
+                    {{/product}}
+                </ul>
+            </div>
+        </section>
+        {{#address}}
+        <section class="mod address">
+            <header>收货地址</header>
+            <div class="content">
+                <p>{{name}} {{mobile}}</p>
+                <p>{{province}}{{city}}{{area}} {{post}}</p>
+                <p>{{detail}}</p>
+                <button class="et-btn et-btn-style-a" data-action="navPage" data-params='{"id":"AddressPage"}'>更换</button>
+            </div>
+        </section>
+        {{/address}}
+        <section class="mod">
+            <header>给卖家留言</header>
+            <div class="content">
+                <textarea class="et-text" id="order-msg"></textarea>
+            </div>
+        </section>
+        <section class="mod post">
+            <header>配送</header>
+            <div class="content">
+                {{#postage}}
+                    <span class="et-check" data-value="{{value}}" data-price="{{price}}">{{desc}}</span>
+                {{/postage}}
+                {{^postage}}
+                该订单不需要配送
+                {{/postage}}
+            </div>
+        </section>
+        <section class="option">
+            <div class="pay-info">
+                <span>实付款<b class="real-price">{{total_price}}</b>元</span>
+                {{#hongbao}}<span>消耗<b class="hongbao-use">{{hongbao}}</b>红包</span>{{/hongbao}}
+            </div>
+            <div class="et-btn-block-wrap">
+                <button class="et-btn et-btn-style-b" id="submit-order">确认无误，购买</button>
+            </div>
+        </section>
+    </script>
 </section>

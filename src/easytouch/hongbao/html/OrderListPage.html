@@ -19,14 +19,14 @@
 
     <script type="text/template">
         {{#list}}
-            <li data-action="navPage" data-params='{"id":"OrderDetailPage", "params":{"trade_no":"{{tradeNO}}"} }'>
+            <li data-action="navPage" data-params='{"id":"OrderDetailPage", "params":{"trade_no":"{{trade_no}}"} }'>
                 <div class="et-center">
                     <img src="{{img}}" alt="">
                 </div>
                 <div class="desc">
                     <h1>现价19.9元包邮 原价27元</h1>
                     <ul>
-                        <li>订单编号：{{tradeNO}}</li>
+                        <li>订单编号：{{trade_no}}</li>
                         <li>订单日期：{{time}}</li>
                         <li>价格：<b>{{price}}</b>元(<b class="et-hb-use">{{hongbao}}</b>红包)</li>
                         <li>数量：{{num}}件</li>

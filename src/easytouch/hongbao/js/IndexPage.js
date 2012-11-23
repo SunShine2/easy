@@ -8,6 +8,8 @@
         },
         exitApp: function(){
             this.app.exit();
+        },
+        init: function(){
         }
     });
 })();

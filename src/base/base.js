@@ -302,10 +302,9 @@ easy框架基类，用于创建easy组件，参考YUI3
     Base.ATTRS = {};
 
     //给base的原型进行扩充基本方法
-    $.CustomEvent.call(Base.prototype);
     _addAttrFn.call(Base.prototype);
 
-    $.extend(Base.prototype, {
+    $.extend(Base.prototype, $.Events.prototype, {
         /**
         用于判断是否已经初始化过
         @attribute initialized

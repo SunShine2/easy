@@ -12,6 +12,7 @@
 }
 .easytouch.animating .et-page {
     -webkit-animation-fill-mode: both;
+    -webkit-backface-visibility: hidden;
 }
 .et-page,
 .et-app {
@@ -28,6 +29,7 @@
     display: block;
 }
 .et-app {
+    border: none;
     z-index: 1;
 }
 .et-load {
@@ -42,7 +44,10 @@
     -webkit-box-align: center;
     -webkit-box-orient: vertical;
     z-index: 2;
-    opacity: .18;
+    opacity: .5;
+    font-weight: bold;
+    color: black;
+    text-shadow: 0 0 1px rgba(0, 0, 0, .5);
 }
 .et-load[data-modal="true"] {
     pointer-events: auto;
