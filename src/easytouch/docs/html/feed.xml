@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>EasyTouch</title>
+    <link href="http://wireless.aliyun-inc.com/easy/src/easytouch/feed.xml" rel="self" />
+    <link href="http://wireless.aliyun-inc.com/easy/src/easytouch/" />
+    <updated>2012-11-28T12:39:43+08:00</updated>
+    <id>http://wireless.aliyun-inc.com/easy/src/easytouch/</id>
+    <entry>
+        <title type="html"><![CDATA[安装]]></title>
+        <author><name>ZhouQi</name><uri>http://zhouqicf.com</uri></author>
+        <link href="http://wireless.aliyun-inc.com/easy/src/easytouch/setup.html"/>
+        <published>2012-11-28T00:00:00+08:00</published>
+        <updated>2012-11-28T11:54:22+08:00</updated>
+        <id>http://wireless.aliyun-inc.com/easy/src/easytouch/setup.html</id>
+        <content type="html" xml:base="http://wireless.aliyun-inc.com/easy/src/easytouch/" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">加载依赖</h2>
+<p>EasyTouch依赖Easy框架的基础代码</p>
+<div class="highlight"><pre><span class="c">&lt;!--Easy的reset.css--&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/css/reset.css&quot;</span><span class="nt">&gt;</span>
+<span class="c">&lt;!--EasyTouch的核心样式--&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/easytouch/css/core.css&quot;</span><span class="nt">&gt;</span>
+<span class="c">&lt;!--EasyTouch的所有动画样式，建议使用anim.less加载用到的样式--&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/easytouch/css/anim.css&quot;</span><span class="nt">&gt;</span>
+
+<span class="c">&lt;!--Easy框架基础脚本--&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/core/core.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/lib/zepto/ajax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/core/event.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/events/events.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/base/base.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+<span class="c">&lt;!--EasyTouch核心脚本--&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/easytouch/js/core.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="c">&lt;!--EasyTouch Model、ModelList模块--&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/easytouch/js/model.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/easytouch/js/modellist.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="c">&lt;!--EasyTouch View模块--&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://wireless.aliyun-inc.com/easy/src/easytouch/js/view.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<h2 id="toc_1">只加载用到的动画样式</h2>
+<p>在应用的less文件中加载<code>anim.less</code>文件，使用less的<code>mix</code>方法调用用到的动画</p>
+<div class="highlight"><pre><span class="c">/*加载import less文件，路径需要修改*/</span>
+<span class="k">@import</span> <span class="s2">&quot;/easytouch/less/anim.less&quot;</span><span class="p">;</span>
+
+<span class="c">/*slideLeftIn、slideLeftOut、slideRightIn、slideRightOut对应的mix方法*/</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-slide</span><span class="o">();</span>
+</pre></div>
+<p>所有动画列表</p>
+<div class="highlight"><pre><span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-slide</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-slideV</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-fade</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-dissolve</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-pop</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-flip</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-swap</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-cube</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-flow</span><span class="o">();</span>
+<span class="nc">.easytouch</span> <span class="o">&gt;</span> <span class="nc">.anim-turn</span><span class="o">();</span>
+</pre></div>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[开发第一个App]]></title>
+        <author><name>ZhouQi</name><uri>http://zhouqicf.com</uri></author>
+        <link href="http://wireless.aliyun-inc.com/easy/src/easytouch/start.html"/>
+        <published>2012-11-28T00:00:00+08:00</published>
+        <updated>2012-11-28T12:39:43+08:00</updated>
+        <id>http://wireless.aliyun-inc.com/easy/src/easytouch/start.html</id>
+        <content type="html" xml:base="http://wireless.aliyun-inc.com/easy/src/easytouch/" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">结构</h2>
+<p>EasyTouch由<code>App</code>、<code>Page</code>、<code>Model</code>、<code>ModelList</code>和<code>View</code>5个部分组成，其中<code>App</code>和<code>Page</code>为核心部分，是一个应用必不可少的组成部分。<code>Model</code>、<code>ModelList</code>和<code>View</code>可以作为MVC的一部分独立于EasyTouch运行。</p>
+<p><code>App</code>是一个应用的抽象，用来控制应用的整体操作，如页面切换、父子应用通信、历史记录的控制等。所有<code>Page</code>存在于<code>App</code>的容器中，做为One Page One Application中的虚拟页面存在。</p>
+
+<h2 id="toc_1">扩展一个<code>$.EasyTouch.App</code>类</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">App</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">EasyTouch</span><span class="p">.</span><span class="nx">App</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="c1">//应用ID</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;market&#39;</span><span class="p">,</span>
+    <span class="c1">//应用容器</span>
+    <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#app&#39;</span><span class="p">,</span>
+    <span class="c1">//是否显示页面加载动画</span>
+    <span class="nx">ifShowLoading</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="c1">//默认页面切换动画</span>
+    <span class="nx">defaultAnimation</span><span class="o">:</span> <span class="s1">&#39;slideRightIn&#39;</span><span class="p">,</span>
+    <span class="c1">//应用包含的页面</span>
+    <span class="nx">pages</span><span class="o">:</span> <span class="p">{</span>
+       <span class="p">...</span>
+    <span class="p">},</span>
+    <span class="c1">//子应用</span>
+    <span class="nx">apps</span><span class="o">:</span> <span class="p">{</span>
+       <span class="s1">&#39;hongbao&#39;</span><span class="o">:</span> <span class="s1">&#39;http://cloudappfile.aliapp.com/prod/app_4/7184_b6b/hongbao/&#39;</span>
+    <span class="p">},</span>
+    <span class="c1">//绑定事件</span>
+    <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+       <span class="s1">&#39;header&#39;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">tap</span><span class="o">:</span> <span class="s1">&#39;tapHeader&#39;</span>
+        <span class="p">},</span>
+       <span class="s1">&#39;.back&#39;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">tap</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+                <span class="p">...</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">//应用初始化方法</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span>
+
+    <span class="p">},</span>
+    <span class="c1">//应用再次访问时执行的方法</span>
+    <span class="nx">reset</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span>
+
+    <span class="p">},</span>
+    <span class="c1">//任何你需要扩展的方法</span>
+    <span class="nx">anyFunctions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){}</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2 id="toc_2">扩展一个<code>$.EasyTouch.Page</code>类</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Page1</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">EasyTouch</span><span class="p">.</span><span class="nx">Page</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="c1">//页面片段的来源</span>
+    <span class="nx">html</span><span class="o">:</span> <span class="s1">&#39;#xxx .xxx&#39;</span><span class="p">,</span>
+    <span class="c1">//绑定事件</span>
+    <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+       <span class="p">...</span>
+    <span class="p">},</span>
+    <span class="c1">//页面初始化方法</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+    <span class="c1">//页面再次访问时执行的方法</span>
+    <span class="nx">reset</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+    <span class="c1">//每次页面切换动画完成后执行的方法，如果页面每次访问都需要做大量的DOM操作等高负荷计算，为了避免对页面切换动画的影响，建议在ready中执行</span>
+    <span class="nx">ready</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+    <span class="c1">//任何你需要扩展的方法</span>
+    <span class="nx">anyFunctions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){}</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2 id="toc_3">合起来</h2>
+<p>App初始化后跳转到Page1</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Page1</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">EasyTouch</span><span class="p">.</span><span class="nx">Page</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">html</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+    <span class="nx">reset</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){}</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">App</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">EasyTouch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">pages</span><span class="o">:</span> <span class="p">{</span>
+       <span class="s1">&#39;Page1&#39;</span><span class="o">:</span> <span class="nx">Page1</span>
+    <span class="p">},</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">navPage</span><span class="p">(</span><span class="s1">&#39;Page1&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+<span class="k">new</span> <span class="nx">App</span><span class="p">();</span>
+</pre></div>
+
+<h2 id="toc_4">构建一个基类</h2>
+<p>EasyTouch中任意一个模块都可以多次调用<code>extend</code>方法，为此你可以为你的应用构建一个基础的类，其他的类都基于这个基类，方便进行统一的处理</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">PageBase</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">EasyTouch</span><span class="p">.</span><span class="nx">Page</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">iScroll</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">iscroll</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">iScroll</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="p">{</span>
+            <span class="p">...</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">Page1</span> <span class="o">=</span> <span class="nx">PageBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">iScroll</span><span class="p">(</span><span class="s1">&#39;scroller&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+<p>甚至可以重写构造函数<code>initializer</code>，在构造函数中执行统一的处理，这样在Page1初始化时，就可以自动执行一些方法了</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">PageBase</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">EasyTouch</span><span class="p">.</span><span class="nx">Page</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">initializer</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">//EasyTouch中任何类都可以在实例中通过`super`访问到原始的方法，重写内置方法时通过执行`super`上的方法，保证EasyTouch内部逻辑不会出错</span>
+        <span class="k">this</span><span class="p">.</span><span class="kr">super</span><span class="p">.</span><span class="nx">initializer</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+
+        <span class="c1">//任何处理</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">Page1</span> <span class="o">=</span> <span class="nx">PageBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="p">...</span>
+<span class="p">})</span>
+</pre></div>
+]]>
+        </content>
+    </entry>
+</feed>

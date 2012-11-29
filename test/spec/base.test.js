@@ -36,7 +36,7 @@ describe('测试Base模块', function () {
             },
             getName:function () {
                 this.trigger('getName', {nameState:'get'});
-                return this.name
+                return this.get('name');
             },
             getStaticName:function () {
                 return $.Abc.NAME;
@@ -69,7 +69,7 @@ describe('测试Base模块', function () {
                 this.fucked = false;
             },
             getName:function () {
-                return this.value
+                return this.get('value')
             },
             destructor:function () {
             }
@@ -104,6 +104,7 @@ describe('测试Base模块', function () {
             });
             var obj1 = new $.Test01();
             it('测试initialized属性是否已经设置为true', function () {
+                console.log(obj1);
                 expect(obj1.initialized).toBeTruthy();
             });
             it('测试自定义事件方法是否已经挂载', function () {
@@ -315,7 +316,7 @@ describe('测试Base模块', function () {
                 var obj = new Test01({
                     number:[]
                 });
-                expect(obj.number).toEqual(10)
+                expect(obj.get('number')).toEqual(10)
             });
             it('测试setter对value的预处理', function () {
                 var obj = new Test({
@@ -566,10 +567,10 @@ describe('测试Base模块', function () {
                 };
                 pm = {
                     initializer:function () {
-                        this._set('fucked', true);
+                        this['fucked'] = true;
                     },
                     getIndex:function () {
-                        return this.index;
+                        return this.get('index');
                     }
                 };
                 sm = {

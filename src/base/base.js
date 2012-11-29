@@ -1,10 +1,89 @@
 /**
 easy框架基类，用于创建easy组件，参考YUI3
 @author : butian.wth
-@version : 0.0.1
+@version : 0.0.2
 @module Base
 */
 ;(function(){
+
+    /**
+     增加filter系统，用于对初始化时传入的option进行处理
+     @param {Object} option 传入的参数对象
+     @param {Object} attrObj 模块本身的ATTRS对象
+     @return {Object} 处理过后的参数对象
+     @private
+     */
+    function optionFilter(option, attrObj) {
+        var ret = {};
+        //如果option内的属性在attr中并没有对应的值，则直接将其传入
+        $.each(attrObj, function (key, item) {
+            var value = option[key];
+            filterHandler(value, item, function (v) {
+                ret[key] = v;
+            });
+        });
+        //如果attr的属性在option中没有对应的值，则使用attr中的默认值
+        $.each(option, function (key, item) {
+            filterHandler(item, attrObj[key], function (v) {
+                ret[key] = v;
+            });
+        });
+        return ret;
+    }
+
+    /**
+     判断item和value的匹配，给出正确的值
+     @value {String|Number} value 参数中的值
+     @item {Object} item ATTRS中对应key的内容
+     @callback {Function} callback 过滤系统通过后的处理函数
+     @private
+     */
+
+    function filterHandler(value, item, callback) {
+        if (!item) {
+            callback(value);
+            return false;
+        }
+        var v,
+            ret;
+        if (value) {
+            ret = itemFilter(value, item);
+            //如果返回的是boolean类型且值为true，则用true和false来判断是否setter通过
+            if ($.type(ret) === BOOLEAN && ret) {
+                v = value;
+            } else if (ret) { //如果返回的值非boolean类型，而且非undefined/null，则表示是经过setter处理后的值
+                v = ret;
+            }
+        }
+        if (!ret || !value) {
+            //如果ATTRS中含有value属性，则默认采用value
+            //如果不含value属性，则意味着这个属性是必须指定的
+            if ('value' in item) {
+                v = item.value;
+            } else {
+                throw new Error(FILTER_ERROR_MSG);
+            }
+        }
+        return callback(v);
+    }
+
+    /**
+     对单个属性进行filter，如果有setter则用setter过滤并处理，否则就用validator
+     @value {String|Number} value 参数中的值
+     @item {Object} item ATTRS中对应key的内容
+     @return {Boolean} 是否检查通过
+     @private
+     */
+    function itemFilter(value, item) {
+        if (item.setter) {
+            return item.setter(value)
+        } else if (item.validator) {
+            return ~[STRING, NUMBER].indexOf($.type(value)) ? item.validator.test(value) : false;
+        } else {
+            return true
+        }
+    }
+
     /**
     Attribute集合
     */
@@ -63,7 +142,7 @@ easy框架基类，用于创建easy组件，参考YUI3
          * @return this
          */
         this._set = function(key, value){
-            this[key] = value;
+            this._attrs[key] = value;
             return this;
         };
         /**
@@ -75,7 +154,7 @@ easy框架基类，用于创建easy组件，参考YUI3
          * @return 属性的值
          */
         this._get = function (key) {
-            return this[key]
+            return this._attrs[key]
         };
 
         //模块构建完成后，增加一些对模块ATTRS进行二次处理的方法
@@ -129,89 +208,11 @@ easy框架基类，用于创建easy组件，参考YUI3
         ATTR_CHANGE = 'attrChange',
         BASE = 'base',
         BOOLEAN = 'boolean',
-        FILTER_ERROR_MSG = '[Base filterHandler]：a suitable value required',
+        FILTER_ERROR_MSG = '[Base filterHandler]:a suitable value required',
         STRING = 'string',
         NUMBER = 'number',
         INITIALIZED = 'initialized',
         DESTROYED = 'destroyed';
-
-    /**
-    增加filter系统，用于对初始化时传入的option进行处理
-    @param {Object} option 传入的参数对象
-    @param {Object} attrObj 模块本身的ATTRS对象
-    @return {Object} 处理过后的参数对象
-    @private
-    */
-    function optionFilter(option, attrObj) {
-        var ret = {};
-        //如果option内的属性在attr中并没有对应的值，则直接将其传入
-        $.each(attrObj, function (key, item) {
-            var value = option[key];
-            filterHandler(value, item, function (v) {
-                ret[key] = v;
-            });
-        });
-        //如果attr的属性在option中没有对应的值，则使用attr中的默认值
-        $.each(option, function (key, item) {
-            filterHandler(item, attrObj[key], function (v) {
-                ret[key] = v;
-            });
-        });
-        return ret;
-    }
-
-    /**
-    判断item和value的匹配，给出正确的值
-    @value {String|Number} value 参数中的值
-    @item {Object} item ATTRS中对应key的内容
-    @callback {Function} callback 过滤系统通过后的处理函数
-    @private
-    */
-
-    function filterHandler(value, item, callback) {
-        if (!item) {
-            callback(value);
-            return false;
-        }
-        var v,
-            ret;
-        if (value) {
-            ret = itemFilter(value, item);
-            //如果返回的是boolean类型且值为true，则用true和false来判断是否setter通过
-            if ($.type(ret) === BOOLEAN && ret) {
-                v = value;
-            } else if (ret) { //如果返回的值非boolean类型，而且非undefined/null，则表示是经过setter处理后的值
-                v = ret;
-            }
-        }
-        if (!ret || !value) {
-            //如果ATTRS中含有value属性，则默认采用value
-            //如果不含value属性，则意味着这个属性是必须指定的
-            if ('value' in item) {
-                v = item.value;
-            } else {
-                throw new Error(FILTER_ERROR_MSG);
-            }
-        }
-        return callback(v);
-    }
-
-    /**
-    对单个属性进行filter，如果有setter则用setter过滤并处理，否则就用validator
-    @value {String|Number} value 参数中的值
-    @item {Object} item ATTRS中对应key的内容
-    @return {Boolean} 是否检查通过
-    @private
-    */
-    function itemFilter(value, item) {
-        if (item.setter) {
-            return item.setter(value)
-        } else if (item.validator) {
-            return ~[STRING, NUMBER].indexOf($.type(value)) ? item.validator.test(value) : false;
-        } else {
-            return true
-        }
-    }
 
     /**
     #基础base对象#
@@ -274,9 +275,12 @@ easy框架基类，用于创建easy组件，参考YUI3
     4. 对模块增加_instances属性，保存对所有实例的引用
     5. 增加_set和_get方法，用于直接操作模块属性，不触发ATTR_CHANGE事件
     6. 修复构造函数自带ATTRS时对应的处理方式，从直接赋值修改为合并
+    @20121129（对attribute进行了重构，修改了属性的挂载方式）
+    1. 外部组件在访问ATTR属性的时候，只能通过get/set进行访问
+    2. 外部组件要给实例挂载变量的时候，只能使用this[propertyName]的方式进行
     */
     function Base() {
-        this._init.apply(this, arguments);
+        this._initBase.apply(this, arguments);
     }
 
     /**
@@ -327,16 +331,26 @@ easy框架基类，用于创建easy组件，参考YUI3
         */
         attrChangeHistory:[],
         /**
-        生命周期内的方法，默认的初始化操作
-        @method _init
+        生命周期内的方法，默认的初始化操作，在Base中完成的操作
+        @method _initBase
         @params {Object} option 用于对象初始化的参数
         @private
         */
-        _init:function (option) {
-            option = optionFilter(option || {}, this.constructor.ATTRS);
-            $.extend(this, option);
+        _initBase:function (option) {
+            //将父类的ATTRS拷贝一份到实例中
+            this._attrs = optionFilter(option || {}, this.constructor.ATTRS);
+            /**
+             * BUGFIX:不再将ATTRS过滤完毕的属性传递到this上
+             */
+            //$.extend(this, option);
             this.bind(INIT, this._defInitFn);
-            this.initializer && this.initializer(option);
+            if(this.initializer){
+                if( option ){
+                    this.initializer(option);
+                }else{
+                    this.initializer();
+                }
+            }
             /**
             @event init
             @description 模块实例化初始化的时候触发的事件
@@ -357,7 +371,7 @@ easy框架基类，用于创建easy组件，参考YUI3
         @private
         */
         _defInitFn:function () {
-            this._set(INITIALIZED, true);
+            this[INITIALIZED] = true;
             this.bind(ATTR_CHANGE, this._defAttrChange);
         },
         /**
@@ -366,7 +380,7 @@ easy框架基类，用于创建easy组件，参考YUI3
         @private
         */
         _defDestroyFn:function () {
-            this._set(DESTROYED, true);
+            this[DESTROYED] = true;
             this.destructor && this.destructor(arguments);
         },
         /**
@@ -447,7 +461,7 @@ easy框架基类，用于创建easy组件，参考YUI3
         if (superModule.NAME !== BASE) {
             $.extend(attrMember, superModule.ATTRS);
         }
-        //@20120830修复构造函数自带ATTRS时对应的处理方式
+        //@20120830 BUGFIX:修复构造函数自带ATTRS时对应的处理方式
         module.ATTRS = module.ATTRS || {};
         $.extend(module.ATTRS, attrMember);
         //挂在静态属性

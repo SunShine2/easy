@@ -61,15 +61,14 @@
         }
     </style>
 </head>
-<iframe src="http://10.9.12.72/easy/src/easytouch/hongbao/index.html" width="480" height="800"></iframe>
 <body class="easytouch">
 <script src="../_assets/mustache.js"></script>
 <script src="../../../lib/iscroll/4.2/iscroll-lite.js"></script>
 <script src="../../core/core.js"></script>
 <script src="../../../lib/zepto/ajax.js"></script>
 <script src="../../core/event.js"></script>
+<script src="../../events/events.js"></script>
 <script src="../../base/base.js"></script>
-<script src="../../custom-event/custom-event.js"></script>
 <script src="../js/core.js"></script>
 <script>
     $(function(){
@@ -224,7 +223,7 @@
                 return iscroll = new iScroll(el, params);
             }
         });
-        //window.app = new App();
+        window.app = new App();
     });
 </script>
 </body>
