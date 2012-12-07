@@ -1342,7 +1342,9 @@
                     data: $.extend({}, data)
                 },
                 init = function(el){
-                    el.attr('id', options.id);
+                    if(!el.attr('id')){
+                        el.attr('id', options.id);
+                    }
                     el.addClass(CLASS_PREFIX + 'page');
                     _this.app.$el.append(el);
                     _this.id = options.id;
