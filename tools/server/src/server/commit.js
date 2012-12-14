@@ -49,10 +49,10 @@ module.exports = function(request,response,next){
         commit(zipPath,id,version,function(success){
             retObj.success = success;
             if(!success){
-                console.send('提交失败!');
+                console.log('提交失败!');
                 retObj.msg = '上传失败!';
             }
-            console.send('提交结束!');
+            console.log('提交结束!');
             end();
         });
         

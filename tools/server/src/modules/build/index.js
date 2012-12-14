@@ -129,24 +129,36 @@ function getBuildedContent(appPath,callback,isDebug){
         appCfg = appInfo.appCfg,
         $ = cheerio.load(strHtml),
         scripts = $('script'),
-        less = $('link[rel=stylesheet\\/less]'),
-        css = $('link[rel=stylesheet]'),
+        styles = $('style,link[rel=stylesheet\\/less],link[rel=stylesheet]'),
+        //less = $('link[rel=stylesheet\\/less]'),
+        //css = $('link[rel=stylesheet]'),
         strContent = '',
-        i,strJs,
+        i,
+        //strJs,strCss,
         uuid,
         taskCfg= {appPath:appPath,appCfg:appCfg},
         task = new Task(taskCfg,$);   //创建一个依赖查找任务
-
     for(i=0; i<scripts.length; i++){
         uuid = '__script__' + i;
         if(scripts.eq(i).attr('src')){
             task.appendScript(scripts.eq(i).attr('src'),uuid);
         } else {
-            strJs = scripts[i].children && scripts[i].children.length > 0 && scripts[i].children[0].data;
-            task.appendCode(strJs,uuid);
+            //strJs = scripts[i].children && scripts[i].children.length > 0 && scripts[i].children[0].data;
+            task.appendCode(scripts.eq(i).text(),uuid);
         }
         scripts.eq(i).attr('uuid',uuid);
     }
+
+    for(i = 0; i< styles.length; i++){
+        uuid = '__styles__' + i;
+        styles.eq(i).attr('uuid',uuid);
+        if(styles[i].name === 'style'){
+            task.appendCssCode(styles.eq(i).text(),uuid);
+        } else {
+            task.appendCss(styles.eq(i).attr('href'),uuid);
+        }
+    }
+    /*
     for(i = 0; i <less.length;i++){
         uuid = '__less__' + i;
         less.eq(i).attr('uuid',uuid);
@@ -158,10 +170,10 @@ function getBuildedContent(appPath,callback,isDebug){
         css.eq(i).attr('uuid',uuid);
         task.appendCss(css.eq(i).attr('href'),uuid);
     }
-    
+    */
     task.finished(function(info){
         var format = new HtmlFormat(appPath,$.html(),appCfg,info,function(_strHtml){
-            //console.log('页面内容创建完成!');
+            console.log('页面内容创建完成!');
             callback(_strHtml,info);
         });
     });

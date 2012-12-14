@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>slider for easy</title>
+    <link rel="stylesheet" href="slider.css">
+    <link rel="stylesheet" href="../../_assets/highlight.js/styles/default.css">
+    <script src="http://zeptojs.com/zepto.js"></script>
+    <script src="http://mustache.github.com/extras/mustache.js"></script>
+    <script src="../../_assets/highlight.js/highlight.pack.js"></script>
+    <script src="slider.js"></script>
+    <style type="text/css">
+        h1{
+            font-family: Arial;
+        }
+        body{
+            background-color: #F0F0F0;
+        }
+        #slider,
+        #slider-mustache{
+            height: 210px;
+            width: 678px;  /*容器必须指定高度*/
+        }
+    </style>
+</head>
+<body>
+<h1>slider for easy</h1>
+<h2>一、默认HTML结构</h2>
+<div id="slider"></div>
+<div id="action">
+    <button id="reset">重置图片</button>
+    <button id="dispose">销毁</button>
+</div>
+
+<pre><code>
+    var slider = new $.EasySlider(
+        //容器，可以是一个选择器，也可以是一个Zepto对象
+        '#slider',
+        {
+            useArrow: true,     //是否启用左右箭头，default：true
+            useTimer: true,    //是否启用自动轮播，default：true
+            delay: 3000,        //自动轮播的间隔，default：5000
+            width: 678,         //容器的宽度，default：程序自动计算容器宽度
+
+            //图片
+            //也可以使用自定义模板,请参考第二个例子
+            data: [
+                'http://storage.aliyun.com/aliyun_portal_storage/1343704718_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                'http://storage.aliyun.com/aliyun_portal_storage/1343289381_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                'http://storage.aliyun.com/aliyun_portal_storage/1343230777_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                'http://storage.aliyun.com/aliyun_portal_storage/1343959473_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg'
+            ],
+
+            //切换图片时的回调
+            //index：切换到了第几张图片，自己去查找对应的数据，做相应的处理
+            onchange: function(index){
+                console.log('onchange', arguments);
+            }
+        }
+    );
+
+    $('#reset').click(function(e){
+        e.preventDefault();
+        //重置图片列表
+        slider.reset([
+            'http://storage.aliyun.com/aliyun_portal_storage/1343230777_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+            'http://storage.aliyun.com/aliyun_portal_storage/1343959473_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg'
+        ]);
+    });
+
+    $('#dispose').click(function(e){
+        e.preventDefault();
+        //销毁组件
+        slider.dispose();
+    });
+</code></pre>
+
+<h2>二、自定义HTML结构</h2>
+<div id="slider-mustache"></div>
+<pre><code>
+    var sliderMustache = new $.EasySlider(
+        //容器，可以是一个选择器，也可以是一个Zepto对象
+        '#slider-mustache',
+        {
+            tpl: '&lt;img src="{{src}}" data-type="{{type}}" data-id="{{id}}"&gt;', //mustache模板
+
+            //数据
+            data: [
+                {
+                    src: 'http://storage.aliyun.com/aliyun_portal_storage/1343230777_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                    type: '1',
+                    id: 132
+                },
+                {
+                    src:'http://storage.aliyun.com/aliyun_portal_storage/1343959473_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                    type: '2',
+                    id: 143
+                }
+            ]
+        }
+    );
+</code></pre>
+
+<script type="text/javascript">
+    var slider = new $.EasySlider(
+        //容器，可以是一个选择器，也可以是一个Zepto对象
+        '#slider',
+        {
+            useArrow: true,     //是否启用左右箭头，default：true
+            useTimer: true,     //是否启用自动轮播，default：true
+            delay: 3000,        //自动轮播的间隔，default：5000
+            width: 678,         //容器的宽度，default：程序自动计算容器宽度
+
+            //图片
+            data: [
+                'http://storage.aliyun.com/aliyun_portal_storage/1343704718_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                'http://storage.aliyun.com/aliyun_portal_storage/1343289381_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                'http://storage.aliyun.com/aliyun_portal_storage/1343230777_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                'http://storage.aliyun.com/aliyun_portal_storage/1343959473_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg'
+            ],
+
+            //切换图片时的回调
+            //index：切换到了第几张图片，自己去查找对应的数据，做相应的处理
+            onchange: function(index){
+                //console.log('onchange', arguments);
+            }
+        }
+    );
+
+    $('#reset').click(function(e){
+        e.preventDefault();
+        slider.reset([
+            'http://storage.aliyun.com/aliyun_portal_storage/1343230777_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg'
+        ]);
+    });
+
+    $('#dispose').click(function(e){
+        e.preventDefault();
+        slider.dispose();
+    });
+
+    var sliderMustache = new $.EasySlider(
+        //容器，可以是一个选择器，也可以是一个Zepto对象
+        '#slider-mustache',
+        {
+            tpl: '<img src="{{src}}" data-type="{{type}}" data-id="{{id}}">', //mustache模板
+
+            //数据
+            data: [
+                {
+                    src: 'http://storage.aliyun.com/aliyun_portal_storage/1343230777_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                    type: '1',
+                    id: 132
+                },
+                {
+                    src:'http://storage.aliyun.com/aliyun_portal_storage/1343959473_1.INDEX.DEFAULT.INDEX.MAIN.AD_74.jpg',
+                    type: '2',
+                    id: 143
+                }
+            ]
+        }
+    );
+
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>

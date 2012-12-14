@@ -175,7 +175,6 @@ function repaireCssImage(strCss,uri,appPath){
         if(query !== ''){
             fileName += '?' + query;
         }
-
         return 'url(' + fileName + ')';
     });
     return strCss;

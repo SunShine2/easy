@@ -1,5 +1,7 @@
+var path = require('path');
 
-var util = require('./util');
+    util = require('./util');
+
 
 exports = module.exports = DepInfo;
 
@@ -205,7 +207,8 @@ DepInfo.prototype._removeImports = function(m){
 @return {Object} 修复图片路径后的样式模块
 **/
 DepInfo.prototype._repaireCssImage = function(m){
-    m.content = util.repaireCssImage(m.content,m.uri,this._appPath);
+    var uri = ~m.uri.indexOf('__root__')? (this._appPath + path.sep + 'index.html'):m.uri;
+    m.content = util.repaireCssImage(m.content,uri,this._appPath);
     return m;
 };
 

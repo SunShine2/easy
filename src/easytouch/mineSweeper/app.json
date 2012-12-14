@@ -1,0 +1,12 @@
+{
+  "appName":"扫雷",
+  "id":"8771",
+  "debug":{
+  "weinre":"false",
+  "inline-resource":"false",
+  "jsCompress":"true",
+  "cssClean":"true",
+  "datauri":"true",
+  "smushit":"true"
+}
+}

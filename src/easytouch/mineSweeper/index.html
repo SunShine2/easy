@@ -1,0 +1,374 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>扫雷游戏</title>
+    <link rel="stylesheet" href="http://wireless.aliyun-inc.com/easy/src/css/reset.css">
+    <link rel="stylesheet" href="http://wireless.aliyun-inc.com/easy/src/easytouch/css/core.css">
+    <link rel="stylesheet" href="http://wireless.aliyun-inc.com/easy/src/easytouch/css/anim.css">
+    <link rel="stylesheet" href="http://wireless.aliyun-inc.com/easy/src/dialog/dialog.css">
+	<style>
+		body{
+			width: 480px;
+		}
+		header {
+			text-shadow:0 0 20px #ff6600;
+			 color:#fff; background:#333;
+			/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#222), to(#111));*/
+			/*text-shadow: 0 2px 2px rgba(220, 220, 220, .1), 0 0 30px rgba(220, 220, 220, .125);*/
+			padding: 0.5em;
+			text-align: center;
+			font-size: 1.4em;
+			-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+			font-weight: bold;
+			position: relative;
+		}
+		.et-back {
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 3em;
+			background: url(../hongbao/img/back.png?datauri) no-repeat 50% 50%;
+		}
+		.et-page {
+			background-color: #fff;
+			height: 100%;
+			overflow: hidden;
+		}
+		.iScroll {
+			position: absolute;
+			top: 49px;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+		.scroller, .armoryCon div {
+			font-size:2em;
+			padding-bottom: 20px;
+			-webkit-box-sizing: border-box;
+		}
+		.iScroll button{
+			text-shadow: 1px 1px 5px blue;
+			color: white;
+			background: none;
+			border: none;
+			border-bottom: 1px solid #999;
+		}
+		.armoryCon div {
+			padding:0.5em;
+		}
+		.ruleCon {
+			color:#666;
+			padding:0.5em;
+		}
+		.ruleCon p{
+			margin-bottom:.5em;
+		}
+		.ruleCon h2{
+			color:#900;
+			text-align:center;
+			font-weight:bold;
+		}
+		.armoryCon div label{
+		}
+		.et-listview .et-arrow {
+			content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAMCAYAAABfnvydAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARZJREFUeNpiXLJkiQETE9NqFhaW4////08JCwv7xYAEgHJM9hwcHCr8/PyxfHx8K9atW8eMogCIFwN13+Tk5GQAKgrk5eWdj6yAEWgsw/r166WBkse4uLjkQPwvX77McnV1TYcrAIGNGzeqAK04DFQk8e/fP4bPnz/3ubm5FcMVgMCmTZt0gYoOAK0T+vv3L0hRPQuyfd++fWMAuucvKysrAxsbGwM3Nzc/XAHQuypAye1ApihUaJaNjQ3ECqCkNDMz82GgDkWgFQxAKxabm5vHgVQxq6ioCAEl9wMdpwaSBNJrgI6MlZWV/Q8LqFhgQGkB/Q/SuRUoGW1pafkXZjULIyPjQaDdj4AOOwW0Lg4oiRLUAAEGAHnIXrpvFbnTAAAAAElFTkSuQmCC);
+			float: right;
+			margin-top: 3px;
+		}
+		pre {
+			margin: 1em;
+		}
+		button {
+			display: block;
+			width: 95%;
+			margin: .8em auto 0;
+			padding: 0.5em;
+		}
+		#startGame{
+			background:url(image/startGame.png?datauri) no-repeat 20px center;
+		}
+        #bestGame{
+			background:url(image/award.png?datauri) no-repeat 20px center;
+		}
+		#aboutGame{
+			background:url(image/rule.png?datauri) no-repeat 20px center;
+		}
+		#exitGame{
+			background:url(image/quit.png?datauri) no-repeat 20px center;
+		}
+		#primary{
+			background:url(image/level1.png?datauri) no-repeat 20px center;
+		}
+		#specialty{
+			background:url(image/level2.png?datauri) no-repeat 20px center;
+		}
+		#master{
+			background:url(image/level3.png?datauri) no-repeat 20px center;
+		}
+		#extreme{
+			background:url(image/level4.png?datauri) no-repeat 20px center;
+		}
+    </style>
+    <link rel="stylesheet" href="css/mineSweeper.css">
+    <script exclude="true" src="http://wireless.aliyun-inc.com/halo/dist/JsCloudAPI-1.0.0beta.js"></script>
+    <script src="http://wireless.aliyun-inc.com/halo/dist/halo-1.0.0beta.js"></script>
+    <script src="http://wireless.aliyun-inc.com/easy/lib/iscroll/4.2/iscroll-lite.js"></script> 
+    <script src="http://wireless.aliyun-inc.com/easy/src/core/core.js"></script>
+    <script src="http://wireless.aliyun-inc.com/easy/lib/zepto/ajax.js"></script> 
+    <script src="http://wireless.aliyun-inc.com/easy/src/core/event.js"></script> 
+    <script src="http://wireless.aliyun-inc.com/easy/src/events/events.js"></script> 
+    <script src="http://wireless.aliyun-inc.com/easy/src/base/base.js"></script>
+    <script src="http://wireless.aliyun-inc.com/easy/src/easytouch/js/core.js"></script>  
+    <script src="js/MineSweeper.js"></script>  
+    <script src="http://wireless.aliyun-inc.com/easy/src/dialog/dialog.js"></script>
+</head>
+
+<body>
+<script>
+ $(function(){
+	/*--start--*/
+	//所有的常量
+			window.ROWS_NUM = 12,
+			window.COLS_NUM = 8,
+			window.PRIMARY_MINE_NUM = 15,
+			window.SPECIALTY_MINE_NUM = 20,
+			window.MASTER_MINE_NUM = 25,
+			window.EXTREME_MINE_NUM = 30;
+	/*--end--*/
+        var IndexPage = $.EasyTouch.Page.extend({
+            html: 'tpl/IndexPage.html',
+            render: function(response){
+                console.log('IndexPage render', arguments);
+                return response;
+            },
+            init: function(params){
+                var _this = this;
+
+     			$('#bestGame').tap(function(e){
+                    _this.app.navPage('ArmoryPage', {}, 'popIn');
+                });
+                $('#aboutGame').tap(function(e){
+                    _this.app.navPage('AboutGame', {}, 'popIn');
+                });
+
+                $('#startGame').tap(function(e){
+                    _this.app.navPage('GameLevel', {}, 'slideBottomIn');
+                });
+				
+				$('#exitGame').tap(function(e){
+//					  navigator.app.exit();
+                      _this.app.exit(); 
+                });
+				/*容器*/
+                this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
+                    checkDOMChanges: true
+                });
+            }
+        });
+		
+		 var LevelPage = $.EasyTouch.Page.extend({
+          	html: 'tpl/GameLevel.html',
+			render: function(response){
+                console.log('LevelPage render', arguments);
+                return response;
+            },
+			init: function(){
+				var _this = this;
+				$('#primary').tap(function(e){
+					console.log(_this.app.pages['StartGame']);
+					_this.app.navPage('StartGame', {mineNum:PRIMARY_MINE_NUM});
+				});
+				$('#specialty').tap(function(e){
+					_this.app.navPage('StartGame', {mineNum:SPECIALTY_MINE_NUM});
+				});
+				$('#master').tap(function(e){
+					_this.app.navPage('StartGame', {mineNum:MASTER_MINE_NUM});
+				});
+				$('#extreme').tap(function(e){
+					_this.app.navPage('StartGame', {mineNum:EXTREME_MINE_NUM});
+				});
+				this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
+					checkDOMChanges: true
+				});
+			}
+        });
+		
+
+        var App = $.EasyTouch.App.extend({
+            id: 'app',
+            debug: true,
+            defaultAnimation: 'slideRightIn',
+            events: {
+                '.page-back': {
+                    tap: function(){
+                        this.pageBack();
+                    }
+                }
+            },
+            pages: {
+                'IndexPage': IndexPage,
+                'AboutGame': {
+                    html: 'tpl/AboutGame.html',
+                    init: function(params){
+						this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
+							checkDOMChanges: true
+						});
+                    }
+                },
+				'StartGame':{
+					html: 'tpl/StartGame.html',
+					init:function(params){
+						/*第一次进入后*/
+						this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
+							checkDOMChanges: true
+						});
+						this.reset(params);
+					},
+					reset: function(params){
+						/*页面每一次被访问时调用*/
+					},
+					leave: function(){
+						/*每一次离开页面都执行该方法*/
+						Game.exit();
+					},
+					ready: function(params){
+						/*页面每一次切换后调用*/
+						var p = {};
+						for(var i in params){
+							p[i] = params[i];
+						}
+						p.con = $('#StartGame');
+						Game.init(p);
+						//alert($('#StartGame').html());
+					}
+				},
+				'ArmoryPage':{
+					html: 'tpl/ArmoryPage.html',
+					init: function(params){
+						this.app.iScroll(this.el.getElementsByClassName('iScroll')[0], {
+							checkDOMChanges: true
+						});
+						this.reset(params);
+					},
+					reset: function(params){
+						var best = restoreBest();
+							con	 = $('#ArmoryPage');
+						console.log('pageOut',best);
+						con.find('.primaryCode span').text((best&&best.primary)?best.primary:0);
+						con.find('.specialtyCode span').text((best&&best.specialty)?best.specialty:0);
+						con.find('.masterCode span').text((best&&best.master)?best.master:0);
+						con.find('.extremeCode span').text((best&&best.extreme)?best.extreme:0);
+					}
+				},
+				'GameLevel': LevelPage
+            },
+            init: function(params){
+				
+                console.log('app init', params);
+                var _this = this;
+
+                _this.bind('pagebeforenav', function(){
+					//	alert("页面跳转前触发");
+                    console.log('[EasyTouch] pagebeforenav', arguments);
+                }, _this);
+                _this.bind('pagenav', function(){
+					//	alert("页面跳转完成后触发");
+                    console.log('[EasyTouch] pagenav', arguments);
+                }, _this);
+                _this.bind('pagebeforeback', function(){
+					//	alert("返回上一个页面前触发");
+                    console.log('[EasyTouch] pagebeforeback', arguments);
+                }, _this);
+                _this.bind('pageback', function(){
+					//	alert("返回上一个页面后触发");
+                    console.log('[EasyTouch] pageback', arguments);
+                }, _this);
+                _this.bind('pagebeforechange', function(){
+					//	alert("页面切换前触发（包括回退和跳转）");
+                    console.log('[EasyTouch] pagebeforechange', arguments);
+                }, _this);
+                _this.bind('pagechange', function(){
+					//	alert("页面切换后触发（包括回退和跳转）");
+                    console.log('[EasyTouch] pagechange', arguments);
+                }, _this);
+                _this.bind('appnav', function(){
+					//	alert("应用切换后触发");
+                    console.log('[EasyTouch] appnav', arguments);
+                }, _this);
+                _this.bind('appbeforenav', function(){
+
+					//	alert("切换应用前触发");
+                    console.log('[EasyTouch] appbeforenav', arguments);
+                }, _this);
+                _this.bind('pageload', function(){
+					//	alert("异步获取页面完成后触发");
+                    console.log('[EasyTouch] pageload', arguments);
+                }, _this);
+                _this.bind('pagebeforeload', function(){
+					//	alert("异步获取页面完成前触发");
+                    console.log('[EasyTouch] pagebeforeload', arguments);
+                }, _this);
+                _this.bind('pageloadfailed', function(){
+					//	alert("获取页面失败时触发");
+                    console.log('[EasyTouch] pageloadfailed', arguments);
+                }, _this);
+                _this.bind('appload', function(){
+					//	alert("第一次加载子应用成功时触发");
+                    console.log('[EasyTouch] appload', arguments);
+                }, _this);
+                _this.bind('appbeforeload', function(){
+					//	alert("第一次加载子应用时触发");
+                    console.log('[EasyTouch] appbeforeload', arguments);
+                }, _this);
+                _this.bind('apploadfailed', function(){
+					//	alert("第一次加载子应用失败时触发");
+                    console.log('[EasyTouch] apploadfailed', arguments);
+                }, _this);
+				/*
+					启用单页面刷新功能, 并开始记录页面跳转, 如果存在历史记录,
+					则跳转至最后一条历史记录, 反之跳转至options中指定的页面
+				*/
+            /*    this.history.start({
+                    id: 'IndexPage',
+                    params: {
+                        name: "YouXiao"
+                    }
+                });*/
+				this.navPage('IndexPage');
+
+            },
+            iScroll: function(el, params){
+				//触发移动
+                var iscroll,
+					_params = {
+						onBeforeScrollStart: function(e){
+							var tagName = e.target.tagName;
+							if (tagName != 'SELECT' && tagName != 'INPUT' && tagName != 'TEXTAREA'){
+								e.preventDefault();
+							}
+						}
+					};
+                params = params || {};
+                if(params.checkDOMChanges){
+					//监听了手机上的事件
+                    el.addEventListener('touchstart', function(e){
+                        if (iscroll.moved || iscroll.zoomed || iscroll.animating || (iscroll.scrollerW == iscroll.scroller.offsetWidth * iscroll.scale && iscroll.scrollerH == iscroll.scroller.offsetHeight * iscroll.scale)) {
+                            return;
+                        }
+                        iscroll.refresh();
+                    });
+                    delete params.checkDOMChanges;
+                }
+                params = $.extend(_params, params);
+                iscroll = new iScroll(el, params);
+				return iscroll;
+            }
+        });
+        window.app = new App();
+    });
+</script>
+</body>
+</html>

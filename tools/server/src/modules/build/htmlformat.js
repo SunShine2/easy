@@ -82,8 +82,9 @@ HtmlFormat.prototype._insertCss = function(finished){
     }
 
     //去掉所有less和css标签,因为已经在依赖查询的时候找到了所有less的样式内容
-    this._$('link[rel=stylesheet\\/less]').remove();
-    this._$('link[rel=stylesheet]').remove();
+    //this._$('link[rel=stylesheet\\/less]').remove();
+    //this._$('link[rel=stylesheet]').remove();
+    this._$('style,link[rel=stylesheet\\/less],link[rel=stylesheet]').remove();
     this._less(strDepCss,function(strCss){
         self._getCssBlock(strCss,function(cssBlock){
             self._$('head').append(cssBlock);
@@ -231,7 +232,6 @@ HtmlFormat.prototype._runReplaceJob = function(){
 HtmlFormat.prototype._complete = function(){
     if(this._onFishied){
         var strHtml = this._$.html();
-
         if(this._appCfg.debug['html-minify'] == 'true'){
             strHtml = html_minifier(strHtml, {
                 removeComments: true,
@@ -239,8 +239,7 @@ HtmlFormat.prototype._complete = function(){
                 removeEmptyAttributes:true
             });
         }
-        
-        //console.log('页面格式化完成!');
+        console.log('页面格式化完成!');
         this._onFishied(strHtml);
     }
 };
@@ -385,7 +384,7 @@ HtmlFormat.prototype._cssDatauri = function(strCss,callback,uri){
     }
 
     for(i = 0; i<dataUriJobs.length; i++){
-        util.getImageBase64(dataUriJobs[i].url,getCallbackFn(dataUriJobs[i]),isSmushit);
+        util.getImageBase64(dataUriJobs[i].url,getCallbackFn(dataUriJobs[i]),false);
     }
 
     function getCallbackFn(job){

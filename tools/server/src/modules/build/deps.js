@@ -145,7 +145,7 @@ Deps.prototype._loadFiles = function(){
             content:util.removeComments(scr.content),
             cached:2,
             uuid:this._codes[i].uuid,
-            type:scr.type === 'less'?'css':scr.type
+            type:scr.type
         };
         this._saveRootModule(mRoot);
     }
@@ -319,7 +319,7 @@ Deps.prototype._appendDependenciesToModule = function(module){
     //找到当前模块的所有依赖
     //console.log('查找模块依赖:',module.uri);
     var modules,loadUris = [];
-    if(module.type === 'css' || module.type === 'less'){
+    if(module.type === 'css'){
         var depCss = this._getCssDeps(module.content);
         //console.log(module.uri,'找到样式依赖:',depCss);
         for(var k = 0; k < depCss.length; k++){

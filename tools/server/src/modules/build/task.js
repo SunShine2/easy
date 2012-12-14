@@ -78,12 +78,8 @@ Task.prototype = {
 **/
     appendScript:function(src,uuid){
         var regJs = /.js$/,
-            extend = regJs.test(src)?'':'.js',
-            vals = typeof src === 'string'?[src]:src;
-
-        for(var i = 0; i < vals.length; i++){
-            this._codes.push({uri:vals[i] + extend,content:null,uuid:uuid});
-        }
+            extend = regJs.test(src)?'':'.js';
+        this._codes.push({uri:src + extend,content:null,uuid:uuid});
     },
 /**
 向任务中增加内联脚本
@@ -92,24 +88,25 @@ Task.prototype = {
 @param {String} 脚本的id
 **/
     appendCode:function(codes,uuid){
-        var i,
-            vals = typeof codes === 'string'?[codes]:codes;
-        for(i = 0; i < vals.length; i++){
-            this._codes.push({content:vals[i],uuid:uuid});
-        }
+        this._codes.push({content:codes,uuid:uuid});
     },
 /**
-向任务中增加外联less
-@method appendLess
+向任务中增加外联样式
+@method appendCss
 @param {String|Array} href 需要增加的脚本
 @param {String} 脚本的id
 **/
     appendCss:function(href,uuid){
-        var i,
-            vals = typeof href === 'string'?[href]:href;
-        for(i = 0; i < vals.length; i++){
-            this._codes.push({uri:href,type:'css',uuid:uuid,content:null});
-        }
+        this._codes.push({uri:href,type:'css',uuid:uuid,content:null});
+    },
+/**
+向任务中增加内联css和less
+@method appendLess
+@param {String|Array} href 需要增加的脚本
+@param {String} 脚本的id
+**/
+    appendCssCode: function(code,uuid){
+        this._codes.push({type:'css',uuid:uuid,content:code});
     },
 
 /**

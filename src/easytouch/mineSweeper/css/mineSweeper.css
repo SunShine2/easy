@@ -1,0 +1,205 @@
+@charset "utf-8";
+/* CSS Document */
+.outerCon{
+	width:99%;
+	margin:0.2em auto;
+	font-size:20px;
+	background-color: #0E1B12;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+	padding:0.1em 0;
+}
+.conDiv{
+}
+@media all{
+	.conDiv,.easy-dialog{
+		font-size:24px;
+	}
+	.actionBar td{
+		font-size:20px;
+		height:60px;
+	}
+	.gamecon{
+		top:128px;
+	} 
+}
+@media all and (max-width:479px){
+	.conDiv,.easy-dialog{
+		font-size:20px;
+	}
+	.actionBar td{
+		height:55px;
+		font-size:18px;
+	}
+	.gamecon{
+		top:121px;
+	} 
+}
+@media all and (max-width:300px){
+	.conDiv,.easy-dialog{
+		font-size:12px;
+	}
+	.actionBar td{
+		font-size:14px;
+		height:30px;
+	}
+	.gamecon{
+		top:89px;
+	} 
+}
+
+@media all and (max-width:150px){
+	.conDiv,.easy-dialog{
+		font-size:10px;
+	}
+	.actionBar td{
+		font-size:6px;
+		height:20px;
+	}
+	.gamecon{
+		top:78px;
+	} 
+}
+.container{
+	margin:0.1em auto;
+	width: 99%;
+	-webkit-box-sizing: border-box;
+	font-family:Verdana, Geneva, sans-serif;
+}
+.gamecon{
+	width:99%;
+	margin:0 auto;
+	background:#0E1B12;
+}
+.gamecon table{
+	width:100%;
+}
+.oneline{
+	width:100%;
+}
+.oneline td{
+	width:12.5%;
+	padding:0;
+}
+.oneline div{
+	position:relative;
+	padding:1px;
+}
+.oneline input{
+	display:block;
+	width:100%;
+}
+.pos{
+	position:relative;
+}
+.showNum{
+	position:absolute;
+	top:-0.5px;
+	left:-0.5px;
+	height:100%;
+	font-family:Verdana, Geneva, sans-serif;
+	border:none;
+	background:none;
+	/*font-size:150%;*/
+}
+.color_1,.color_5{
+	color:green;
+}
+.color_2,.color_6{
+	color:yellow;
+}
+.color_3,.color_7{
+	color:red;
+}
+.color_4,.color_8{
+	color:pink;
+}
+.actionBar{
+	width:100%;
+	background: url(../image/actionBg.png?datauri) repeat;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+}
+.actionBar td{
+	text-align:center;
+}
+.btn{
+	width:18%;
+	vertical-align:center;
+}
+.btn div{
+	/*padding:0.3em 0;*/
+}
+.btn div div{
+	background: #97F5B8;
+	margin: 0.2em;
+	border-right: 1px solid #0A3D0B;
+	border-bottom: 1px solid #0A3D0B;
+	border-radius: 2px;
+}
+.btn div.selected div{
+	background: #FDF579;
+	border-left: 1px solid #555007;
+	border-top: 1px solid #555007;
+	border-right:none;
+	border-bottom:none;
+}
+.tdCon{
+	/*background: -webkit-radial-gradient(ellipse farthest-corner, #66BD9D, #62B999 30%, #62B999 50%, #407E69);*/
+	padding:1% 0;
+	width:80%;
+	border:#407E69 1px solid;
+	border-radius:2px;
+	background-color:#62b999;
+}
+.mark, .probe{
+	background: #fff;
+}
+.marked,.timer{
+	color:red;
+	background:none;
+	border:none;
+}
+.probe, .timer{
+	margin-left:18%;
+}
+.easy-dialog{
+	/*display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;*/
+}
+.easy-dialog .main{
+	padding:0.5em;
+	width: 70%;
+	max-height:90%;
+	background-color: black;
+	opacity: 0.95;
+	margin: 0 auto;
+	border: 1px solid #fff;
+	border-radius: 2%;
+	color:#fff;
+}
+.easy-dialog .head{
+	border: none;
+	background: none;
+	padding: 0;
+	border-bottom:1px solid #888;
+	padding-bottom:0.2em;
+}
+.easy-dialog .head .close{
+	display:none;
+}
+.easy-dialog .body{
+	min-height:20px;
+}
+.easy-dialog .foot{
+	padding-bottom:0;
+}
+.easy-dialog .foot button{
+	width: 40%;
+	display: inline;
+	margin: 0 5%;
+	padding: 0.1em;
+	color: black;
+	padding:.5em auto;
+}

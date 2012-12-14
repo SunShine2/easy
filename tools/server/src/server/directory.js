@@ -50,7 +50,7 @@ function _directory(request,response,next,fullPath){
         info;
 
     if(!fs.existsSync(fullPath)){
-        console.log('目录或文件不存在!');
+        console.log('目录或文件不存在:',fullPath);
         next();
         return;
     }
@@ -207,7 +207,7 @@ function padding(num){
 }
 
 function toFixed(size){
-    return Math.round(size / 1024 * 100) / 10;
+    return Math.round(size / 1024 * 100) / 100;
 }
 
 function getAppInfo(dir){
