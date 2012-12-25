@@ -1,7 +1,7 @@
 /**
  * deferred-ajax
  * @author: youxiao@alibaba-inc.com
- * @version: 0.0.1
+ * @version: 0-0-1
  * @module deferred-ajax
  * @uses Deferred Ajax
  * @description  ajax增强模块,支持ajax的promise模式

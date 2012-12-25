@@ -1,7 +1,7 @@
 /**
 easy框架基类，用于创建easy组件，参考YUI3
 @author : butian.wth
-@version : 0.0.2
+@version : 0-0-2
 @module Base
 */
 ;(function(){

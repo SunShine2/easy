@@ -1,6 +1,6 @@
 /**
  * Deferred
- * @version: 0.0.1
+ * @version: 0-0-1
  * @module EasyTouch
  * @uses Deferred
  * @description jQuery DeferredÄ£¿é

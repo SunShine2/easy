@@ -1,7 +1,7 @@
 /**
  * From Backbone.js 0.9.2
  * @class $.Events
- * @author youxiao@alibaba-inc.com
+ * @author : youxiao@alibaba-inc.com
  */
 
 //     Backbone.js 0.9.2

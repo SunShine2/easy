@@ -1,8 +1,8 @@
 /**
  * Callbacks
- * @version: 0.0.1
+ * @version: 0-0-1
  * @module Callbacks
- * @description jQuery CallbacksÄ£¿é
+ * @description jQuery CallbacksÄ£ï¿½ï¿½
  */
 
 ;(function ($) {

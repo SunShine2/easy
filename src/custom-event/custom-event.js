@@ -1,7 +1,7 @@
 /**
 用于组件的自定义事件系统
 @author: butian.wth
-@version : 0.0.2
+@version : 0-0-2
 @module : CustomEvent
 */
 ;(function(){

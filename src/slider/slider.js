@@ -1,6 +1,6 @@
 /**
- * @author youxiao@alibaba-inc.com
- * @version 0.0.1
+ * @author: youxiao@alibaba-inc.com
+ * @version: 0-0-1
  * @require zepto.js/mustache.js/slider.css
  * @modify butian.wth ---- 增加dispose方法
  */

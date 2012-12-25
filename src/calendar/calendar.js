@@ -1,7 +1,7 @@
 /*
  * 日历模块
  * author : butian.wth@aliyun-inc.com
- * version : 0.0.1
+ * version : 0-0-1
  */
 
 (function($){

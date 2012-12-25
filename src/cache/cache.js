@@ -1,6 +1,6 @@
 /**
  * cache模块
- * version : 0.0.1
+ * version : 0-0-1
  * author : butian.wth@aliyun-inc.com
  * cache控制模块，用于将请求放入本地存储，尽量确保节省流量
  */

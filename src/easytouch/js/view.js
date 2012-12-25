@@ -1,7 +1,7 @@
 /**
  * EasyTouch
  * @author: youxiao@alibaba-inc.com
- * @version: 0.0.1
+ * @version: 0-0-1
  * @module EasyTouch-View
  */
 ;(function(){
