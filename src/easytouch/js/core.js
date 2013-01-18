@@ -9,7 +9,8 @@
  *  2. 监听backbutton事件，如果是在子应用可以回到父应用
  *
  */
-;(function(){
+define('easy-touch-core', ['base','css!easy-touch-style'], function ($) {
+
     $.EasyTouch = {
         Loading: {
             /**
@@ -551,13 +552,37 @@
                 }
             });
 
-//        this.bind(EVN_APP_PAGE_CHANGE, function(e, data){
-//            var hash = data.to;
-//            if(data.data){
-//                hash += '=' + JSON.stringify(data.data);
-//            }
-//            window.location.hash = hash;
-//        });
+
+            this.bind(EVN_APP_PAGE_CHANGE, function(e, data){
+                var params = {
+                    id: data.to,
+                    data: data.data || {}
+                };
+                window.location.hash = encodeURIComponent(JSON.stringify(params));
+            });
+            window.addEventListener('hashchange', function(){
+                try{
+                    var hash = JSON.parse(decodeURIComponent(window.location.hash.substring(1))),
+                        PID = hash.id;
+                    if(!PID){
+                        return;
+                    }
+                    var pre = _this._history[_this.history.getIndex() - 1];
+                    if(_this.getCurrentPID() === PID){
+                        console.log('[EasyTouch] hashchange', PID + ' is current page');
+                        return false;
+                    }else if(!_this.pages[PID]){
+                        console.log('[EasyTouch] hashchange', PID + ' is not exist');
+                        return false;
+                    }else if(pre && pre.id === PID){
+                        console.log('[EasyTouch] hashchange', 'pageBack');
+                        _this.pageBack(hash.data, hash.anim);
+                    }else{
+                        console.log('[EasyTouch] hashchange', 'navPage');
+                        _this.navPage(PID, hash.data, hash.anim, true);
+                    }
+                }catch(ex){}
+            });
 
             this.init(options);
         },
@@ -729,17 +754,41 @@
          //Notice: When the slideRightIn included, the slideLeftOut is also ready.
          //The same, when you include slideLeftOut, slideRightIn is ready too.
          //All the animation function has two options: "duration" and "function".</span>
-         <span style="color:#30418C">.easytouch</span> > <span style="color:#30418C">.anim-slideRightIn</span>(<span class="lit">.6</span>s, <span class="str">ease-in</span>);
+         <span style="color:#30418C"><span style="color:#30418C">.easytouch-slide</span>(<span class="lit">.6</span>s, <span class="str">ease-in</span>);
          </code></pre>
 
          @param {Boolean} ifPushToHistory if push the page to history, default: `true`
          @chainable
          **/
         navPage: function(id, data, anim, ifPushToHistory){
-            if(!this.pages[id]){
-                console.log('[EasyTouch] navPage', id + ' is not exist.');
+            if(this.$el.hasClass('animating')){
+                console.log('[EasyTouch] navPage', 'animating');
                 return this;
             }
+            if(!this.pages[id]){
+                console.log('[EasyTouch] navPage', id + ' is not exist');
+                return this;
+            }
+            if(this.getCurrentPID() === id && this.$el.find('.et-current').length){
+                console.log('[EasyTouch] navPage', id + ' is current page');
+                return this;
+            }
+            var status = 0,//正常
+                index = this.history.getIndex();
+            if(index < this._history.length - 1){
+                var nextRecord = this._history[index+1];
+                if(nextRecord.id === id){
+                    data = data || nextRecord.data;
+                    anim = anim || nextRecord.anim;
+                    status = 2; //forward
+                }else if(id === this.getCurrentPID()){
+                    status = 3; //当前页
+                }else{
+                    status = 1; //分叉
+                }
+            }
+
+            console.log(status);
 
             console.log('[EasyTouch] navPage', arguments);
 
@@ -750,14 +799,39 @@
                 currentPage = this.getCurrentPage(),
                 _data = $.extend({}, data),
                 pushHistory = function(id, data, anim, ifPushToHistory){
-                    if(ifPushToHistory === false){
-                        return;
+                    if(status === 2){
+                        _this.history.setCurrent(index + 1);
+                    }else if(status === 1){
+                        var tmp = [];
+                        for(var i= 0,j=_this._history.length;i<j;i++){
+                            var h = _this._history[i];
+                            if(i <= index){
+                                tmp.push(h);
+                            }else{
+                                break;
+                            }
+                        }
+                        _this._history = tmp;
+                        _this.history.push({
+                            id: id,
+                            data: data,
+                            anim: anim
+                        });
+                    }else if(status === 3){
+                        _this.history.update(index, {
+                            data: data,
+                            anim: anim
+                        });
+                    }else{
+                        if(ifPushToHistory === false){
+                            return;
+                        }
+                        _this.history.push({
+                            id: id,
+                            data: data,
+                            anim: anim
+                        });
                     }
-                    _this.history.push({
-                        id: id,
-                        data: data,
-                        anim: anim
-                    });
                 };
             if(currentPage && currentPage.id === id){
                 currentPage.trigger(EVN_PAGE_RESET, _data);
@@ -807,6 +881,10 @@
          **/
         pageBack: function(data, anim){
             console.log('[EasyTouch] pageBack', arguments);
+            if(this.$el.hasClass('animating')){
+                console.log('[EasyTouch] pageBack', 'animating');
+                return this;
+            }
             if(this._history.length <= 1){
                 this.exit();
                 return this;
@@ -815,12 +893,14 @@
             var _this = this,
                 _data,
                 currentPage = _this.getCurrentPage(),
-                preRecord = this._history[this._history.length - 2],
-                lastRecord = this._history[this._history.length - 1],
+                index = _this.history.getIndex(),
+                preRecord = this._history[index - 1],
+                lastRecord = this._history[index],
                 id = preRecord.id,
                 eventArgus,
                 trigger = function(fromPage, toPage){
-                    _this.history.pop();
+                    _this.history.setCurrent(index - 1);
+
                     fromPage.trigger(EVN_PAGE_LEAVE);
                     toPage.trigger(EVN_PAGE_READY, data);
                     _this.trigger(EVN_APP_PAGE_BACK, eventArgus);
@@ -1001,7 +1081,7 @@
          * @return {Object} the instance of page
          */
         getCurrentPage: function(){
-            return this._history.length?this._pages[this._history[this._history.length - 1].id]:null;
+            return this._history.length?this._pages[this._history[this.history.getIndex()].id]:null;
         },
         /**
          * 获取当前页面的ID
@@ -1009,7 +1089,7 @@
          * @return {String} the page id
          */
         getCurrentPID: function(){
-            return this._history.length?this._history[this._history.length - 1].id:null;
+            return (this._pages && this._history.length)?this._history[this.history.getIndex()].id:null;
         },
         history: function(){
             var _this = this,
@@ -1037,11 +1117,34 @@
                 start: function(options){
                     useHistory = true;
                     if(_this._history.length){
-                        var record = _this._history[_this._history.length - 1];
+                        var record = _this._history[_this.history.getIndex()];
                         _this.navPage(record.id, record.data);
                     }else{
                         _this.navPage(options.id, options.data);
                     }
+                },
+                getIndex: function(){
+                    for(var i= 0,j=_this._history.length;i<j;i++){
+                        if(_this._history[i].on){
+                            return i;
+                        }
+                    }
+                },
+                setCurrent: function(index){
+                    _this._history = _this._history.map(function(item, i){
+                        if(index === i){
+                            item.on = true;
+                        }else{
+                            if(item.on){
+                                delete item.on;
+                            }
+                        }
+                        return item;
+                    });
+                    _this.history.save();
+                },
+                update: function(index, params){
+                    $.extend(true, _this._history[index], params);
                 },
                 /**
                  * 从尾部删除一条历史记录,并写入`sessionStorage`
@@ -1074,12 +1177,18 @@
                  */
                 push: function(record){
                     var lastPID = _this.getCurrentPID(),
-                        firstPID = _this._history.length && _this._history[0].id;
+                        firstPID = _this._history.length && _this._history[0].id,
+                        index = _this.history.getIndex();
+                    if(lastPID){
+                        delete _this._history[index].on;
+                    }
+                    record.on = true;
                     if(record.id !== lastPID && record.id !== firstPID){
                         _this._history.push(record);
                     }else if(record.id === lastPID){
                         //相等时，仅更新data参数
-                        _this._history[_this._history.length - 1].data = record.data;
+                        _this._history[index].data = record.data;
+                        _this._history[index].on = true;
                     }else if(record.id === firstPID){
                         _this._history = [record];
                     }
@@ -1581,4 +1690,6 @@
     });
     $.extend($.EasyTouch.Page.prototype, $.EasyTouch.DelegateEvents);
     $.extend($.EasyTouch.Page.prototype, $.EasyTouch.Loading);
-})();
+
+    return $;
+});

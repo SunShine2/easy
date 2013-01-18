@@ -29,10 +29,6 @@
   display: -webkit-box;
   -webkit-box-lines: multiple;
 }
-.easy-lines > * {
-  display: block;
-  width: 100%;
-}
 /*超出文字显示...*/
 .easy-text-overflow {
   overflow: hidden;
@@ -40,7 +36,7 @@
   white-space: nowrap;
 }
 /*清楚浮动*/
-.easy-fix-float {
+.easy-fix-float::after {
   content: "\0020";
   display: block;
   height: 0;

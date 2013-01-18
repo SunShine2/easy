@@ -1,12 +1,12 @@
-;(function(){
-    var App = $.EasyTouch.extend({
+define('app', ['cssLoader', 'css!reset-style', 'css!common-style', 'css!demo-style', 'easy-touch-core','css!demo-anim', 'homePage', 'page2'], function (CSS_LOADER, RESET_STYLE, COMMON_STYLE, DEMO_STYLE, $, DEMO_ANIM, homePage, page2) {
+    var App = $.EasyTouch.App.extend({
         id: 'hongbao',
         container:'#pages',
         defaultAnimation: 'slideRightIn',
         debug: true,
         pages: {
-            home: window.HomePage,
-            page2:window.Page2
+            home: homePage,
+            page2: page2
         },
         events: {
             '[data-action="nav"]':{
@@ -17,7 +17,6 @@
                     this.pageBack();
                 }
             }
-
         },
         init: function(params){
             this.history.start({
@@ -32,4 +31,5 @@
         }
     });
     window.app = new App();
-})();
+    return app;
+});

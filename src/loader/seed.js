@@ -39,7 +39,7 @@
     var alias_src = {
         'core' : 'core/core.js',
         'anim' : {path:'anim/anim.js', requires:['core']},
-        'custom-event' : {path:'custom-event/custom-event.js', requires:['core']},
+        'events' : {path:'custom-event/events.js', requires:['core']},
         'base' : {path:'base/base.js', requires:['custom-event']},
         'cache' : {path:'cache/cache.js', requires:['core']},
         'caf' : {path:'caf/caf.js', requires:['core']},

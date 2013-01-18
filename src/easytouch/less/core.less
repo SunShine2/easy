@@ -26,13 +26,17 @@
     position: absolute;
     display: none;
 }
+.et-page.current,
+.et-app.current{
+    display: block;
+}
 .et-app{
     border: none;
     z-index: 1;
 }
 .et-load{
     pointer-events: none;
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;

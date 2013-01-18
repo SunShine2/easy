@@ -180,7 +180,7 @@
     EasySlider.prototype.dispose = function(){
         this.wrapper.unbind();
         this._stopTimer();
-        this.wrapper.empty();
+        this.wrapper.removeClass('easy-slider').empty();
     };
 
     $.EasySlider = EasySlider;

@@ -21,6 +21,7 @@
         this.TPL = params.tpl;
         this.USETIMER = params.useTimer !== false;
         this.USEARROW = params.useArrow !== false;
+        this.INITINDEX = params.index?params.index:0;
         this.DELAY = params.delay || 5000;
         this.WIDTH = params.width || this.wrapper.width();
 
@@ -38,20 +39,14 @@
             if(!_this.TPL){
                 html_slider+='<img class="item" src="'+item+'"/>';
             }
-            html_icon+='<i'+(index===0?' class="current"':'')+'></i>';
+            html_icon+='<i></i>';
         });
         if(_this.TPL){
             html_slider = Mustache.to_html('{{#data}}<div class="item">'+_this.TPL+'</div>{{/data}}', {
                 data: data
             });
         }
-        slider.html(html_slider).find('.item').each(function(index, item){
-            if(index === 0){
-                $(item).addClass('current');
-            }else{
-                $(item).addClass('right');
-            }
-        });
+        slider.html(html_slider);
         icon.html(html_icon);
         this.wrapper.addClass('easy-slider').append(slider).append(icon);
         if(this.USEARROW){
@@ -60,6 +55,11 @@
         this.slider = slider;
         this.icons = icon.find('i');
         this._handleDisable();
+
+        if(this.INITINDEX && (this.length > this.INITINDEX)){
+            this.index = this.INITINDEX;
+            this._scroll();
+        }
     };
     EasySlider.prototype._initTimer = function(){
         if(!this.USETIMER || this.length === 1){

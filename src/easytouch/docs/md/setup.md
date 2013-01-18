@@ -43,20 +43,20 @@ EasyTouch依赖Easy框架的基础代码
 @import "/easytouch/less/anim.less";
 
 /*slideLeftIn、slideLeftOut、slideRightIn、slideRightOut对应的mix方法*/
-.easytouch > .anim-slide();
+.easytouch-slide();
 ```
 
 所有动画列表
 
 ```css
-.easytouch > .anim-slide();
-.easytouch > .anim-slideV();
-.easytouch > .anim-fade();
-.easytouch > .anim-dissolve();
-.easytouch > .anim-pop();
-.easytouch > .anim-flip();
-.easytouch > .anim-swap();
-.easytouch > .anim-cube();
-.easytouch > .anim-flow();
-.easytouch > .anim-turn();
+.easytouch-slide();
+.easytouch-slideV();
+.easytouch-fade();
+.easytouch-dissolve();
+.easytouch-pop();
+.easytouch-flip();
+.easytouch-swap();
+.easytouch-cube();
+.easytouch-flow();
+.easytouch-turn();
 ```

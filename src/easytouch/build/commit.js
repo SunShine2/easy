@@ -11,7 +11,7 @@
  */
 
 var debuger = true;
-var server = 'http://admin.cloudapp.aliyun.com';
+var server = 'http://cloudapp.admin.aliyun-inc.com';
 if(debuger){
     server = 'http://test.developer.aliyun.com/console';
 }

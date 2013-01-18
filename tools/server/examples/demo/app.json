@@ -1,5 +1,12 @@
 {
   "appName":"空的App",
   "id":"",
-  "debug":"false"
+  "debug":{
+  "weinre":"false",
+  "inline-resource":"false",
+  "jsCompress":"false",
+  "cssClean":"false",
+  "datauri":"false",
+  "smushit":"false"
+}
 }

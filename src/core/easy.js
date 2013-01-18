@@ -3,7 +3,7 @@
  * @author : butian.wth
  * @version : 0.0.2
  */
-;(function($){
+define('easy-core', ['zepto-core'], function ($) {
 
     /**
      * 增加type方法，用于支持Base模块
@@ -42,4 +42,6 @@
     */
     $.zid = zid;
 
-})(Zepto);
+    return $;
+
+});

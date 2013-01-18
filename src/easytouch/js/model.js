@@ -101,6 +101,31 @@
      **/
     $.EasyTouch.Model = $.Base.build('$.EasyTouch.Model', {
         /**
+         * ID，可用于缓存时的key
+         * @property id
+         * @type String
+         */
+        id: undefined,
+        /**
+         * 是否启用缓存
+         * @property cache
+         * @type Boolean
+         */
+        cache: false,
+        /**
+         * 同一个数据源，因为请求参数不同时，缓存的数量，默认：10
+         * @property cacheSize
+         * @type Number
+         */
+        cacheSize: 10,
+        /**
+         * 缓存的时间，单位：ms
+         * @property maxAge
+         * @type Number
+         */
+        maxAge: 0,
+
+        /**
          * EasyTouch.ModelList的集合，当前model所属ModelList的集合
          * @property lists
          * @type Array
@@ -146,7 +171,7 @@
          * @property attrs
          * @type Object
          */
-        attrs: {},
+        attrs: undefined,
         /**
          * 存储的数据
          * @property data
@@ -166,7 +191,9 @@
          * @private
          */
         initializer: function(data){
-            data = data || this.defaults;
+            this.attrs = {}; //防止引用
+            data = data || this.defaults || {};
+            this.id = this.id || new Date().getTime();
             this.reset(data);
             this.init(data);
         },
@@ -281,9 +308,9 @@
             data = data || this.data;
             var type = $.type(data);
             if(type === 'array'){
-                return [].concat(data);
+                return $.extend(true, [], data);
             }else if(type === 'object'){
-                return $.extend({}, data);
+                return $.extend(true, {}, data);
             }else{
                 return data;
             }
@@ -315,8 +342,10 @@
          *      @param {Function} settings.error 失败的回调
          * @chainable
          */
+        //TODO: 更新缓存
         save: function(options, settings){
             settings = settings || {};
+
             var _this = this,
                 _success = settings.success;
             settings.success = function(){
@@ -347,15 +376,134 @@
          */
         remove: function(options, settings){
             settings = settings || {};
+
             var _this = this,
                 _success = settings.success;
             settings.success = function(){
                 _this.destroy();
+                _this._saveToLocal();
                 _this.trigger(EVN_REMOVE);
                 _success && _success.apply(this, arguments);
             };
             this.ajax(options, settings);
             return this;
+        },
+        /**
+         * 用于查询缓存是否过期
+         *
+         *      this._isExpired({
+         *          xxx
+         *      });
+         *
+         * @param {Object} params 查询参数，用于分辨不同的查询
+         * @return {Boolean}
+         */
+        _isExpired: function(params){
+            var _this = this,
+                data = localStorage[this._generateKey()],
+                key = params?JSON.stringify(params):'';
+            if(!data){
+                return true;
+            }
+            try{
+                var expired = true;
+                data = JSON.parse(data);
+                data.forEach(function(item){
+                    if(key === item.key){
+                        expired = (new Date().getTime() - item.lastModified) > _this.maxAge;
+                    }
+                });
+                return expired;
+            }catch(ex){
+                return true;
+            }
+        },
+        /**
+         * 用于将数据缓存到本地
+         *      
+         *      this._saveToLocal({
+         *          id: xxx,
+         *      }, {
+         *          xxx
+         *      })     
+         * 
+         * @method _saveToLocal
+         * @param {Object} params 查询参数，用于分辨不同的查询
+         * @param {Object} data 将要被缓存的数据
+         * @private
+         */
+        _saveToLocal: function(params, data){
+            var prefixKey = this._generateKey();
+            try{
+                var localData = localStorage[prefixKey],
+                    key = params?JSON.stringify(params):'',
+                    has = false,
+                    timestamp = new Date().getTime();
+                localData = localData?JSON.parse(localData):[];
+                localData = localData.map(function(item){
+                    if(item.key === key){
+                        has = true;
+                        item.data = data;
+                        item.lastModified = timestamp;
+                    }
+                    return item;
+                });
+                if(!has){
+                    localData.unshift({
+                        key: key,
+                        lastModified: timestamp,
+                        data: data
+                    });
+                }
+                if(localData.length > this.cacheSize){
+                    localData.length = this.cacheSize;
+                }
+                localStorage[prefixKey] = JSON.stringify(localData);
+            }catch(ex){
+                localStorage[prefixKey] = '';
+            }
+        },
+        /**
+         * 生成缓存的key
+         * 
+         *      this._generateKey();
+         *  
+         * @method _generateKey
+         * @return {String}
+         * @private
+         */
+        _generateKey: function(){
+            return 'easytouch:model:' + this.id;
+        },
+        /**
+         * 从缓存中获取数据
+         * 
+         *      this._reverse({
+         *          id: xxx,
+         *          ...
+         *      })
+         * 
+         * @method _reverse
+         * @param {Object} params 查询参数，用于分辨不同的查询
+         * @return {Any}
+         * @private
+         */
+        _reverse: function(params){
+            var _this = this,
+                data = localStorage[this._generateKey()],
+                key = params?JSON.stringify(params):'';
+            if(!data){
+                return null;
+            }
+            try{
+                data = JSON.parse(data);
+                data = data.filter(function(item){
+                    return key === item.key;
+                });
+                return data?data[0]['data']:null;
+            }catch(ex){
+                return true;
+            }
         },
         /**
          * 从服务端获取数据，重置本地数据
@@ -378,12 +526,30 @@
          */
         fetch: function(options, settings){
             settings = settings || {};
+            options = options || {};
+
+            var key = $.extend(true, {}, this.server.data, options.data);
+
+            if(this.cache && !this._isExpired(key)){
+                var data = this._reverse(key);
+                if(data){
+                    this._watch(data);
+                    this.reset(this.parse(data), settings);
+                    options && options.success && options.success.apply(this, data);
+                    options && options.complete && options.complete.apply(this, data);
+                    settings.success && settings.success.apply(this, data);
+                    return;
+                }
+            }
+
             var _this = this,
                 _success = settings.success;
             settings.success = function(data){
-                _this._watch(data);
                 settings.success = _success;
-                _this.reset(_this.parse(data), settings);
+                _this._saveToLocal(key, data);
+                _this._watch(data);
+                data = _this.parse(data);
+                _this.reset(data, settings);
             };
             this.ajax(options, settings);
             return this;
@@ -445,12 +611,12 @@
         ajax: function(options, settings){
             settings = settings || {};
             var _this = this,
-                defaultOptions = $.extend({
+                defaultOptions = $.extend(true, {
                     data: {},
                     type: 'GET',
                     dataType: 'json'
                 }, _this.server),
-                _options = this.parseAjaxOptions($.extend(defaultOptions, options)),
+                _options = this.parseAjaxOptions($.extend(true, defaultOptions, options)),
                 success = _options.success,
                 error = _options.error,
                 beforeSend = _options.beforeSend,

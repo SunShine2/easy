@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        html, body, ul { margin: 0; padding: 0 }
+        li { border-bottom:1px solid #E0E0E0; font-size:20px; font-weight:bold; list-style:none outside none; margin:0; padding:8px 0 8px 10px; position:relative; -webkit-transition: opacity .75s ease-in }
+    </style>
+    <script src='pull-to-refresh.js'></script>
+    <script>
+        window.addEventListener('load', function() {
+            window.pull = new PullToRefresh({
+                el: 'content',
+                success: function(callback) {
+                    // simulate a network request that takes 2 seconds
+                    window.setTimeout(function() {
+                        var l = document.getElementById('list');
+                        for(var i = 0; i < 5; i++) { // insert 5 new items
+                            var li = document.createElement('li');
+                            li.innerHTML = 'List Item ' + Math.floor(Math.random() * 100);
+                            li.style.opacity = 0;
+                            l.insertBefore(li, l.firstChild);
+                        }
+                        window.setTimeout(function() {
+                            for(var i = 0; i < 5; i++) {
+                                l.children[i].style.opacity = 1;
+                            }
+                        }, 0);
+                        callback();  // pull callback when finished
+                    }, 2000);
+                },
+                start: function() {
+                    console.log('start');
+                },
+                cancel: function() {
+                    //alert('cancel');
+                }
+            });
+        }, false);
+    </script>
+</head>
+<body>
+<div id='content'>
+    <ul id='list'>
+        <li>List Item 1</li>
+        <li>List Item 2</li>
+        <li>List Item 3</li>
+        <li>List Item 4</li>
+        <li>List Item 5</li>
+        <li>List Item 6</li>
+        <li>List Item 7</li>
+        <li>List Item 8</li>
+        <li>List Item 9</li>
+        <li>List Item 10</li>
+        <li>List Item 11</li>
+        <li>List Item 12</li>
+        <li>List Item 13</li>
+        <li>List Item 14</li>
+        <li>List Item 15</li>
+        <li>List Item 16</li>
+        <li>List Item 17</li>
+        <li>List Item 18</li>
+        <li>List Item 19</li>
+        <li>List Item 20</li>
+        <ul>
+</div>
+</body>
+</html>

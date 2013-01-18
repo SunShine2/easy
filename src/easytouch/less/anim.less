@@ -1,8 +1,5 @@
-//namespace
-.easytouch{
-
 //slide
-.anim-slide(@durationIn: .25s, @functionIn: ease, @durationOut: .25s, @functionOut: ease) {
+.easytouch-slide(@durationIn: .25s, @functionIn: ease, @durationOut: .25s, @functionOut: ease) {
     .et-slideLeftIn{
         -webkit-animation: et-slideLeftIn @durationIn @functionIn;
     }
@@ -51,7 +48,7 @@
 }
 
 //slider slideV
-.anim-slideV(@durationIn: .25s, @functionIn: ease, @durationOut: .25s, @functionOut: ease){
+.easytouch-slideV(@durationIn: .25s, @functionIn: ease, @durationOut: .25s, @functionOut: ease){
     .et-slideTopIn{
         -webkit-animation: et-slideTopIn @durationIn @functionIn;
     }
@@ -100,7 +97,7 @@
 }
 
 //fade
-.anim-fade(@durationIn: .225s, @functionIn: ease-out, @durationOut: .125s, @functionOut: ease-in){
+.easytouch-fade(@durationIn: .225s, @functionIn: ease-out, @durationOut: .125s, @functionOut: ease-in){
     .et-fadeIn {
         -webkit-animation: et-fadeIn @durationIn @functionIn;
     }
@@ -126,7 +123,7 @@
 }
 
 //Disolve
-.anim-dissolve(@durationIn: .125s, @functionIn: ease-out, @durationOut: .225s, @functionOut: ease-in){
+.easytouch-dissolve(@durationIn: .125s, @functionIn: ease-out, @durationOut: .225s, @functionOut: ease-in){
     .et-dissolveIn {
         -webkit-animation: et-dissolveIn @durationIn @functionIn;
     }
@@ -153,7 +150,7 @@
 }
 
 //pop
-.anim-pop(@durationIn: .35s, @functionIn: ease-out, @durationOut: .1s, @functionOut: ease-in){
+.easytouch-pop(@durationIn: .35s, @functionIn: ease-out, @durationOut: .1s, @functionOut: ease-in){
     .et-popIn {
         -webkit-animation: et-popIn @durationIn @functionIn;
     }
@@ -183,7 +180,7 @@
 }
 
 //swap
-.anim-swap(@durationIn: .6s, @functionIn: ease-out, @durationOut: .6s, @functionOut: ease-in){
+.easytouch-swap(@durationIn: .6s, @functionIn: ease-out, @durationOut: .6s, @functionOut: ease-in){
     .et-swapRightOut,
     .et-swapLeftIn{
         -webkit-transform: perspective(800);
@@ -268,7 +265,7 @@
 }
 
 //flip
-.anim-flip(@durationIn: .225s, @functionIn: ease-out, @durationOut: .175s, @functionOut: ease-in){
+.easytouch-flip(@durationIn: .225s, @functionIn: ease-out, @durationOut: .175s, @functionOut: ease-in){
     .et-flipLeftIn,
     .et-flipRightOut{
         -webkit-transform-origin: 50% 50%;
@@ -335,7 +332,7 @@
 }
 
 //cube
-.anim-cube(@durationIn: .6s, @functionIn: ease, @durationOut: .6s, @functionOut: ease){
+.easytouch-cube(@durationIn: .6s, @functionIn: ease, @durationOut: .6s, @functionOut: ease){
     .et-cubeLeftIn,
     .et-cubeRightOut{
         -webkit-transform: perspective(800);
@@ -396,7 +393,7 @@
 }
 
 //flow
-.anim-flow(@durationIn: .35s, @functionIn: ease, @durationOut: .35s, @functionOut: ease){
+.easytouch-flow(@durationIn: .35s, @functionIn: ease, @durationOut: .35s, @functionOut: ease){
     .et-flowLeftIn,
     .et-flowRightOut{
         -webkit-transform-origin: 50% 30%;
@@ -477,7 +474,7 @@
 }
 
 //turn
-.anim-turn(@durationIn: .35s, @functionIn: ease-out, @durationOut: .1s, @functionOut: ease-in){
+.easytouch-turn(@durationIn: .35s, @functionIn: ease-out, @durationOut: .1s, @functionOut: ease-in){
     .et-turnIn,
     .et-turnOut{
         -webkit-backface-visibility:hidden;
@@ -506,6 +503,4 @@
             -webkit-transform: rotateY(-90deg) scale(.9);
         }
     }
-}
-
 }

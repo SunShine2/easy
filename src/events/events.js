@@ -9,7 +9,8 @@
 //     Backbone may be freely distributed under the MIT license.
 //     For all details and documentation:
 //     http://backbonejs.org
-;(function(){
+define('easy-event', ['zepto-event'], function ($) {
+
     // Regular expression used to split event strings
     var eventSplitter = /\s+/;
 
@@ -127,4 +128,6 @@
     //make an events class
     $.Events = function(){};
     $.extend($.Events.prototype, Events);
-})();
+
+    return $;
+});

@@ -55,10 +55,11 @@ $.DataSource = $.Base.build('$.DataSource', {
     **/
     initializer: function(options){
         this.options = options || {};
+        this.name = this.options.name;
         if(!this.name){
             throw new Error('the name property must be specified');
         }
-        this.order = this.order || ['Remote', 'Local', 'Default'];
+        this.order = this.options.order || ['Remote', 'Local', 'Default'];
         this.services = {};
         for(var i = 0, l = this.order.length; i < l; i++){
             var name = this.order[i],
@@ -96,12 +97,12 @@ $.DataSource = $.Base.build('$.DataSource', {
                     index++;
                     action();
                 }else{
-                    service[method](options, function(e, result){
+                    service[method](options, function(e, result, params){
                         if(e){
                             index++;
                             action();
                         }else{
-                            callback && callback(null, result, name, options.key);
+                            callback && callback(null, result, name, options.key, params);
                         }
                     });
                 }
@@ -128,7 +129,7 @@ $.DataSource = $.Base.build('$.DataSource', {
             throw new Error("The request key `" + options.key + "` has not be defined.");
         }
         order = options.order || itemOptions.order || this.order;
-        this._step(order, options, 'fetch', function(e, data, source, key){
+        this._step(order, options, 'fetch', function(e, data, source, key, params){
             if(e){
                 return callback(e);
             }
@@ -139,7 +140,10 @@ $.DataSource = $.Base.build('$.DataSource', {
                 options: options,
                 itemOptions: itemOptions
             });
-            callback(null, data);
+            callback(null, data, {
+                source: source,
+                timestamp: params
+            });
         });
     },
 
@@ -285,9 +289,9 @@ $.DataSource.Local = $.Base.build('$.DataSource.Local', {
                 json = JSON.parse(data);
                 if(expiredTime && expiredTime < Date.now() - Number(json.timestamp)){
                     localStorage.removeItem(key);
-                    return callback('EXPIRED', data);
+                    return callback('EXPIRED', json.data, json.timestamp);
                 }
-                return callback(null, json.data);
+                return callback(null, json.data, json.timestamp);
             }catch(err){
                 localStorage.removeItem(key);
                 callback(err);

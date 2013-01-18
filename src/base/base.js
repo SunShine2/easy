@@ -4,7 +4,7 @@ easy框架基类，用于创建easy组件，参考YUI3
 @version : 0-0-2
 @module Base
 */
-;(function(){
+define('base', ['easy-core', 'easy-event'], function ($) {
 
     /**
      增加filter系统，用于对初始化时传入的option进行处理
@@ -527,4 +527,6 @@ easy框架基类，用于创建easy组件，参考YUI3
     };
 
     $.Base = Base;
-})();
+
+    return $;
+});

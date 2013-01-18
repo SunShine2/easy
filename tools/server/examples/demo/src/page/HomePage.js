@@ -1,5 +1,5 @@
-;(function(){
-    var page = $.EasyTouch.Page.extend({
+define('homePage', ['easy-touch-core'], function(){
+    return $.EasyTouch.Page.extend({
         html: '#home',
         events: {
             '[data-action="exit"]':{
@@ -10,5 +10,4 @@
             this.app.exit();
         }
     });
-    window.HomePage = page;
-})();
+});
